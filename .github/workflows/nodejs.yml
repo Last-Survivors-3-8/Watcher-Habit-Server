@@ -13,19 +13,19 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Node.js 사용
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
       - run: npm ci
 
-      - name: Start the server
+      - name: 서버 시작
         run: npm run start &
         env:
           CI: true
 
-      - name: Check server is running
+      - name: 서버 실행 확인
         run: |
           sleep 10
           curl -v http://localhost:3000
