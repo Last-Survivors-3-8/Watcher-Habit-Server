@@ -11,8 +11,14 @@ const HabitSchema = new mongoose.Schema({
     required: true,
     maxlength: 100,
   },
-  habitStartDate: { type: Date, default: Date.now },
-  habitEndDate: { type: Date, default: Date.now },
+  habitStartDate: {
+    type: String,
+    default: () => new Date().toISOString().split('T')[0],
+  },
+  habitEndDate: {
+    type: String,
+    default: () => new Date().toISOString().split('T')[0],
+  },
   doDay: {
     type: String,
     enum: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
