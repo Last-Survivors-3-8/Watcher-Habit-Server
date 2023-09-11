@@ -22,6 +22,8 @@ jobs:
 
       - run: npm ci
 
-      - run: npm start
+      - name: Start the server
+        run: npm run start &
+        timeout-minutes: 5
         env:
           CI: true
