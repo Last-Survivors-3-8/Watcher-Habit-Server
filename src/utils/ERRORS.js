@@ -121,4 +121,4 @@ const ERRORS = {
   INTERNAL_SERVER_ERROR,
 };
 
-export default ERRORS;
+module.exports = ERRORS;
