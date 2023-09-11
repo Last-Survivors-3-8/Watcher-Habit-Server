@@ -22,6 +22,10 @@ jobs:
 
       - name: Start the server
         run: npm run start &
-        timeout-minutes: 5
         env:
           CI: true
+
+      - name: Check server is running
+        run: |
+          sleep 10
+          curl -v http://localhost:3000
