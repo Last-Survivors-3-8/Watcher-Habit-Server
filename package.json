@@ -3,8 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node src/bin/www"
-  },
+    "start": "node src/bin/www",
+    "lint": "eslint .",
+    "format": "prettier --check ."
+},
   "dependencies": {
     "aws-sdk": "^2.1452.0",
     "cookie-parser": "~1.4.4",
