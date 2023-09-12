@@ -70,6 +70,12 @@ const isCreator = (isRequired = true) =>
     .isMongoId()
     .withMessage(ERRORS.INVALID_CREATOR_ID);
 
+const isApprovals = (isRequired = true) =>
+  body('approvals.*.userId')
+    .optional(!isRequired)
+    .isMongoId()
+    .withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE);
+
 const isStatus = (isRequired = true) =>
   body('status')
     .optional(!isRequired)
@@ -89,14 +95,14 @@ const validateGetHabit = [isHabitId()];
 const validateCreateHabit = [
   isHabitTitle(),
   isHabitContent(),
-  isHabitStartDate(),
-  ishabitEndDate(),
+  isHabitStartDate(false),
+  ishabitEndDate(false),
   isDoDay(),
   isStartTime(),
   isEndTime(),
-  isPenalty(),
+  isPenalty(false),
   isCreator(),
-  isStatus(),
+  isStatus(false),
 ];
 
 const validateUpdateHabit = [
@@ -109,6 +115,7 @@ const validateUpdateHabit = [
   isStartTime(false),
   isEndTime(false),
   isPenalty(false),
+  isApprovals(false),
   isStatus(false),
 ];
 
