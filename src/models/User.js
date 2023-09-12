@@ -12,6 +12,9 @@ const UserSchema = new mongoose.Schema({
       message: ERRORS.NICKNAME_NO_BLANK_CONTAINED,
     },
   },
+  profileImageUrl: {
+    type: String,
+  },
   email: {
     type: String,
     required: true,
