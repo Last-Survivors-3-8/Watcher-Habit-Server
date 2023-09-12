@@ -28,4 +28,4 @@ jobs:
       - name: 서버 실행 확인
         run: |
           sleep 10
-          curl -v http://localhost:3000
+          curl -v ${{ secrets.SERVER_URL }}
