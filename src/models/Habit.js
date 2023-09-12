@@ -100,7 +100,7 @@ const HabitSchema = new mongoose.Schema(
         'expiredFailure',
         'approvalFailure',
       ],
-      required: true,
+      default: 'notTimeYet',
     },
   },
   {
