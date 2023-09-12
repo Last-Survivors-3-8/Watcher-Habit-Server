@@ -108,6 +108,11 @@ const USER_NOT_FOUND = {
   MESSAGE: '유저를 찾지 못했습니다.',
 };
 
+const PARAM_VALIDATION_ERROR = {
+  STATUS_CODE: 400,
+  MESSAGE: '요청 데이터 검증에서 오류가 발견되었습니다.',
+};
+
 const NICKNAME_REQUIRED = '닉네임은 필수입니다.';
 
 const NICKNAME_NO_BLANK_CONTAINED =
@@ -150,4 +155,5 @@ module.exports.ERRORS = {
   EMAIL_INVALID,
   SOCIAL_LOGIN_TYPE_REQUIRED,
   SOCIAL_LOGIN_TYPE_INCORRECT,
+  PARAM_VALIDATION_ERROR,
 };
