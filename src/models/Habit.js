@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { ERRORS } = require('../utils/ERRORS');
 
 const HabitSchema = new mongoose.Schema(
   {
@@ -21,7 +22,7 @@ const HabitSchema = new mongoose.Schema(
         validator(v) {
           return /^(\d{4})-(\d{2})-(\d{2})$/.test(v) && v <= this.habitEndDate;
         },
-        message: '유효하지 않은 시작 날짜입니다.',
+        message: ERRORS.INVALID_HABIT_START_DATE,
       },
     },
     habitEndDate: {
@@ -33,7 +34,7 @@ const HabitSchema = new mongoose.Schema(
             /^(\d{4})-(\d{2})-(\d{2})$/.test(v) && v >= this.habitStartDate
           );
         },
-        message: '유효하지 않은 종료 날짜입니다.',
+        message: ERRORS.INVALID_HABIT_END_DATE,
       },
     },
 
@@ -71,7 +72,7 @@ const HabitSchema = new mongoose.Schema(
             url,
           );
         },
-        message: (props) => `${props.value}는 유효한 S3 URL이 아닙니다.`,
+        message: (props) => `${props.value}${ERRORS.INVALID_S3_URL}`,
       },
     },
     minApprovalCount: { type: Number, default: 0 },

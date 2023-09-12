@@ -98,7 +98,46 @@ const INTERNAL_SERVER_ERROR = {
   MESSAGE: '죄송합니다. 서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
 };
 
-const ERRORS = {
+const INVALID_MONGO_ID = {
+  STATUS_CODE: 400,
+  MESSAGE: '유효한 mongo id가 아닙니다.',
+};
+
+const USER_NOT_FOUND = {
+  STATUS_CODE: 404,
+  MESSAGE: '유저를 찾지 못했습니다.',
+};
+
+const PARAM_VALIDATION_ERROR = {
+  STATUS_CODE: 400,
+  MESSAGE: '요청 데이터 검증에서 오류가 발견되었습니다.',
+};
+
+const DUPLICATE_NICKNAME = {
+  STATUS_CODE: 400,
+  MESSAGE: '중복된 닉네임입니다.',
+};
+
+const NICKNAME_REQUIRED = '닉네임은 필수입니다.';
+
+const NICKNAME_NO_BLANK_CONTAINED =
+  '닉네임은 공백이나 특수문자를 포함할 수 없습니다.';
+
+const EMAIL_REQUIRED = '이메일은 필수입니다.';
+
+const EMAIL_INVALID = '올바르지 않은 이메일 형식입니다.';
+
+const SOCIAL_LOGIN_TYPE_REQUIRED = '소셜 로그인 타입은 필수입니다.';
+
+const SOCIAL_LOGIN_TYPE_INCORRECT = '올바르지 않은 소셜 로그인 타입입니다.';
+
+const INVALID_HABIT_START_DATE = '유효하지 않은 시작 날짜입니다.';
+
+const INVALID_HABIT_END_DATE = '유효하지 않은 종료 날짜입니다.';
+
+const INVALID_S3_URL = '는 유효한 S3 URL이 아닙니다.';
+
+module.exports.ERRORS = {
   INVALID_GROUP_NAME,
   INVALID_INVITATION_CODE,
   INVALID_HABIT_TITLE,
@@ -112,13 +151,24 @@ const ERRORS = {
   INVALID_STATUS,
   INVALID_NICKNAME,
   INVALID_EMAIL,
-  PASSWORD_REQUIRED,
   INVALID_SOCIAL_LOGIN_TYPE,
+  INVALID_HABIT_START_DATE,
+  INVALID_HABIT_END_DATE,
+  INVALID_S3_URL,
+  PASSWORD_REQUIRED,
   UNAUTHORIZED,
   FORBIDDEN,
   NOT_FOUND,
   CONFLICT,
   INTERNAL_SERVER_ERROR,
+  INVALID_MONGO_ID,
+  USER_NOT_FOUND,
+  NICKNAME_REQUIRED,
+  NICKNAME_NO_BLANK_CONTAINED,
+  EMAIL_REQUIRED,
+  EMAIL_INVALID,
+  SOCIAL_LOGIN_TYPE_REQUIRED,
+  SOCIAL_LOGIN_TYPE_INCORRECT,
+  PARAM_VALIDATION_ERROR,
+  DUPLICATE_NICKNAME,
 };
-
-module.exports = ERRORS;
