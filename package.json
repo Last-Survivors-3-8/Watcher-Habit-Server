@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node src/bin/www"
+    "start": "DEBUG=app:* node src/bin/www"
   },
   "dependencies": {
     "aws-sdk": "^2.1452.0",
