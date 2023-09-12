@@ -61,6 +61,7 @@ router.post('/', validateCreateUser, async (req, res, next) => {
 
     const newUser = new User(req.body);
     await newUser.save();
+
     return res.status(201).json(newUser);
   } catch (error) {
     return next(error);

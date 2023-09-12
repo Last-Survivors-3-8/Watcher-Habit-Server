@@ -20,6 +20,7 @@ const validateCreateUser = [
     if (req.body.socialLoginType === 'none' && !value) {
       throw new Error(ERRORS.PASSWORD_REQUIRED.MESSAGE);
     }
+
     return true;
   }),
   check('socialLoginType')
