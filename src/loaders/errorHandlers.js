@@ -1,4 +1,5 @@
 const createError = require('http-errors');
+const { ERRORS } = require('../utils/ERRORS');
 
 module.exports = (app) => {
   app.use((req, res, next) => {
@@ -6,9 +7,9 @@ module.exports = (app) => {
   });
 
   app.use((err, req, res) => {
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-    res.status(err.status || 500);
-    res.send(err.message || 'Internal Server Error');
+    const statusCode = err.status || ERRORS.INTERNAL_SERVER_ERROR.STATUS_CODE;
+    const message = err.message || ERRORS.INTERNAL_SERVER_ERROR.MESSAGE;
+
+    res.status(statusCode).json({ error: message });
   });
 };
