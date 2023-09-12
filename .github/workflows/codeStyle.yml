@@ -1,0 +1,25 @@
+name: 린트 및 코드 스타일 검사
+
+on: [push]
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v3
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.17.1'
+
+      - name: 의존성 설치
+        run: npm ci
+
+      - name: ESLint 실행
+        run: npm run lint
+
+      - name: Prettier로 코드 스타일 검사
+        run: npm run format

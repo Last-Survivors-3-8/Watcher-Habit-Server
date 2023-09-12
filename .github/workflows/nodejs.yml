@@ -1,0 +1,32 @@
+name: Node.js CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.17.1]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Node.js 사용
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - run: npm ci
+
+      - name: 서버 시작
+        run: npm run start &
+        env:
+          CI: true
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+
+      - name: 서버 실행 확인
+        run: |
+          sleep 10
+          curl -v ${{ secrets.SERVER_URL }}
