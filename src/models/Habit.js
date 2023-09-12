@@ -38,11 +38,13 @@ const HabitSchema = new mongoose.Schema(
       },
     },
 
-    doDay: {
-      type: String,
-      required: true,
-      enum: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
-    },
+    doDay: [
+      {
+        type: String,
+        required: true,
+        enum: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+      },
+    ],
     startTime: {
       type: String,
       required: true,
