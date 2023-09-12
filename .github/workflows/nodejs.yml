@@ -24,6 +24,7 @@ jobs:
         run: npm run start &
         env:
           CI: true
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
       - name: 서버 실행 확인
         run: |
