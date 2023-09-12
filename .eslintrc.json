@@ -1,4 +1,7 @@
 {
   "extends": ["airbnb-base", "prettier"],
-  "plugins": ["node"]
+  "plugins": ["node"],
+  "rules": {
+    "no-unused-vars": "off"
+  }
 }
