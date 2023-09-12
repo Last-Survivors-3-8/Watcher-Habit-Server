@@ -16,6 +16,10 @@ const validateMiddleware = require('../middlewares/validateMiddleware');
 
 const router = express.Router();
 
+/**
+ * 습관 조회 api
+ * /api/habit/:habitId
+ */
 router.get('/:habitId', validateGetHabit, validateMiddleware, getHabit);
 router.post('/', validateCreateHabit, validateMiddleware, createHabit);
 router.patch('/:habitId', validateUpdateHabit, validateMiddleware, updateHaibt);

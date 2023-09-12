@@ -108,6 +108,11 @@ const USER_NOT_FOUND = {
   MESSAGE: '유저를 찾지 못했습니다.',
 };
 
+const HABIT_NOT_FOUND = {
+  STATUS_CODE: 404,
+  MESSAGE: '습관을 찾지 못했습니다.',
+};
+
 const PARAM_VALIDATION_ERROR = {
   STATUS_CODE: 400,
   MESSAGE: '요청 데이터 검증에서 오류가 발견되었습니다.',
@@ -223,4 +228,5 @@ module.exports.ERRORS = {
   PENALTY_LENGTH,
   INVALID_CREATOR_ID,
   NO_STATUS,
+  HABIT_NOT_FOUND,
 };
