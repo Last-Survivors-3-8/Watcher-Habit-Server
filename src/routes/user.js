@@ -49,6 +49,16 @@ router.post('/', validateCreateUser, async (req, res, next) => {
   }
 
   try {
+    const duplicateNickName = await User.exists({
+      nickName: req.body.nickName,
+    });
+
+    if (duplicateNickName) {
+      const err = new Error(ERRORS.DUPLICATE_NICKNAME.MESSAGE);
+      err.status = ERRORS.DUPLICATE_NICKNAME.STATUS_CODE;
+      return next(err);
+    }
+
     const newUser = new User(req.body);
     await newUser.save();
     return res.status(201).json(newUser);
@@ -62,7 +72,9 @@ router.use((err, req, res, next) => {
     return res.status(400).json({ errors: err });
   }
 
-  return next(err);
+  return res
+    .status(err.status || ERRORS.INTERNAL_SERVER_ERROR.STATUS_CODE)
+    .json({ error: err.message || ERRORS.INTERNAL_SERVER_ERROR.MESSAGE });
 });
 
 module.exports = router;

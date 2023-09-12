@@ -113,6 +113,11 @@ const PARAM_VALIDATION_ERROR = {
   MESSAGE: '요청 데이터 검증에서 오류가 발견되었습니다.',
 };
 
+const DUPLICATE_NICKNAME = {
+  STATUS_CODE: 400,
+  MESSAGE: '중복된 닉네임입니다.',
+};
+
 const NICKNAME_REQUIRED = '닉네임은 필수입니다.';
 
 const NICKNAME_NO_BLANK_CONTAINED =
@@ -165,4 +170,5 @@ module.exports.ERRORS = {
   SOCIAL_LOGIN_TYPE_REQUIRED,
   SOCIAL_LOGIN_TYPE_INCORRECT,
   PARAM_VALIDATION_ERROR,
+  DUPLICATE_NICKNAME,
 };
