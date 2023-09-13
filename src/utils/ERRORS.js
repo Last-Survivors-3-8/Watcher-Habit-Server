@@ -108,6 +108,16 @@ const USER_NOT_FOUND = {
   MESSAGE: '유저를 찾지 못했습니다.',
 };
 
+const HABIT_NOT_FOUND = {
+  STATUS_CODE: 404,
+  MESSAGE: '습관을 찾지 못했습니다.',
+};
+
+const GROUP_NOT_FOUND = {
+  STATUS_CODE: 404,
+  MESSAGE: '그룹을 찾지 못했습니다.',
+};
+
 const PARAM_VALIDATION_ERROR = {
   STATUS_CODE: 400,
   MESSAGE: '요청 데이터 검증에서 오류가 발견되었습니다.',
@@ -118,6 +128,12 @@ const DUPLICATE_NICKNAME = {
   MESSAGE: '중복된 닉네임입니다.',
 };
 
+const DUPLICATE_HABIT_TIME = {
+  STATUS_CODE: 400,
+  MESSAGE: '기존 습관과 실행 기간이 겹칩니다.',
+};
+
+// 유저 스키마 검증 오류 메시지
 const NICKNAME_REQUIRED = '닉네임은 필수입니다.';
 
 const NICKNAME_NO_BLANK_CONTAINED =
@@ -136,6 +152,42 @@ const INVALID_HABIT_START_DATE = '유효하지 않은 시작 날짜입니다.';
 const INVALID_HABIT_END_DATE = '유효하지 않은 종료 날짜입니다.';
 
 const INVALID_S3_URL = '는 유효한 S3 URL이 아닙니다.';
+
+// 습관 스키마 검증 오류 메시지
+const INVALID_HABIT_ID = '잘못된 habitId 형식입니다.';
+
+const HABIT_TITLE_STRING = '습관 제목은 문자열이어야 합니다.';
+
+const HABIT_TITLE_LENGTH = '습관 제목은 2자에서 10자 사이이어야 합니다.';
+
+const HABIT_CONTENT_STRING = '습관 내용은 문자열이어야 합니다.';
+
+const HABIT_CONTENT_LENGTH = '습관 내용은 2자에서 100자 사이이어야 합니다.';
+
+const INVALID_HABIT_START_DATE_FORMAT =
+  '잘못된 습관 시작 날짜 형식입니다. 형식은 YYYY-MM-DD이어야 합니다.';
+
+const HABIT_END_DATE_BEFORE_START =
+  '습관 종료 날짜는 습관 시작 날짜보다 이전일 수 없습니다.';
+
+const INVALID_HABIT_END_DATE_FORMAT =
+  '잘못된 습관 종료 날짜 형식입니다. 형식은 YYYY-MM-DD이어야 합니다.';
+
+const INVALID_DO_DAY = 'doDay에 잘못된 요일이 제공되었습니다.';
+
+const INVALID_START_TIME_FORMAT =
+  '잘못된 시작 시간 형식입니다. 형식은 HH:MM이어야 합니다.';
+
+const INVALID_END_TIME_FORMAT =
+  '잘못된 종료 시간 형식입니다. 형식은 HH:MM이어야 합니다.';
+
+const PENALTY_STRING = '패널티는 문자열이어야 합니다.';
+
+const PENALTY_LENGTH = '벌금은 2자에서 50자 사이이어야 합니다.';
+
+const INVALID_CREATOR_ID = '잘못된 생성자 ID 형식입니다.';
+
+const NO_STATUS = '없는 상태입니다.';
 
 module.exports.ERRORS = {
   INVALID_GROUP_NAME,
@@ -171,4 +223,22 @@ module.exports.ERRORS = {
   SOCIAL_LOGIN_TYPE_INCORRECT,
   PARAM_VALIDATION_ERROR,
   DUPLICATE_NICKNAME,
+  INVALID_HABIT_ID,
+  HABIT_TITLE_STRING,
+  HABIT_TITLE_LENGTH,
+  HABIT_CONTENT_STRING,
+  HABIT_CONTENT_LENGTH,
+  INVALID_HABIT_START_DATE_FORMAT,
+  HABIT_END_DATE_BEFORE_START,
+  INVALID_HABIT_END_DATE_FORMAT,
+  INVALID_DO_DAY,
+  INVALID_START_TIME_FORMAT,
+  INVALID_END_TIME_FORMAT,
+  PENALTY_STRING,
+  PENALTY_LENGTH,
+  INVALID_CREATOR_ID,
+  NO_STATUS,
+  HABIT_NOT_FOUND,
+  DUPLICATE_HABIT_TIME,
+  GROUP_NOT_FOUND,
 };
