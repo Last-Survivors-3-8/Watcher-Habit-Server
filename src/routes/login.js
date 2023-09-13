@@ -2,7 +2,7 @@ const express = require('express');
 const { validationResult } = require('express-validator');
 const User = require('../models/User');
 const createAndSetTokens = require('../utils/createAndSetTokens');
-const ERRORS = require('../utils/ERRORS');
+const { ERRORS } = require('../utils/ERRORS');
 const handleError = require('../utils/handleError');
 
 const router = express.Router();

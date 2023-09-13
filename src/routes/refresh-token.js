@@ -1,7 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const ERRORS = require('../utils/ERRORS');
+const { ERRORS } = require('../utils/ERRORS');
 const handleError = require('../utils/handleError');
 const createAndSetTokens = require('../utils/createAndSetTokens');
 

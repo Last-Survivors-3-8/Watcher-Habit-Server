@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
-const ERRORS = require('../utils/ERRORS');
+const { ERRORS } = require('../utils/ERRORS');
 const handleError = require('../utils/handleError');
 
 const verifyToken = (req, res, next) => {
-  const authHeader = req.headers.Authorization;
+  const authHeader = req.headers.authorization;
 
   if (!authHeader) {
     return handleError(res, ERRORS.NO_TOKEN_PROVIDED);
