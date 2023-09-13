@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
-const createAndSetTokens = (user, res, tokenExpired = true) => {
-  if (tokenExpired) {
+const createAndSetTokens = (user, res, shouldCreateRefreshToken = true) => {
+  if (shouldCreateRefreshToken) {
     const refreshToken = jwt.sign(
       { userId: user._id },
       process.env.REFRESH_TOKEN_SECRET,

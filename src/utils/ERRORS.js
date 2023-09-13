@@ -133,6 +133,31 @@ const DUPLICATE_HABIT_TIME = {
   MESSAGE: '기존 습관과 실행 기간이 겹칩니다.',
 };
 
+const NO_TOKEN_PROVIDED = {
+  STATUS_CODE: 401,
+  MESSAGE: '토큰이 제공되지 않았습니다.',
+};
+
+const TOKEN_INVALID_OR_EXPIRED = {
+  STATUS_CODE: 401,
+  MESSAGE: '토큰이 유효하지 않거나 만료되었습니다.',
+};
+
+const REFRESH_TOKEN_NOT_PROVIDED = {
+  STATUS_CODE: 401,
+  MESSAGE: '리프레시 토큰이 제공되지 않았습니다.',
+};
+
+const REFRESH_TOKEN_EXPIRED = {
+  STATUS_CODE: 401,
+  MESSAGE: '리프레시 토큰이 만료되었습니다.',
+};
+
+const ACCESS_DENIED = {
+  STATUS_CODE: 403,
+  MESSAGE: '접근이 거부되었습니다.',
+};
+
 // 유저 스키마 검증 오류 메시지
 const NICKNAME_REQUIRED = '닉네임은 필수입니다.';
 
@@ -241,4 +266,9 @@ module.exports.ERRORS = {
   HABIT_NOT_FOUND,
   DUPLICATE_HABIT_TIME,
   GROUP_NOT_FOUND,
+  NO_TOKEN_PROVIDED,
+  TOKEN_INVALID_OR_EXPIRED,
+  REFRESH_TOKEN_NOT_PROVIDED,
+  REFRESH_TOKEN_EXPIRED,
+  ACCESS_DENIED,
 };

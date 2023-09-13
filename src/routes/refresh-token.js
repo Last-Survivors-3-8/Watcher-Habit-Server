@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { ERRORS } = require('../utils/ERRORS');
 const handleError = require('../utils/handleError');
-const createAndSetTokens = require('../utils/createAndSetTokens');
 
 const router = express.Router();
 
@@ -16,14 +15,17 @@ router.post('/', async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-
     const user = await User.findById(decoded.userId).lean().exec();
 
     if (!user) {
       return handleError(res, ERRORS.USER_NOT_FOUND);
     }
 
-    const accessToken = createAndSetTokens(user, res, refreshToken);
+    const accessToken = jwt.sign(
+      { userId: user._id },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: '1m' },
+    );
 
     return res.status(200).json({ accessToken });
   } catch (error) {
