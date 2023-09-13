@@ -70,6 +70,12 @@ const isCreator = (isRequired = true) =>
     .isMongoId()
     .withMessage(ERRORS.INVALID_CREATOR_ID);
 
+const isSharedGroup = (isRequired = true) =>
+  body('sharedGroup')
+    .optional(!isRequired)
+    .isMongoId()
+    .withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE);
+
 const isApprovals = (isRequired = true) =>
   body('approvals.*.userId')
     .optional(!isRequired)
@@ -102,6 +108,7 @@ const validateCreateHabit = [
   isEndTime(),
   isPenalty(false),
   isCreator(),
+  isSharedGroup(false),
   isStatus(false),
 ];
 
@@ -115,6 +122,7 @@ const validateUpdateHabit = [
   isStartTime(false),
   isEndTime(false),
   isPenalty(false),
+  isSharedGroup(false),
   isApprovals(false),
   isStatus(false),
 ];
