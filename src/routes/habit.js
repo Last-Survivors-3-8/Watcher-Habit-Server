@@ -21,8 +21,23 @@ const router = express.Router();
  * /api/habit/:habitId
  */
 router.get('/:habitId', validateGetHabit, validateMiddleware, getHabit);
+
+/**
+ * 습관 생성 api
+ * /api/habit
+ */
 router.post('/', validateCreateHabit, validateMiddleware, createHabit);
+
+/**
+ * 습관 수정 api
+ * /api/habit/:habitId
+ */
 router.patch('/:habitId', validateUpdateHabit, validateMiddleware, updateHaibt);
+
+/**
+ * 습관 삭제 api
+ * /api/habit/:habitId
+ */
 router.delete(
   '/:habitId',
   validateDeleteHabit,

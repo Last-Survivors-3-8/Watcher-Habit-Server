@@ -113,6 +113,11 @@ const HABIT_NOT_FOUND = {
   MESSAGE: '습관을 찾지 못했습니다.',
 };
 
+const GROUP_NOT_FOUND = {
+  STATUS_CODE: 404,
+  MESSAGE: '그룹을 찾지 못했습니다.',
+};
+
 const PARAM_VALIDATION_ERROR = {
   STATUS_CODE: 400,
   MESSAGE: '요청 데이터 검증에서 오류가 발견되었습니다.',
@@ -121,6 +126,11 @@ const PARAM_VALIDATION_ERROR = {
 const DUPLICATE_NICKNAME = {
   STATUS_CODE: 400,
   MESSAGE: '중복된 닉네임입니다.',
+};
+
+const DUPLICATE_HABIT_TIME = {
+  STATUS_CODE: 400,
+  MESSAGE: '기존 습관과 실행 기간이 겹칩니다.',
 };
 
 // 유저 스키마 검증 오류 메시지
@@ -229,4 +239,6 @@ module.exports.ERRORS = {
   INVALID_CREATOR_ID,
   NO_STATUS,
   HABIT_NOT_FOUND,
+  DUPLICATE_HABIT_TIME,
+  GROUP_NOT_FOUND,
 };
