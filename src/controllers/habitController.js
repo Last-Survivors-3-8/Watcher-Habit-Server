@@ -46,10 +46,9 @@ const createHabit = async (req, res, next) => {
     });
 
     if (duplicateHabitTime) {
-      const err = new Error(ERRORS.DUPLICATE_HABIT_TIME.MESSAGE);
-      err.status = ERRORS.DUPLICATE_HABIT_TIME.STATUS_CODE;
-      err.duplicateHabit = duplicateHabitTime;
-      return next(err);
+      return handleError(res, ERRORS.DUPLICATE_HABIT_TIME, {
+        duplicateHabit: duplicateHabitTime,
+      });
     }
 
     if (minApprovalCount === 0) {
@@ -110,10 +109,9 @@ const updateHabit = async (req, res, next) => {
       });
 
       if (duplicateHabitTime && String(duplicateHabitTime._id) !== habitId) {
-        const err = new Error(ERRORS.DUPLICATE_HABIT_TIME.MESSAGE);
-        err.status = ERRORS.DUPLICATE_HABIT_TIME.STATUS_CODE;
-        err.duplicateHabit = duplicateHabitTime;
-        return next(err);
+        return handleError(res, ERRORS.DUPLICATE_HABIT_TIME, {
+          duplicateHabit: duplicateHabitTime,
+        });
       }
     }
 
