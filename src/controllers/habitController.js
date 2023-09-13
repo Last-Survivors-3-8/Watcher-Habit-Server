@@ -1,5 +1,6 @@
 const { ERRORS } = require('../utils/ERRORS');
 const habitService = require('../services/habitService');
+const handleError = require('../utils/handleError');
 
 const getHabit = async (req, res, next) => {
   const { habitId } = req.params;
@@ -8,9 +9,7 @@ const getHabit = async (req, res, next) => {
     const habit = await habitService.getHabitById(habitId);
 
     if (!habit) {
-      return res
-        .status(ERRORS.HABIT_NOT_FOUND.STATUS_CODE)
-        .json({ error: ERRORS.HABIT_NOT_FOUND.MESSAGE });
+      return handleError(res, ERRORS.HABIT_NOT_FOUND);
     }
 
     return res.status(200).json(habit);
@@ -34,9 +33,7 @@ const createHabit = async (req, res, next) => {
   try {
     const hasCreator = await habitService.checkUserExists(creator);
     if (!hasCreator) {
-      const err = new Error(ERRORS.USER_NOT_FOUND.MESSAGE);
-      err.status = ERRORS.USER_NOT_FOUND.STATUS_CODE;
-      return next(err);
+      return handleError(res, ERRORS.USER_NOT_FOUND);
     }
 
     const duplicateHabitTime = await habitService.checkForDuplicateHabitTime({
@@ -51,7 +48,7 @@ const createHabit = async (req, res, next) => {
     if (duplicateHabitTime) {
       const err = new Error(ERRORS.DUPLICATE_HABIT_TIME.MESSAGE);
       err.status = ERRORS.DUPLICATE_HABIT_TIME.STATUS_CODE;
-      err.duplicateHaibt = duplicateHabitTime;
+      err.duplicateHabit = duplicateHabitTime;
       return next(err);
     }
 
@@ -62,9 +59,7 @@ const createHabit = async (req, res, next) => {
     if (req.body.sharedGroup) {
       const hasSharedGroup = await habitService.checkGroupExists(sharedGroup);
       if (!hasSharedGroup) {
-        const err = new Error(ERRORS.GROUP_NOT_FOUND.MESSAGE);
-        err.status = ERRORS.GROUP_NOT_FOUND.STATUS_CODE;
-        return next(err);
+        return handleError(res, ERRORS.GROUP_NOT_FOUND);
       }
     }
 
@@ -76,7 +71,7 @@ const createHabit = async (req, res, next) => {
   }
 };
 
-const updateHaibt = async (req, res, next) => {
+const updateHabit = async (req, res, next) => {
   const { habitId } = req.params;
   const {
     creator,
@@ -93,17 +88,14 @@ const updateHaibt = async (req, res, next) => {
     const habit = await habitService.getHabitById(habitId);
 
     if (!habit) {
-      return res
-        .status(ERRORS.HABIT_NOT_FOUND.STATUS_CODE)
-        .json({ error: ERRORS.HABIT_NOT_FOUND.MESSAGE });
+      return handleError(res, ERRORS.HABIT_NOT_FOUND);
     }
 
     if (creator) {
       const hasCreator = await habitService.checkUserExists(creator);
+
       if (!hasCreator) {
-        const err = new Error(ERRORS.USER_NOT_FOUND.MESSAGE);
-        err.status = ERRORS.USER_NOT_FOUND.STATUS_CODE;
-        return next(err);
+        return handleError(res, ERRORS.USER_NOT_FOUND);
       }
     }
 
@@ -132,9 +124,7 @@ const updateHaibt = async (req, res, next) => {
     if (sharedGroup) {
       const hasSharedGroup = await habitService.checkGroupExists(sharedGroup);
       if (!hasSharedGroup) {
-        const err = new Error(ERRORS.GROUP_NOT_FOUND.MESSAGE);
-        err.status = ERRORS.GROUP_NOT_FOUND.STATUS_CODE;
-        return next(err);
+        return handleError(res, ERRORS.GROUP_NOT_FOUND);
       }
     }
 
@@ -155,9 +145,7 @@ const deleteHabit = async (req, res, next) => {
   try {
     const result = await habitService.deleteHabitById(habitId);
     if (!result) {
-      return res
-        .status(ERRORS.HABIT_NOT_FOUND.STATUS_CODE)
-        .json(ERRORS.HABIT_NOT_FOUND.MESSAGE);
+      return handleError(res, ERRORS.HABIT_NOT_FOUND);
     }
 
     return res
@@ -171,6 +159,6 @@ const deleteHabit = async (req, res, next) => {
 module.exports = {
   getHabit,
   createHabit,
-  updateHaibt,
+  updateHabit,
   deleteHabit,
 };

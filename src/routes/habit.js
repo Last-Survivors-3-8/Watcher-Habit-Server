@@ -1,17 +1,7 @@
 const express = require('express');
 const commonErrorHandler = require('../middlewares/commonErrorHandler');
-const {
-  validateGetHabit,
-  validateCreateHabit,
-  validateUpdateHabit,
-  validateDeleteHabit,
-} = require('../middlewares/validateHabit');
-const {
-  getHabit,
-  createHabit,
-  updateHaibt,
-  deleteHabit,
-} = require('../controllers/habitController');
+const validateHabit = require('../middlewares/validateHabit');
+const habitController = require('../controllers/habitController');
 const validateMiddleware = require('../middlewares/validateMiddleware');
 
 const router = express.Router();
@@ -20,19 +10,34 @@ const router = express.Router();
  * 습관 조회 api
  * /api/habit/:habitId
  */
-router.get('/:habitId', validateGetHabit, validateMiddleware, getHabit);
+router.get(
+  '/:habitId',
+  validateHabit.getRequest,
+  validateMiddleware,
+  habitController.getHabit,
+);
 
 /**
  * 습관 생성 api
  * /api/habit
  */
-router.post('/', validateCreateHabit, validateMiddleware, createHabit);
+router.post(
+  '/',
+  validateHabit.postRequest,
+  validateMiddleware,
+  habitController.createHabit,
+);
 
 /**
  * 습관 수정 api
  * /api/habit/:habitId
  */
-router.patch('/:habitId', validateUpdateHabit, validateMiddleware, updateHaibt);
+router.patch(
+  '/:habitId',
+  validateHabit.patchRequest,
+  validateMiddleware,
+  habitController.updateHabit,
+);
 
 /**
  * 습관 삭제 api
@@ -40,9 +45,9 @@ router.patch('/:habitId', validateUpdateHabit, validateMiddleware, updateHaibt);
  */
 router.delete(
   '/:habitId',
-  validateDeleteHabit,
+  validateHabit.deleteRequest,
   validateMiddleware,
-  deleteHabit,
+  habitController.deleteHabit,
 );
 
 router.use(commonErrorHandler);

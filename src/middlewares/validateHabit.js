@@ -96,9 +96,9 @@ const isStatus = (isRequired = true) =>
     ])
     .withMessage(ERRORS.NO_STATUS);
 
-const validateGetHabit = [isHabitId()];
+const getRequest = [isHabitId()];
 
-const validateCreateHabit = [
+const postRequest = [
   isHabitTitle(),
   isHabitContent(),
   isHabitStartDate(false),
@@ -112,7 +112,7 @@ const validateCreateHabit = [
   isStatus(false),
 ];
 
-const validateUpdateHabit = [
+const patchRequest = [
   isHabitId(),
   isHabitTitle(false),
   isHabitContent(false),
@@ -127,11 +127,11 @@ const validateUpdateHabit = [
   isStatus(false),
 ];
 
-const validateDeleteHabit = [isHabitId()];
+const deleteRequest = [isHabitId()];
 
 module.exports = {
-  validateCreateHabit,
-  validateDeleteHabit,
-  validateGetHabit,
-  validateUpdateHabit,
+  postRequest,
+  deleteRequest,
+  getRequest,
+  patchRequest,
 };
