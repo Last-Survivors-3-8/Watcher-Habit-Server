@@ -30,4 +30,12 @@ const validateCreateUser = [
     .withMessage(ERRORS.SOCIAL_LOGIN_TYPE_INCORRECT),
 ];
 
-module.exports = { validateGetUser, validateCreateUser };
+const validateGetUserCheck = [
+  check('email')
+    .exists()
+    .withMessage(ERRORS.EMAIL_REQUIRED)
+    .isEmail()
+    .withMessage(ERRORS.EMAIL_INVALID),
+];
+
+module.exports = { validateGetUser, validateCreateUser, validateGetUserCheck };

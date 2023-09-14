@@ -2,19 +2,29 @@ const express = require('express');
 const { validationResult } = require('express-validator');
 const User = require('../models/User');
 const { ERRORS } = require('../utils/ERRORS');
-const {
-  validateGetUser,
-  validateCreateUser,
-} = require('../middlewares/validateUser');
 const commonErrorHandler = require('../middlewares/commonErrorHandler');
+const validateUser = require('../middlewares/validateUser');
+const validateMiddleware = require('../middlewares/validateMiddleware');
+const userController = require('../controllers/userController');
 
 const router = express.Router();
+
+/**
+ * 유저 가입 확인 api
+ * api/user/check?email=:email
+ */
+router.get(
+  '/check',
+  validateUser.validateGetUserCheck,
+  validateMiddleware,
+  userController.getUserCheck,
+);
 
 /**
  * 유저 조회 api
  * /api/user/:userId
  */
-router.get('/:userId', validateGetUser, async (req, res, next) => {
+router.get('/:userId', validateUser.validateGetUser, async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -42,7 +52,7 @@ router.get('/:userId', validateGetUser, async (req, res, next) => {
  * 유저 생성 api
  * /api/user
  */
-router.post('/', validateCreateUser, async (req, res, next) => {
+router.post('/', validateUser.validateCreateUser, async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
