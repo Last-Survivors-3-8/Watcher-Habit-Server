@@ -1,5 +1,5 @@
 const { check } = require('express-validator');
-const { ERRORS } = require('../utils/ERRORS');
+const { ERRORS } = require('../lib/ERRORS');
 
 const validateEmail = [
   check('email')

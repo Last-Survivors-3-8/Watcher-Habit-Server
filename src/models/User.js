@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { ERRORS } = require('../utils/ERRORS');
+const { ERRORS } = require('../lib/ERRORS');
 
 const UserSchema = new mongoose.Schema({
   nickname: {

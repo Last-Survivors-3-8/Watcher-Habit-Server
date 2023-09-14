@@ -1,5 +1,5 @@
 const createError = require('http-errors');
-const { ERRORS } = require('../utils/ERRORS');
+const { ERRORS } = require('../lib/ERRORS');
 
 module.exports = (app) => {
   app.use((req, res, next) => {

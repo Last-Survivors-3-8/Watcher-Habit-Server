@@ -1,4 +1,4 @@
-const { ERRORS } = require('../utils/ERRORS');
+const { ERRORS } = require('../lib/ERRORS');
 
 const commonErrorHandler = (err, req, res, next) => {
   if (Array.isArray(err) && err[0].msg) {

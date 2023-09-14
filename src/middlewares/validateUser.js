@@ -1,5 +1,5 @@
 const { param, check } = require('express-validator');
-const { ERRORS } = require('../utils/ERRORS');
+const { ERRORS } = require('../lib/ERRORS');
 
 const validateGetUser = [
   param('userId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE),

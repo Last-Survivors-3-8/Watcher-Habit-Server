@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const { ERRORS } = require('../utils/ERRORS');
-const handleError = require('../utils/handleError');
+const { ERRORS } = require('../lib/ERRORS');
+const handleError = require('../lib/handleError');
 
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization;

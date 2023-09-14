@@ -1,7 +1,7 @@
 const express = require('express');
 const { validationResult } = require('express-validator');
 const User = require('../models/User');
-const { ERRORS } = require('../utils/ERRORS');
+const { ERRORS } = require('../lib/ERRORS');
 const commonErrorHandler = require('../middlewares/commonErrorHandler');
 const validateUser = require('../middlewares/validateUser');
 const validateMiddleware = require('../middlewares/validateMiddleware');
