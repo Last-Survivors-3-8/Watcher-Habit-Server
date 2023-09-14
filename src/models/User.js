@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { ERRORS } = require('../utils/ERRORS');
 
 const UserSchema = new mongoose.Schema({
-  nickName: {
+  nickname: {
     type: String,
     required: true,
     validate: {
