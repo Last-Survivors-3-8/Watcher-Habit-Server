@@ -1,5 +1,6 @@
 const User = require('../models/User');
 
-const getUserCheckByEmail = (email) => User.findOne({ email });
+const getNicknameByEmail = (email) =>
+  User.findOne({ email }, 'nickname').lean().exec();
 
-module.exports = { getUserCheckByEmail };
+module.exports = { getNicknameByEmail };
