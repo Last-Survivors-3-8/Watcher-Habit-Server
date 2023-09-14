@@ -4,6 +4,7 @@ const User = require('../models/User');
 const { ERRORS } = require('../lib/ERRORS');
 const handleError = require('../lib/handleError');
 const createAndSetTokens = require('../utils/createAndSetTokens');
+const commonErrorHandler = require('../middlewares/commonErrorHandler');
 
 const router = express.Router();
 
@@ -51,5 +52,7 @@ router.post('/logout', (_, res, next) => {
     return next(error);
   }
 });
+
+router.use(commonErrorHandler);
 
 module.exports = router;
