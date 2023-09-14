@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const { ERRORS } = require('../utils/ERRORS');
+const { ERRORS } = require('../lib/ERRORS');
 
 const UserSchema = new mongoose.Schema({
-  nickName: {
+  nickname: {
     type: String,
     required: true,
     validate: {
@@ -11,6 +11,9 @@ const UserSchema = new mongoose.Schema({
       },
       message: ERRORS.NICKNAME_NO_BLANK_CONTAINED,
     },
+  },
+  profileImageUrl: {
+    type: String,
   },
   email: {
     type: String,

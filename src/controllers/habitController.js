@@ -1,6 +1,6 @@
-const { ERRORS } = require('../utils/ERRORS');
+const { ERRORS } = require('../lib/ERRORS');
 const habitService = require('../services/habitService');
-const handleError = require('../utils/handleError');
+const handleError = require('../lib/handleError');
 
 const getHabit = async (req, res, next) => {
   const { habitId } = req.params;

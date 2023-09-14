@@ -1,12 +1,12 @@
 const { param, check } = require('express-validator');
-const { ERRORS } = require('../utils/ERRORS');
+const { ERRORS } = require('../lib/ERRORS');
 
 const validateGetUser = [
   param('userId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE),
 ];
 
 const validateCreateUser = [
-  check('nickName')
+  check('nickname')
     .exists()
     .withMessage(ERRORS.NICKNAME_REQUIRED)
     .isAlphanumeric()
@@ -30,4 +30,12 @@ const validateCreateUser = [
     .withMessage(ERRORS.SOCIAL_LOGIN_TYPE_INCORRECT),
 ];
 
-module.exports = { validateGetUser, validateCreateUser };
+const validateGetUserCheck = [
+  check('email')
+    .exists()
+    .withMessage(ERRORS.EMAIL_REQUIRED)
+    .isEmail()
+    .withMessage(ERRORS.EMAIL_INVALID),
+];
+
+module.exports = { validateGetUser, validateCreateUser, validateGetUserCheck };

@@ -1,5 +1,5 @@
 const { body, param } = require('express-validator');
-const { ERRORS } = require('../utils/ERRORS');
+const { ERRORS } = require('../lib/ERRORS');
 
 const isHabitId = () =>
   param('habitId').isMongoId().withMessage(ERRORS.INVALID_HABIT_ID);
