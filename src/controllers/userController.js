@@ -7,7 +7,7 @@ const getUserCheck = async (req, res, next) => {
     const user = await userService.getUserCheckByEmail(email);
 
     if (user) {
-      return res.status(200).json({ nickName: user.nickName });
+      return res.status(200).json({ nickname: user.nickname });
     }
 
     return res.status(200).json({

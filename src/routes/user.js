@@ -60,11 +60,11 @@ router.post('/', validateUser.validateCreateUser, async (req, res, next) => {
   }
 
   try {
-    const duplicateNickName = await User.exists({
-      nickName: req.body.nickName,
+    const duplicateNickname = await User.exists({
+      nickname: req.body.nickname,
     });
 
-    if (duplicateNickName) {
+    if (duplicateNickname) {
       const err = new Error(ERRORS.DUPLICATE_NICKNAME.MESSAGE);
       err.status = ERRORS.DUPLICATE_NICKNAME.STATUS_CODE;
       return next(err);
