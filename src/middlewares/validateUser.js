@@ -6,7 +6,7 @@ const validateGetUser = [
 ];
 
 const validateCreateUser = [
-  check('nickName')
+  check('nickname')
     .exists()
     .withMessage(ERRORS.NICKNAME_REQUIRED)
     .isAlphanumeric()
