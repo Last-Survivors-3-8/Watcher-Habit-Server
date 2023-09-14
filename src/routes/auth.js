@@ -1,10 +1,10 @@
 const express = require('express');
-const { validationResult } = require('express-validator');
 const User = require('../models/User');
 const { ERRORS } = require('../lib/ERRORS');
 const handleError = require('../lib/handleError');
 const createAndSetTokens = require('../utils/createAndSetTokens');
 const commonErrorHandler = require('../middlewares/commonErrorHandler');
+const validateMiddleware = require('../middlewares/validateMiddleware');
 
 const router = express.Router();
 
@@ -12,13 +12,7 @@ const router = express.Router();
  * 로그인 토큰 발급 api
  * /api/auth/login
  */
-router.post('/login', async (req, res, next) => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return next(errors.array());
-  }
-
+router.post('/login', validateMiddleware, async (req, res, next) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email }).lean().exec();
