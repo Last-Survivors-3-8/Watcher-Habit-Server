@@ -1,4 +1,4 @@
-const { param, check } = require('express-validator');
+const { check } = require('express-validator');
 const { ERRORS } = require('../utils/ERRORS');
 
 const validateLogout = [
