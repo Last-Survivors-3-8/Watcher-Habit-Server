@@ -18,7 +18,7 @@ const createAndSetTokens = (user, res, tokenExpired = true) => {
   const accessToken = jwt.sign(
     { userId: user._id },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '10s' },
+    { expiresIn: '6h' },
   );
 
   return accessToken;
