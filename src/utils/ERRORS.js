@@ -214,6 +214,8 @@ const INVALID_CREATOR_ID = '잘못된 생성자 ID 형식입니다.';
 
 const NO_STATUS = '없는 상태입니다.';
 
+const NEED_TOKEN = '토큰이 필요합니다.';
+
 module.exports.ERRORS = {
   INVALID_GROUP_NAME,
   INVALID_INVITATION_CODE,
@@ -271,4 +273,5 @@ module.exports.ERRORS = {
   REFRESH_TOKEN_NOT_PROVIDED,
   REFRESH_TOKEN_EXPIRED,
   ACCESS_DENIED,
+  NEED_TOKEN,
 };
