@@ -5,6 +5,7 @@ const commonErrorHandler = require('../middlewares/commonErrorHandler');
 const validateUser = require('../middlewares/validateUser');
 const validateMiddleware = require('../middlewares/validateMiddleware');
 const userController = require('../controllers/userController');
+const authenticateToken = require('../middlewares/authenticateToken');
 
 const router = express.Router();
 
@@ -25,6 +26,7 @@ router.get(
  */
 router.get(
   '/:userId',
+  // authenticateToken,
   validateUser.validateGetUser,
   validateMiddleware,
   async (req, res, next) => {

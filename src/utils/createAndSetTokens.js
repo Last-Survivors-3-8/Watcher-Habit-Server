@@ -10,7 +10,8 @@ const createAndSetTokens = (user, res, tokenExpired = true) => {
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: true,
+      // secure: true,
+      sameSite: 'none',
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
   }
@@ -18,7 +19,7 @@ const createAndSetTokens = (user, res, tokenExpired = true) => {
   const accessToken = jwt.sign(
     { userId: user._id },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '6h' },
+    { expiresIn: '1s' },
   );
 
   return accessToken;

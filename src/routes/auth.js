@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const { ERRORS } = require('../lib/ERRORS');
 const handleError = require('../lib/handleError');
@@ -45,6 +46,35 @@ router.post('/logout', (_, res, next) => {
   } catch (error) {
     return next(error);
   }
+});
+
+/**
+ * 토큰 재발급 api
+ * /api/auth/refreshToken
+ */
+router.post('/refreshToken', (req, res) => {
+  const { refreshToken } = req.cookies;
+
+  if (!refreshToken) {
+    return res.status(401).json({ error: 'No refresh token provided' });
+  }
+
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) {
+      return res
+        .status(403)
+        .json({ error: 'Invalid or expired refresh token' });
+    }
+
+    const accessToken = jwt.sign(
+      { userId: user._id },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: '6h' },
+    );
+
+    return res.status(200).json({ accessToken });
+  });
+  return null;
 });
 
 router.use(commonErrorHandler);
