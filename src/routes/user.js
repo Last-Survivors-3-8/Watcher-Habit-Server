@@ -34,16 +34,18 @@ router.get(
     try {
       const baseQuery = User.findById(userId).lean();
 
-      let query;
-      if (include === 'group') {
-        query = baseQuery.populate('groups');
-      } else if (include === 'habit') {
-        query = baseQuery.populate('habits');
-      } else {
-        query = baseQuery;
+      switch (include) {
+        case 'group':
+          baseQuery.populate('groups');
+          break;
+        case 'habit':
+          baseQuery.populate('habits');
+          break;
+        default:
+          break;
       }
 
-      const user = await query.exec();
+      const user = await baseQuery.exec();
 
       if (!user) {
         return res
