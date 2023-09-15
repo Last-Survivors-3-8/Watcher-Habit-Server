@@ -22,7 +22,13 @@ const getMemberDailyHabits = async (req) => {
     }),
   );
 
-  return memberDailyHabits;
+  const formattedDate = memberDailyHabits.reduce((acc, habit) => {
+    const [nickname] = Object.keys(habit);
+    acc[nickname] = habit[nickname];
+    return acc;
+  }, {});
+
+  return formattedDate;
 };
 
 module.exports = { getMemberDailyHabits };
