@@ -29,14 +29,32 @@ router.get(
   validateMiddleware,
   async (req, res, next) => {
     const { userId } = req.params;
+    const { include, withUserData } = req.query;
 
     try {
-      const user = await User.findById(userId).lean().exec();
+      const baseQuery = User.findById(userId).lean();
+
+      let query;
+      if (include === 'group') {
+        query = baseQuery.populate('groups');
+      } else if (include === 'habit') {
+        query = baseQuery.populate('habits');
+      } else {
+        query = baseQuery;
+      }
+
+      const user = await query.exec();
 
       if (!user) {
         return res
           .status(ERRORS.USER_NOT_FOUND.STATUS_CODE)
           .json({ error: ERRORS.USER_NOT_FOUND.MESSAGE });
+      }
+
+      if (withUserData === 'false') {
+        return res
+          .status(200)
+          .json(include === 'group' ? user.groups : user.habits);
       }
 
       return res.status(200).json(user);
