@@ -1,8 +1,6 @@
 const { ERRORS } = require('../lib/ERRORS');
 const handleError = require('../lib/handleError');
-const User = require('../models/User');
 const userService = require('../services/userService');
-const dateToDay = require('../utils/dateToDay');
 
 const getUserCheck = async (req, res, next) => {
   const { email } = req.query;
@@ -23,29 +21,16 @@ const getUserCheck = async (req, res, next) => {
 };
 
 const getUserDailyHabitList = async (req, res, next) => {
-  const { date } = req.query;
   const { nickname } = req.params;
-  const currentDay = dateToDay(date);
 
   try {
-    const user = await User.findOne({ nickname })
-      .populate({
-        path: 'habits',
-        match: {
-          doDay: { $in: [currentDay] },
-          habitStartDate: { $lte: date },
-          habitEndDate: { $gte: date },
-        },
-        select: '_id habitTitle startTime endTime',
-      })
-      .lean()
-      .exec();
+    const userDailyHabits = await userService.getUserDailyHabits(req, nickname);
 
-    if (!user) {
+    if (!userDailyHabits) {
       return handleError(res, ERRORS.USER_NOT_FOUND);
     }
 
-    return res.status(200).json({ data: { nickname: user.habits } });
+    return res.status(200).json({ data: { [nickname]: userDailyHabits } });
   } catch (error) {
     return next(error);
   }
