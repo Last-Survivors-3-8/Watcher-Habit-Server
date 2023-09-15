@@ -1,4 +1,4 @@
-const { param, check } = require('express-validator');
+const { param, check, query } = require('express-validator');
 const { ERRORS } = require('../lib/ERRORS');
 
 const validateGetUser = [
@@ -38,4 +38,25 @@ const validateGetUserCheck = [
     .withMessage(ERRORS.EMAIL_INVALID),
 ];
 
-module.exports = { validateGetUser, validateCreateUser, validateGetUserCheck };
+const validateGetUserHabitList = [
+  param('nickname')
+    .isString()
+    .withMessage(ERRORS.INVALID_NICKNAME.MESSAGE)
+    .custom((value) => {
+      if (!/^[a-zA-Z0-9]+$/.test(value)) {
+        throw new Error(ERRORS.NICKNAME_NO_BLANK_CONTAINED);
+      }
+      return true;
+    }),
+  query('date')
+    .optional()
+    .matches(/^\d{4}-\d{2}-\d{2}$/)
+    .withMessage(ERRORS.INVALID_HABIT_START_DATE_FORMAT),
+];
+
+module.exports = {
+  validateGetUser,
+  validateCreateUser,
+  validateGetUserCheck,
+  validateGetUserHabitList,
+};

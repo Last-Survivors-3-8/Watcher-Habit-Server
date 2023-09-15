@@ -76,6 +76,17 @@ router.post(
   },
 );
 
+/**
+ * 유저별 일간 습관 목록 조회 API
+ * api/user/:nickname/habitList?date=:date
+ */
+router.get(
+  '/:nickname/habitList',
+  validateUser.validateGetUserHabitList,
+  validateMiddleware,
+  userController.getUserDailyHabitList,
+);
+
 router.use(commonErrorHandler);
 
 module.exports = router;
