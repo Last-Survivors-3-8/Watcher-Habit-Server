@@ -1,6 +1,7 @@
-const userService = require('../services/userService');
-const { ERRORS } = require('../lib/ERRORS');
 const User = require('../models/User');
+const { ERRORS } = require('../lib/ERRORS');
+const handleError = require('../lib/handleError');
+const userService = require('../services/userService');
 
 const getUserCheck = async (req, res, next) => {
   const { email } = req.query;
@@ -41,12 +42,10 @@ const getUser = async (req, res, next) => {
     const user = await baseQuery.exec();
 
     if (!user) {
-      return res
-        .status(ERRORS.USER_NOT_FOUND.STATUS_CODE)
-        .json({ error: ERRORS.USER_NOT_FOUND.MESSAGE });
+      return handleError(res, ERRORS.USER_NOT_FOUND);
     }
 
-    if (withUserData === 'false') {
+    if (!withUserData) {
       return res
         .status(200)
         .json(include === 'group' ? user.groups : user.habits);
@@ -65,9 +64,7 @@ const postUser = async (req, res, next) => {
     });
 
     if (duplicateNickname) {
-      const err = new Error(ERRORS.DUPLICATE_NICKNAME.MESSAGE);
-      err.status = ERRORS.DUPLICATE_NICKNAME.STATUS_CODE;
-      return next(err);
+      return handleError(res, ERRORS.DUPLICATE_NICKNAME);
     }
 
     const newUser = new User(req.body);
