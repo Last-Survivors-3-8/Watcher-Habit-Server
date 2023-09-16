@@ -1,3 +1,4 @@
+const { ERRORS } = require('../lib/ERRORS');
 const Group = require('../models/Group');
 const userService = require('./userService');
 
@@ -12,23 +13,25 @@ const getMemberDailyHabits = async (req) => {
     .lean()
     .exec();
 
-  const memberDailyHabits = await Promise.all(
+  if (!group) {
+    throw new Error(ERRORS.GROUP_NOT_FOUND);
+  }
+
+  const formattedData = {};
+
+  await Promise.all(
     group.members.map(async ({ nickname }) => {
       const userDailyHabits = await userService.getUserDailyHabits(
         req,
         nickname,
+        groupId,
       );
-      return { [nickname]: userDailyHabits };
+
+      formattedData[nickname] = userDailyHabits || {};
     }),
   );
 
-  const formattedDate = memberDailyHabits.reduce((acc, habit) => {
-    const [nickname] = Object.keys(habit);
-    acc[nickname] = habit[nickname];
-    return acc;
-  }, {});
-
-  return formattedDate;
+  return formattedData;
 };
 
 module.exports = { getMemberDailyHabits };
