@@ -216,6 +216,10 @@ const NO_STATUS = '없는 상태입니다.';
 
 const NEED_TOKEN = '토큰이 필요합니다.';
 
+// 알림 스키마 검증 오류 메시지
+
+const NO_USER_PROVIDED = '유저정보가 비어 있습니다.';
+
 module.exports.ERRORS = {
   INVALID_GROUP_NAME,
   INVALID_INVITATION_CODE,
@@ -274,4 +278,5 @@ module.exports.ERRORS = {
   REFRESH_TOKEN_EXPIRED,
   ACCESS_DENIED,
   NEED_TOKEN,
+  NO_USER_PROVIDED,
 };
