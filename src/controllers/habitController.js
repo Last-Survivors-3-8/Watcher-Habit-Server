@@ -41,8 +41,8 @@ const createHabit = async (req, res, next) => {
       doDay: { $in: doDay },
       habitStartDate: { $lte: habitEndDate },
       habitEndDate: { $gte: habitStartDate },
-      startTime: { $lte: endTime },
-      endTime: { $gte: startTime },
+      startTime: { $lt: endTime },
+      endTime: { $gt: startTime },
     });
 
     if (duplicateHabitTime) {
@@ -104,8 +104,8 @@ const updateHabit = async (req, res, next) => {
         doDay: { $in: doDay || habit.doDay },
         habitStartDate: { $lte: habitEndDate || habit.habitEndDate },
         habitEndDate: { $gte: habitStartDate || habit.habitStartDate },
-        startTime: { $lte: endTime || habit.endTime },
-        endTime: { $gte: startTime || habit.startTime },
+        startTime: { $lt: endTime || habit.endTime },
+        endTime: { $gt: startTime || habit.startTime },
       });
 
       if (duplicateHabitTime && String(duplicateHabitTime._id) !== habitId) {
