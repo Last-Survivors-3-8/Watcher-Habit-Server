@@ -45,10 +45,10 @@ const saveTemp = async (req, res, next) => {
   }
 };
 
-const deleteTemp = (req, res, next) => {};
+// const deleteTemp = (req, res, next) => {};
 
 module.exports = {
   getListTemp,
   saveTemp,
-  deleteTemp,
+  //   deleteTemp,
 };
