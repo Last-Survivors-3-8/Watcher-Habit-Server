@@ -76,8 +76,25 @@ const postUser = async (req, res, next) => {
   }
 };
 
+const getUserDailyHabitList = async (req, res, next) => {
+  const { nickname } = req.params;
+
+  try {
+    const userDailyHabits = await userService.getUserDailyHabits(req, nickname);
+
+    if (!userDailyHabits) {
+      return handleError(res, ERRORS.USER_NOT_FOUND);
+    }
+
+    return res.status(200).json({ data: { [nickname]: userDailyHabits } });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   getUserCheck,
   getUser,
   postUser,
+  getUserDailyHabitList,
 };
