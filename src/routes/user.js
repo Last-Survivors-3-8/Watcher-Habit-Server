@@ -1,6 +1,4 @@
 const express = require('express');
-const User = require('../models/User');
-const { ERRORS } = require('../lib/ERRORS');
 const commonErrorHandler = require('../middlewares/commonErrorHandler');
 const validateUser = require('../middlewares/validateUser');
 const validateMiddleware = require('../middlewares/validateMiddleware');
@@ -38,26 +36,7 @@ router.post(
   '/',
   validateUser.validateCreateUser,
   validateMiddleware,
-  async (req, res, next) => {
-    try {
-      const duplicateNickname = await User.exists({
-        nickname: req.body.nickname,
-      });
-
-      if (duplicateNickname) {
-        const err = new Error(ERRORS.DUPLICATE_NICKNAME.MESSAGE);
-        err.status = ERRORS.DUPLICATE_NICKNAME.STATUS_CODE;
-        return next(err);
-      }
-
-      const newUser = new User(req.body);
-      await newUser.save();
-
-      return res.status(201).json(newUser);
-    } catch (error) {
-      return next(error);
-    }
-  },
+  userController.postUser,
 );
 
 router.use(commonErrorHandler);

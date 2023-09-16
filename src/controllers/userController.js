@@ -2,6 +2,24 @@ const userService = require('../services/userService');
 const { ERRORS } = require('../lib/ERRORS');
 const User = require('../models/User');
 
+const getUserCheck = async (req, res, next) => {
+  const { email } = req.query;
+
+  try {
+    const user = await userService.getNicknameByEmail(email);
+
+    if (user) {
+      return res.status(200).json({ nickname: user.nickname });
+    }
+
+    return res.status(200).json({
+      exists: false,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const getUser = async (req, res, next) => {
   const { userId } = req.params;
   const { include, withUserData } = req.query;
@@ -40,25 +58,29 @@ const getUser = async (req, res, next) => {
   }
 };
 
-const getUserCheck = async (req, res, next) => {
-  const { email } = req.query;
-
+const postUser = async (req, res, next) => {
   try {
-    const user = await userService.getNicknameByEmail(email);
+    const duplicateNickname = await User.exists({
+      nickname: req.body.nickname,
+    });
 
-    if (user) {
-      return res.status(200).json({ nickname: user.nickname });
+    if (duplicateNickname) {
+      const err = new Error(ERRORS.DUPLICATE_NICKNAME.MESSAGE);
+      err.status = ERRORS.DUPLICATE_NICKNAME.STATUS_CODE;
+      return next(err);
     }
 
-    return res.status(200).json({
-      exists: false,
-    });
+    const newUser = new User(req.body);
+    await newUser.save();
+
+    return res.status(201).json(newUser);
   } catch (error) {
     return next(error);
   }
 };
 
 module.exports = {
-  getUser,
   getUserCheck,
+  getUser,
+  postUser,
 };
