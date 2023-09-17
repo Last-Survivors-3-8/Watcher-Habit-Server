@@ -52,6 +52,17 @@ router.delete(
   habitController.deleteHabit,
 );
 
+/**
+ * 습관 지켜보기 등록 api
+ * /api/habit/:habitId/watcher
+ */
+router.patch(
+  '/:habitId/watcher',
+  validateHabit.registWatcherRequest,
+  validateMiddleware,
+  habitController.registWatcher,
+);
+
 const upload = multer({ storage: multer.memoryStorage() });
 router.post(
   '/:habitId/image',

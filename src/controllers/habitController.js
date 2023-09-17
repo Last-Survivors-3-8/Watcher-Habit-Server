@@ -2,6 +2,7 @@ const { ERRORS } = require('../lib/ERRORS');
 const handleError = require('../lib/handleError');
 const uploadImage = require('../services/aws/s3Service');
 const habitService = require('../services/habitService');
+const User = require('../models/User');
 
 const getHabit = async (req, res, next) => {
   const { habitId } = req.params;
@@ -85,6 +86,8 @@ const updateHabit = async (req, res, next) => {
   } = req.body;
 
   try {
+    const updateFields = { ...req.body };
+
     const habit = await habitService.getHabitById(habitId);
 
     if (!habit) {
@@ -117,7 +120,7 @@ const updateHabit = async (req, res, next) => {
     }
 
     if (minApprovalCount === 0) {
-      req.body.sharedGroup = null;
+      updateFields.sharedGroup = null;
     }
 
     if (sharedGroup) {
@@ -129,7 +132,7 @@ const updateHabit = async (req, res, next) => {
 
     const updatedHabit = await habitService.updateExistingHabit(
       habitId,
-      req.body,
+      updateFields,
     );
 
     return res.status(200).json(updatedHabit);
@@ -188,10 +191,53 @@ const updateHabitImage = async (req, res, next) => {
   return null;
 };
 
+const registWatcher = async (req, res, next) => {
+  const { habitId } = req.params;
+  const { watcherId } = req.body;
+
+  try {
+    const updateFields = { ...req.body };
+
+    const habit = await habitService.getHabitById(habitId);
+
+    if (!habit) {
+      return handleError(res, ERRORS.HABIT_NOT_FOUND);
+    }
+
+    if (watcherId) {
+      const isMember = User.exists({
+        _id: watcherId,
+        sharedGroup: habit.sharedGroup,
+      })
+        .lean()
+        .exec();
+
+      if (isMember) {
+        updateFields.$push = {
+          approvals: { _id: watcherId, status: 'undecided' },
+        };
+      }
+    }
+
+    const updatedHabit = await habitService.updateExistingHabit(
+      habitId,
+      updateFields,
+    );
+
+    return res.status(200).json(updatedHabit);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const deleteWatcher = async (req, res, next) => {};
+
 module.exports = {
   getHabit,
   createHabit,
   updateHabit,
   deleteHabit,
   updateHabitImage,
+  registWatcher,
+  deleteWatcher,
 };
