@@ -1,20 +1,10 @@
-const Notification = require('../models/Notification');
-const handleError = require('../lib/handleError');
-const { ERRORS } = require('../lib/ERRORS');
+const notificationService = require('../services/notificationService');
 
-// TODO 이름 뭘로할지 고민
-
-const getListTemp = async (req, res, next) => {
+const getList = async (req, res, next) => {
   const { userId } = req.params;
 
   try {
-    const notifications = await Notification.find({
-      $or: [{ from: userId }, { to: userId }],
-      isNeedToSend: true,
-      createdAt: {
-        // 작성중
-      },
-    });
+    const notifications = await notificationService.getNotifications(userId);
 
     return res.status(200).json({ notifications });
   } catch (error) {
@@ -22,22 +12,12 @@ const getListTemp = async (req, res, next) => {
   }
 };
 
-const saveTemp = async (req, res, next) => {
-  const { from, to } = req.body;
-
+const save = async (req, res, next) => {
   try {
-    const hasInviteUser = await Notification.exists({ _id: from })
-      .lean()
-      .exec();
-    const hasInvitedUser = await Notification.exists({ _id: to }).lean().exec();
-
-    if (!hasInviteUser || !hasInvitedUser) {
-      return handleError(res, ERRORS.USER_NOT_FOUND);
-    }
-
-    const newNotification = new Notification(req.body);
-    newNotification.isNeedToSend = true;
-    await newNotification.save();
+    const newNotification = await notificationService.saveNotification(
+      req,
+      res,
+    );
 
     return res.status(201).json(newNotification);
   } catch (error) {
@@ -45,10 +25,7 @@ const saveTemp = async (req, res, next) => {
   }
 };
 
-// const deleteTemp = (req, res, next) => {};
-
 module.exports = {
-  getListTemp,
-  saveTemp,
-  //   deleteTemp,
+  getList,
+  save,
 };
