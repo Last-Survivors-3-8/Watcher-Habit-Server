@@ -3,7 +3,14 @@ const Habit = require('../models/Habit');
 const User = require('../models/User');
 const Group = require('../models/Group');
 
-const getHabitById = (habitId) => Habit.findById(habitId).lean().exec();
+const getHabitById = (habitId) =>
+  Habit.findById(habitId)
+    .populate({
+      path: 'creator',
+      select: '_id nickname',
+    })
+    .lean()
+    .exec();
 
 const checkUserExists = (userId) => User.exists({ _id: userId });
 

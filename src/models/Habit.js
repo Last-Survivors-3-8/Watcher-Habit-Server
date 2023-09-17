@@ -80,7 +80,7 @@ const HabitSchema = new mongoose.Schema(
     minApprovalCount: { type: Number, default: 0 },
     approvals: [
       {
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        _id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         status: {
           type: String,
           enum: ['approved', 'rejected', 'undecided'],
