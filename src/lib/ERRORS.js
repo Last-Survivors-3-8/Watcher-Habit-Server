@@ -221,6 +221,10 @@ const NO_STATUS = '없는 상태입니다.';
 
 const NEED_TOKEN = '토큰이 필요합니다.';
 
+const NOT_SHARED_GROUP = '공유한 그룹이 없거나 해당 그룹이 아닙니다.';
+
+const ALREADY_SUBSCRIBED = '이미 지켜보고 있는 습관입니다.';
+
 // 알림 스키마 검증 오류 메시지
 
 const NO_USER_PROVIDED = '유저정보가 비어 있습니다.';
@@ -288,4 +292,6 @@ module.exports.ERRORS = {
   NO_USER_PROVIDED,
   STATUS_NOT_INVITE,
   IMAGE_UPLOAD_FAILED,
+  NOT_SHARED_GROUP,
+  ALREADY_SUBSCRIBED,
 };

@@ -102,6 +102,12 @@ const isWatcherId = (isRequired = true) =>
     .isMongoId()
     .withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE);
 
+const isWatcherIdonUrl = (isRequired = true) =>
+  param('watcherId')
+    .optional(!isRequired)
+    .isMongoId()
+    .withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE);
+
 const getRequest = [isHabitId()];
 
 const postRequest = [
@@ -131,17 +137,19 @@ const patchRequest = [
   isSharedGroup(false),
   isApprovals(false),
   isStatus(false),
-  isWatcherId(false),
 ];
 
 const deleteRequest = [isHabitId()];
 
-const registWatcherRequest = [isHabitId()];
+const subscribeHabitRequest = [isHabitId(), isWatcherId()];
+
+const unSubscribeHabitRequest = [isHabitId(), isWatcherIdonUrl()];
 
 module.exports = {
   postRequest,
   deleteRequest,
   getRequest,
   patchRequest,
-  registWatcherRequest,
+  subscribeHabitRequest,
+  unSubscribeHabitRequest,
 };
