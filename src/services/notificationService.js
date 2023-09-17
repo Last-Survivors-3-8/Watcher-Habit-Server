@@ -5,8 +5,8 @@ const User = require('../models/User');
 const getDateDiffFromToday = require('../utils/getDateDiffFromToday');
 
 const getNotifications = async (userId) => {
-  const yesterday = getDateDiffFromToday(-10);
-  const tomorrow = getDateDiffFromToday(10);
+  const yesterday = getDateDiffFromToday(-1);
+  const tomorrow = getDateDiffFromToday(1);
 
   const notifications = await Notification.find({
     to: userId,
@@ -28,7 +28,7 @@ const saveNotification = async (req, res) => {
   if (status !== 'invite') {
     return handleError(res, ERRORS.STATUS_NOT_INVITE);
   }
-  const invitedUser = await User.findById(to).lean().exec();
+  const invitedUser = await User.findById(to).exec();
 
   if (!invitedUser) {
     return handleError(res, ERRORS.USER_NOT_FOUND);

@@ -3,7 +3,7 @@ const getDateDiffFromToday = (dayDiff) => {
   today.setHours(0, 0, 0, 0);
   const date = new Date(today);
   date.setDate(today.getDate() + dayDiff);
-  return date.toISOString();
+  return date;
 };
 
 module.exports = getDateDiffFromToday;
