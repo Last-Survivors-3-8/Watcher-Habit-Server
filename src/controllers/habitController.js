@@ -1,6 +1,7 @@
 const { ERRORS } = require('../lib/ERRORS');
-const habitService = require('../services/habitService');
 const handleError = require('../lib/handleError');
+const uploadImage = require('../services/aws/s3Service');
+const habitService = require('../services/habitService');
 
 const getHabit = async (req, res, next) => {
   const { habitId } = req.params;
@@ -154,9 +155,43 @@ const deleteHabit = async (req, res, next) => {
   }
 };
 
+const updateHabitImage = async (req, res, next) => {
+  const { habitId } = req.params;
+
+  try {
+    if (req.file) {
+      const imageName = `${Date.now().toString()}-${req.file.originalname}`;
+      const imageUrl = await uploadImage(
+        req.file.buffer,
+        imageName,
+        req.file.mimetype,
+      );
+
+      if (!imageUrl) {
+        return handleError(res, ERRORS.IMAGE_UPLOAD_FAILED);
+      }
+
+      const result = await habitService.updateHabitImageUrl(habitId, imageUrl);
+
+      if (!result) {
+        return handleError(res, ERRORS.HABIT_NOT_FOUND);
+      }
+
+      return res
+        .status(200)
+        .json({ message: '사진 업로드 성공하였습니다.', imageUrl });
+    }
+  } catch (error) {
+    return next(error);
+  }
+
+  return null;
+};
+
 module.exports = {
   getHabit,
   createHabit,
   updateHabit,
   deleteHabit,
+  updateHabitImage,
 };

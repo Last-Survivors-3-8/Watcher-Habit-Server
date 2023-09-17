@@ -1,8 +1,10 @@
 const express = require('express');
-const commonErrorHandler = require('../middlewares/commonErrorHandler');
+const multer = require('multer');
+
 const validateHabit = require('../middlewares/validateHabit');
 const habitController = require('../controllers/habitController');
 const validateMiddleware = require('../middlewares/validateMiddleware');
+const commonErrorHandler = require('../middlewares/commonErrorHandler');
 
 const router = express.Router();
 
@@ -48,6 +50,15 @@ router.delete(
   validateHabit.deleteRequest,
   validateMiddleware,
   habitController.deleteHabit,
+);
+
+const upload = multer({ storage: multer.memoryStorage() });
+router.post(
+  '/:habitId/image',
+  upload.single('image'),
+  validateHabit.getRequest,
+  validateMiddleware,
+  habitController.updateHabitImage,
 );
 
 router.use(commonErrorHandler);

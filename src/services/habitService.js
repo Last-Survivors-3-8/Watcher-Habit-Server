@@ -9,6 +9,10 @@ const getHabitById = (habitId) =>
       path: 'creator',
       select: '_id nickname',
     })
+    .populate({
+      path: 'approvals._id',
+      select: 'profileImageUrl',
+    })
     .lean()
     .exec();
 
@@ -65,6 +69,17 @@ const deleteHabitById = async (habitId) => {
   return result;
 };
 
+const updateHabitImageUrl = async (habitId, imageUrl) => {
+  const result = await Habit.findByIdAndUpdate(habitId).exec();
+
+  await Habit.findByIdAndUpdate(habitId, {
+    habitImage: imageUrl,
+    status: 'awaitingApproval',
+  });
+
+  return result;
+};
+
 module.exports = {
   getHabitById,
   checkUserExists,
@@ -73,4 +88,5 @@ module.exports = {
   createNewHabit,
   updateExistingHabit,
   deleteHabitById,
+  updateHabitImageUrl,
 };
