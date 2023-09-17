@@ -14,6 +14,7 @@ const getHabitById = (habitId) =>
       select: 'profileImageUrl',
     })
     .lean()
+
     .exec();
 
 const checkUserExists = (userId) => User.exists({ _id: userId });
