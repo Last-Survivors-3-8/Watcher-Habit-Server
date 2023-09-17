@@ -31,14 +31,7 @@ const saveRequest = [
     .withMessage(ERRORS.NO_STATUS),
 ];
 
-const deleteRequest = [
-  param('notificationId')
-    .isMongoId()
-    .withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE),
-];
-
 module.exports = {
   getListRequest,
   saveRequest,
-  deleteRequest,
 };
