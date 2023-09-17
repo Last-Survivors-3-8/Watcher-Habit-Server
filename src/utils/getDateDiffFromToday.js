@@ -5,4 +5,4 @@ const getDateDiffFromToday = (dayDiff) => {
   return date;
 };
 
-export default getDateDiffFromToday;
+module.exports = getDateDiffFromToday;

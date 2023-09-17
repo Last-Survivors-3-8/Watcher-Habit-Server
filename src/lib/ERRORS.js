@@ -220,6 +220,8 @@ const NEED_TOKEN = '토큰이 필요합니다.';
 
 const NO_USER_PROVIDED = '유저정보가 비어 있습니다.';
 
+const STATUS_NOT_INVITE = '초대 알림외에는 api로 생성되지 않습니다.';
+
 module.exports.ERRORS = {
   INVALID_GROUP_NAME,
   INVALID_INVITATION_CODE,
@@ -279,4 +281,5 @@ module.exports.ERRORS = {
   ACCESS_DENIED,
   NEED_TOKEN,
   NO_USER_PROVIDED,
+  STATUS_NOT_INVITE,
 };
