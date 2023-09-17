@@ -96,6 +96,18 @@ const isStatus = (isRequired = true) =>
     ])
     .withMessage(ERRORS.NO_STATUS);
 
+const isWatcherId = (isRequired = true) =>
+  body('watcherId')
+    .optional(!isRequired)
+    .isMongoId()
+    .withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE);
+
+const isWatcherIdonUrl = (isRequired = true) =>
+  param('watcherId')
+    .optional(!isRequired)
+    .isMongoId()
+    .withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE);
+
 const getRequest = [isHabitId()];
 
 const postRequest = [
@@ -129,9 +141,15 @@ const patchRequest = [
 
 const deleteRequest = [isHabitId()];
 
+const subscribeHabitRequest = [isHabitId(), isWatcherId()];
+
+const unSubscribeHabitRequest = [isHabitId(), isWatcherIdonUrl()];
+
 module.exports = {
   postRequest,
   deleteRequest,
   getRequest,
   patchRequest,
+  subscribeHabitRequest,
+  unSubscribeHabitRequest,
 };

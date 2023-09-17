@@ -2,6 +2,7 @@ const { ERRORS } = require('../lib/ERRORS');
 const handleError = require('../lib/handleError');
 const uploadImage = require('../services/aws/s3Service');
 const habitService = require('../services/habitService');
+const User = require('../models/User');
 
 const getHabit = async (req, res, next) => {
   const { habitId } = req.params;
@@ -85,6 +86,8 @@ const updateHabit = async (req, res, next) => {
   } = req.body;
 
   try {
+    const updateFields = { ...req.body };
+
     const habit = await habitService.getHabitById(habitId);
 
     if (!habit) {
@@ -117,7 +120,7 @@ const updateHabit = async (req, res, next) => {
     }
 
     if (minApprovalCount === 0) {
-      req.body.sharedGroup = null;
+      updateFields.sharedGroup = null;
     }
 
     if (sharedGroup) {
@@ -129,7 +132,7 @@ const updateHabit = async (req, res, next) => {
 
     const updatedHabit = await habitService.updateExistingHabit(
       habitId,
-      req.body,
+      updateFields,
     );
 
     return res.status(200).json(updatedHabit);
@@ -188,10 +191,95 @@ const updateHabitImage = async (req, res, next) => {
   return null;
 };
 
+const subscribeWatcher = async (req, res, next) => {
+  const { habitId } = req.params;
+  const { watcherId } = req.body;
+
+  try {
+    const updateFields = { ...req.body };
+
+    const habit = await habitService.getHabitById(habitId);
+
+    if (!habit) {
+      return handleError(res, ERRORS.HABIT_NOT_FOUND);
+    }
+
+    const isMember = User.exists({
+      _id: watcherId,
+      sharedGroup: habit.sharedGroup,
+    })
+      .lean()
+      .exec();
+
+    if (!isMember) {
+      return handleError(res, ERRORS.NOT_SHARED_GROUP);
+    }
+
+    const alreadySubscribed = habit.approvals.some(
+      (approval) => String(approval._id._id) === String(watcherId),
+    );
+
+    if (alreadySubscribed) {
+      return handleError(res, ERRORS.ALREADY_SUBSCRIBED);
+    }
+
+    updateFields.$push = {
+      approvals: { _id: watcherId, status: 'undecided' },
+    };
+
+    const updatedHabit = await habitService.updateExistingHabit(
+      habitId,
+      updateFields,
+    );
+
+    return res.status(200).json(updatedHabit);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const unSubscribeWatcher = async (req, res, next) => {
+  const { habitId, watcherId } = req.params;
+
+  try {
+    const updateFields = {};
+
+    const habit = await habitService.getHabitById(habitId);
+
+    if (!habit) {
+      return handleError(res, ERRORS.HABIT_NOT_FOUND);
+    }
+
+    const isMember = User.exists({
+      _id: watcherId,
+      sharedGroup: habit.sharedGroup,
+    })
+      .lean()
+      .exec();
+
+    if (isMember) {
+      updateFields.$pull = {
+        approvals: { _id: watcherId },
+      };
+    }
+
+    const updatedHabit = await habitService.updateExistingHabit(
+      habitId,
+      updateFields,
+    );
+
+    return res.status(200).json(updatedHabit);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   getHabit,
   createHabit,
   updateHabit,
   deleteHabit,
   updateHabitImage,
+  subscribeWatcher,
+  unSubscribeWatcher,
 };

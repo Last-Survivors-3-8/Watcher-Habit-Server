@@ -52,6 +52,28 @@ router.delete(
   habitController.deleteHabit,
 );
 
+/**
+ * 습관 지켜보기 등록 api
+ * /api/habit/:habitId/watcher
+ */
+router.patch(
+  '/:habitId/watcher',
+  validateHabit.subscribeHabitRequest,
+  validateMiddleware,
+  habitController.subscribeWatcher,
+);
+
+/**
+ * 습관 지켜보기 해제 api
+ * /api/habit/:habitId/watcher/:watcherId
+ */
+router.delete(
+  '/:habitId/watcher/:watcherId',
+  validateHabit.unSubscribeHabitRequest,
+  validateMiddleware,
+  habitController.unSubscribeWatcher,
+);
+
 const upload = multer({ storage: multer.memoryStorage() });
 router.post(
   '/:habitId/image',
