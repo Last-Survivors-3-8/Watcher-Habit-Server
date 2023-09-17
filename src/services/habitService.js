@@ -13,6 +13,10 @@ const getHabitById = (habitId) =>
       path: 'approvals._id',
       select: 'profileImageUrl',
     })
+    .populate({
+      path: 'sharedGroup',
+      select: 'groupName',
+    })
     .lean()
     .exec();
 
