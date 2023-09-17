@@ -5,19 +5,19 @@ const User = require('../models/User');
 const getDateDiffFromToday = require('../utils/getDateDiffFromToday');
 
 const getNotifications = async (userId) => {
-  const yesterday = getDateDiffFromToday(-1);
-  const tomorrow = getDateDiffFromToday(1);
+  const yesterday = getDateDiffFromToday(-10);
+  const tomorrow = getDateDiffFromToday(10);
 
-  //   const notifications = await Notification.find({
-  //     to: userId,
-  //     isNeedToSend: true,
-  //     createdAt: {
-  //       $gte: yesterday,
-  //       $lt: tomorrow,
-  //     },
-  //   });
-
-  const notifications = await Notification.find({}).lean().exec();
+  const notifications = await Notification.find({
+    to: userId,
+    isNeedToSend: true,
+    createdAt: {
+      $gte: yesterday,
+      $lt: tomorrow,
+    },
+  })
+    .lean()
+    .exec();
 
   return notifications;
 };

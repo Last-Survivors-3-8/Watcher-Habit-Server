@@ -1,8 +1,9 @@
 const getDateDiffFromToday = (dayDiff) => {
-  const date = new Date();
-  date.setDate(date.getDate() + dayDiff);
-  date.setHours(0, 0, 0, 0);
-  return date;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const date = new Date(today);
+  date.setDate(today.getDate() + dayDiff);
+  return date.toISOString();
 };
 
 module.exports = getDateDiffFromToday;
