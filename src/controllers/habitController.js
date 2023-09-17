@@ -1,6 +1,6 @@
 const { ERRORS } = require('../lib/ERRORS');
 const handleError = require('../lib/handleError');
-const uploadImage = require('../services/aws/s3');
+const uploadImage = require('../services/aws/s3Service');
 const habitService = require('../services/habitService');
 
 const getHabit = async (req, res, next) => {
@@ -176,12 +176,16 @@ const updateHabitImage = async (req, res, next) => {
       if (!result) {
         return handleError(res, ERRORS.HABIT_NOT_FOUND);
       }
-    }
 
-    return res.status(200).json({ message: '사진 업로드 성공하였습니다.' });
+      return res
+        .status(200)
+        .json({ message: '사진 업로드 성공하였습니다.', imageUrl });
+    }
   } catch (error) {
     return next(error);
   }
+
+  return null;
 };
 
 module.exports = {

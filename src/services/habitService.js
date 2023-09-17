@@ -70,7 +70,7 @@ const deleteHabitById = async (habitId) => {
 };
 
 const updateHabitImageUrl = async (habitId, imageUrl) => {
-  const result = await Habit.findByIdAndDelete(habitId).exec();
+  const result = await Habit.findByIdAndUpdate(habitId).exec();
 
   await Habit.findByIdAndUpdate(habitId, {
     habitImage: imageUrl,
