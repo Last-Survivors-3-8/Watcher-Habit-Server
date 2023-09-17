@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const uploadImage = require('../services/aws/s3');
+
 const validateHabit = require('../middlewares/validateHabit');
 const habitController = require('../controllers/habitController');
 const validateMiddleware = require('../middlewares/validateMiddleware');
@@ -53,18 +53,13 @@ router.delete(
 );
 
 const upload = multer({ storage: multer.memoryStorage() });
-
-router.post('/:habitId/image', upload.single('image'), async (req, res) => {
-  try {
-    const { habitId } = req.params;
-    const photoKey = `${Date.now().toString()}-${req.file.originalname}`;
-    const url = await uploadImage(req.file.buffer, photoKey, req.file.mimetype);
-
-    res.status(200).json({ message: '사진 업로드 성공', url });
-  } catch (error) {
-    res.status(500).json({ message: '업로드 에러', error });
-  }
-});
+router.post(
+  '/:habitId/image',
+  upload.single('image'),
+  validateHabit.getRequest,
+  validateMiddleware,
+  habitController.updateHabitImage,
+);
 
 router.use(commonErrorHandler);
 

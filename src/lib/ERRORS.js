@@ -158,6 +158,11 @@ const ACCESS_DENIED = {
   MESSAGE: '접근이 거부되었습니다.',
 };
 
+const IMAGE_UPLOAD_FAILED = {
+  STATUS_CODE: 500,
+  MESSAGE: '이미지 업로드에 실패하였습니다',
+};
+
 // 유저 스키마 검증 오류 메시지
 const NICKNAME_REQUIRED = '닉네임은 필수입니다.';
 
@@ -274,4 +279,5 @@ module.exports.ERRORS = {
   REFRESH_TOKEN_EXPIRED,
   ACCESS_DENIED,
   NEED_TOKEN,
+  IMAGE_UPLOAD_FAILED,
 };

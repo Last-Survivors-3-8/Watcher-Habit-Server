@@ -69,6 +69,17 @@ const deleteHabitById = async (habitId) => {
   return result;
 };
 
+const updateHabitImageUrl = async (habitId, imageUrl) => {
+  const result = await Habit.findByIdAndDelete(habitId).exec();
+
+  await Habit.findByIdAndUpdate(habitId, {
+    habitImage: imageUrl,
+    status: 'awaitingApproval',
+  });
+
+  return result;
+};
+
 module.exports = {
   getHabitById,
   checkUserExists,
@@ -77,4 +88,5 @@ module.exports = {
   createNewHabit,
   updateExistingHabit,
   deleteHabitById,
+  updateHabitImageUrl,
 };
