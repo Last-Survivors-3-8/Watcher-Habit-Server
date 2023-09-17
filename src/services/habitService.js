@@ -10,7 +10,7 @@ const getHabitById = (habitId) =>
       select: '_id nickname',
     })
     .populate({
-      path: 'approvals.userId',
+      path: 'approvals._id',
       select: 'profileImageUrl',
     })
     .lean()
