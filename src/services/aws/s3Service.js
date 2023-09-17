@@ -8,11 +8,11 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-const uploadImage = async (photoBuffer, photoKey, contentType) => {
+const uploadImage = async (imageBuffer, imageKey, contentType) => {
   const params = {
     Bucket: 'watcher-habit',
-    Key: photoKey,
-    Body: photoBuffer,
+    Key: imageKey,
+    Body: imageBuffer,
     ContentType: contentType,
     ACL: 'public-read',
   };
