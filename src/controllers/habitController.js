@@ -3,6 +3,7 @@ const handleError = require('../lib/handleError');
 const uploadImage = require('../services/aws/s3Service');
 const habitService = require('../services/habitService');
 const User = require('../models/User');
+const Habit = require('../models/Habit');
 
 const getHabit = async (req, res, next) => {
   const { habitId } = req.params;
@@ -194,45 +195,44 @@ const updateHabitImage = async (req, res, next) => {
 const subscribeWatcher = async (req, res, next) => {
   const { habitId } = req.params;
   const { watcherId } = req.body;
+  const newApproval = { _id: watcherId, status: 'undecided' };
 
   try {
-    const updateFields = { ...req.body };
-
-    const habit = await habitService.getHabitById(habitId);
+    const habit = await Habit.findById(habitId).populate().exec();
 
     if (!habit) {
       return handleError(res, ERRORS.HABIT_NOT_FOUND);
     }
 
-    const isMember = User.exists({
+    const member = await User.findOne({
       _id: watcherId,
-      sharedGroup: habit.sharedGroup,
+      groups: { $in: [habit.sharedGroup] },
     })
       .lean()
       .exec();
 
-    if (!isMember) {
+    if (!member) {
       return handleError(res, ERRORS.NOT_SHARED_GROUP);
     }
 
     const alreadySubscribed = habit.approvals.some(
-      (approval) => String(approval._id._id) === String(watcherId),
+      (approval) => String(approval._id) === String(watcherId),
     );
 
     if (alreadySubscribed) {
       return handleError(res, ERRORS.ALREADY_SUBSCRIBED);
     }
 
-    updateFields.$push = {
-      approvals: { _id: watcherId, status: 'undecided' },
-    };
+    habit.approvals.push(newApproval);
+    await habit.save();
 
-    const updatedHabit = await habitService.updateExistingHabit(
-      habitId,
-      updateFields,
-    );
+    newApproval.profileImageUrl = member.profileImageUrl;
 
-    return res.status(200).json(updatedHabit);
+    console.log(member);
+
+    console.log(newApproval);
+
+    return res.status(200).json(newApproval);
   } catch (error) {
     return next(error);
   }
@@ -263,12 +263,9 @@ const unSubscribeWatcher = async (req, res, next) => {
       };
     }
 
-    const updatedHabit = await habitService.updateExistingHabit(
-      habitId,
-      updateFields,
-    );
+    await habitService.updateExistingHabit(habitId, updateFields);
 
-    return res.status(200).json(updatedHabit);
+    return res.status(200).json({ _id: watcherId });
   } catch (error) {
     return next(error);
   }
