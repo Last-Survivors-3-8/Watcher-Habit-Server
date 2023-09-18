@@ -13,14 +13,8 @@ const GroupSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    members: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-      default: [],
-    },
-    habits: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Habit' }],
-      default: [],
-    },
+    members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    habits: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Habit' }],
   },
   {
     timestamps: true,
