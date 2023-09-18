@@ -237,6 +237,10 @@ const NO_USER_PROVIDED = '유저정보가 비어 있습니다.';
 
 const STATUS_NOT_INVITE = '초대 알림외에는 api로 생성되지 않습니다.';
 
+// 그룹 검증 오류 메시지
+
+const GROUP_ALREADY_EXISTS = '이미 존재하는 그룹입니다.';
+
 module.exports.ERRORS = {
   INVALID_GROUP_NAME,
   INVALID_INVITATION_CODE,
@@ -300,4 +304,5 @@ module.exports.ERRORS = {
   IMAGE_UPLOAD_FAILED,
   NOT_SHARED_GROUP,
   ALREADY_SUBSCRIBED,
+  GROUP_ALREADY_EXISTS,
 };

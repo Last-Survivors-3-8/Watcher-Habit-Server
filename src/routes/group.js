@@ -7,6 +7,39 @@ const groupController = require('../controllers/groupController');
 const router = express.Router();
 
 /**
+ * 그룹 생성 API
+ * api/group
+ */
+router.post(
+  '/',
+  validateGroup.validateInvitation,
+  validateMiddleware,
+  groupController.generateGroup,
+);
+
+/**
+ * 그룹 조회 API
+ * api/group/:groupId
+ */
+router.get(
+  '/:groupId',
+  validateGroup.validateGroupId,
+  validateMiddleware,
+  groupController.getGroup,
+);
+
+/**
+ * 그룹 멤버 추가 API
+ * api/group/:groupId/members
+ */
+router.post(
+  '/:groupId/members',
+  validateGroup.validateGroupId,
+  validateMiddleware,
+  groupController.getGroup,
+);
+
+/**
  * 그룹별 일간 습관 목록 조회 API
  * api/group/:groupId/habitList?date=:date
  */
