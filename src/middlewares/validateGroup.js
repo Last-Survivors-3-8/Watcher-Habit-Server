@@ -1,7 +1,7 @@
 const { param, query, body } = require('express-validator');
 const { ERRORS } = require('../lib/ERRORS');
 
-const validateInvitation = [
+const validateCreation = [
   body('groupName')
     .isString()
     .isLength({ min: 2, max: 15 })
@@ -33,6 +33,6 @@ module.exports = {
   validateGetGroupHabitList,
   validateGroupId,
   validateMemberId,
-  validateInvitation,
+  validateCreation,
   validateInviteMemberId,
 };

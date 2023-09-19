@@ -12,7 +12,7 @@ const router = express.Router();
  */
 router.post(
   '/',
-  validateGroup.validateInvitation,
+  validateGroup.validateCreation,
   validateMiddleware,
   groupController.generateGroup,
 );
