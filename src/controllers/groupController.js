@@ -1,8 +1,8 @@
 const Group = require('../models/Group');
+const User = require('../models/User');
 const groupService = require('../services/groupService');
 const handleError = require('../lib/handleError');
 const { ERRORS } = require('../lib/ERRORS');
-const User = require('../models/User');
 
 const generateGroup = async (req, res, next) => {
   const { groupName, creatorId } = req.body;
@@ -55,11 +55,30 @@ const getGroup = async (req, res, next) => {
 
 const addMember = async (req, res, next) => {
   const { groupId } = req.params;
+  const { userId } = req.body;
 
   try {
-    const group = await Group.findById(groupId).lean().exec();
+    const group = await Group.findById(groupId).exec();
+    if (!group) {
+      return handleError(res, ERRORS.GROUP_NOT_FOUND);
+    }
 
-    return res.status(200).json({ group });
+    const user = await User.findById(userId).exec();
+    if (!user) {
+      return handleError(res, ERRORS.USER_NOT_FOUND);
+    }
+
+    if (group.members.includes(userId)) {
+      return handleError(res, ERRORS.USER_ALREADY_IN_GROUP);
+    }
+
+    group.members.push(userId);
+    await group.save();
+
+    user.groups.push(groupId);
+    await user.save();
+
+    return res.status(200).json({ message: '가입되었습니다.' });
   } catch (error) {
     return next(error);
   }

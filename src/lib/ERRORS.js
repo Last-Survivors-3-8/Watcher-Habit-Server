@@ -244,6 +244,11 @@ const GROUP_ALREADY_EXISTS = {
   MESSAGE: '이미 존재하는 그룹입니다.',
 };
 
+const USER_ALREADY_IN_GROUP = {
+  STATUS_CODE: 409,
+  MESSAGE: '이미 그룹에 가입되어 있는 유저입니다.',
+};
+
 module.exports.ERRORS = {
   INVALID_GROUP_NAME,
   INVALID_INVITATION_CODE,
@@ -308,4 +313,5 @@ module.exports.ERRORS = {
   NOT_SHARED_GROUP,
   ALREADY_SUBSCRIBED,
   GROUP_ALREADY_EXISTS,
+  USER_ALREADY_IN_GROUP,
 };

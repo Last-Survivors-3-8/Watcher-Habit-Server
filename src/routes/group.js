@@ -32,11 +32,12 @@ router.get(
  * 그룹 멤버 추가 API
  * api/group/:groupId/members
  */
-router.post(
+router.patch(
   '/:groupId/members',
   validateGroup.validateGroupId,
+  validateGroup.validateMemberId,
   validateMiddleware,
-  groupController.getGroup,
+  groupController.addMember,
 );
 
 /**

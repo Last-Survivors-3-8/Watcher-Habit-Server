@@ -12,6 +12,10 @@ const validateGroupId = [
   param('groupId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID),
 ];
 
+const validateMemberId = [
+  body('userId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID),
+];
+
 const validateGetGroupHabitList = [
   param('groupId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE),
   query('date')
@@ -23,5 +27,6 @@ const validateGetGroupHabitList = [
 module.exports = {
   validateGetGroupHabitList,
   validateGroupId,
+  validateMemberId,
   validateInvitation,
 };
