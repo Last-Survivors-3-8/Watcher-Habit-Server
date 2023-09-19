@@ -68,14 +68,6 @@ const HabitSchema = new mongoose.Schema(
     sharedGroup: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' },
     habitImage: {
       type: String,
-      validate: {
-        validator(url) {
-          return /^(https:\/\/s3\.amazonaws\.com\/${bucket-name}\/).+/.test(
-            url,
-          );
-        },
-        message: (props) => `${props.value}${ERRORS.INVALID_S3_URL}`,
-      },
     },
     minApprovalCount: { type: Number, default: 0 },
     approvals: [
