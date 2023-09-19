@@ -249,6 +249,11 @@ const USER_ALREADY_IN_GROUP = {
   MESSAGE: '이미 그룹에 가입되어 있는 유저입니다.',
 };
 
+const FROM_USER_NOT_IN_GROUP = {
+  STATUS_CODE: 403,
+  MESSAGE: '발신자가 해당 그룹의 그룹원이 아니므로 초대를 할 수 없습니다.',
+};
+
 module.exports.ERRORS = {
   INVALID_GROUP_NAME,
   INVALID_INVITATION_CODE,
@@ -314,4 +319,5 @@ module.exports.ERRORS = {
   ALREADY_SUBSCRIBED,
   GROUP_ALREADY_EXISTS,
   USER_ALREADY_IN_GROUP,
+  FROM_USER_NOT_IN_GROUP,
 };

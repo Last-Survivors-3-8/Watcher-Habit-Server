@@ -24,9 +24,15 @@ const validateGetGroupHabitList = [
     .withMessage(ERRORS.INVALID_HABIT_START_DATE_FORMAT),
 ];
 
+const validateInviteMemberId = [
+  body('fromUserId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID),
+  body('toUserId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID),
+];
+
 module.exports = {
   validateGetGroupHabitList,
   validateGroupId,
   validateMemberId,
   validateInvitation,
+  validateInviteMemberId,
 };

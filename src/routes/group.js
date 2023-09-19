@@ -51,6 +51,18 @@ router.get(
   groupController.getGroupDailyHabitList,
 );
 
+/**
+ * 그룹 멤버 초대 API
+ * api/group/:groupId/invite
+ */
+router.post(
+  '/:groupId/invite',
+  validateGroup.validateGroupId,
+  validateGroup.validateInviteMemberId,
+  validateMiddleware,
+  groupController.inviteMember,
+);
+
 router.use(commonErrorHandler);
 
 module.exports = router;
