@@ -2,26 +2,34 @@ const Group = require('../models/Group');
 const groupService = require('../services/groupService');
 const handleError = require('../lib/handleError');
 const { ERRORS } = require('../lib/ERRORS');
+const User = require('../models/User');
 
 const generateGroup = async (req, res, next) => {
-  const { groupName, invitationCode } = req.body;
+  const { groupName, creatorId } = req.body;
 
   try {
-    const hasGroup = await Group.exists({ groupName }).lean().exec();
-    if (hasGroup) {
+    const alreadyHasGroup = await Group.exists({ groupName }).exec();
+
+    if (alreadyHasGroup) {
       return handleError(res, ERRORS.GROUP_ALREADY_EXISTS);
     }
-    // invitationCode 생성? 받아오기?
 
-    // members 에 요청한 멤버 추가 -> access token을 받아와서 유저id를 알아야 할 것 같음
+    const user = await User.findById(creatorId).exec();
+
+    if (!user) {
+      return handleError(res, ERRORS.USER_NOT_FOUND);
+    }
 
     const newGroupColums = {
       groupName,
-      invitationCode,
+      members: [creatorId],
     };
 
     const newGroup = new Group(newGroupColums);
     await newGroup.save();
+
+    user.groups.push(newGroup._id);
+    await user.save();
 
     return res.status(201).json({ newGroup });
   } catch (error) {
@@ -30,6 +38,22 @@ const generateGroup = async (req, res, next) => {
 };
 
 const getGroup = async (req, res, next) => {
+  const { groupId } = req.params;
+
+  try {
+    const group = await Group.findById(groupId).lean().exec();
+
+    if (!group) {
+      return handleError(res, ERRORS.GROUP_NOT_FOUND);
+    }
+
+    return res.status(200).json({ group });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const addMember = async (req, res, next) => {
   const { groupId } = req.params;
 
   try {
@@ -54,5 +78,6 @@ const getGroupDailyHabitList = async (req, res, next) => {
 module.exports = {
   getGroupDailyHabitList,
   getGroup,
+  addMember,
   generateGroup,
 };

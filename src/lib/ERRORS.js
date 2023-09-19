@@ -239,7 +239,10 @@ const STATUS_NOT_INVITE = '초대 알림외에는 api로 생성되지 않습니�
 
 // 그룹 검증 오류 메시지
 
-const GROUP_ALREADY_EXISTS = '이미 존재하는 그룹입니다.';
+const GROUP_ALREADY_EXISTS = {
+  STATUS_CODE: 400,
+  MESSAGE: '이미 존재하는 그룹입니다.',
+};
 
 module.exports.ERRORS = {
   INVALID_GROUP_NAME,
