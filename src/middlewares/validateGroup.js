@@ -6,10 +6,6 @@ const validateInvitation = [
     .isString()
     .isLength({ min: 2, max: 15 })
     .withMessage(ERRORS.INVALID_GROUP_NAME.MESSAGE),
-  body('invitationCode')
-    .isString()
-    .isLength({ min: 6, max: 6 })
-    .withMessage(ERRORS.INVALID_INVITATION_CODE.MESSAGE),
 ];
 
 const validateGroupId = [

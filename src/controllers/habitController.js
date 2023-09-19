@@ -228,10 +228,6 @@ const subscribeWatcher = async (req, res, next) => {
 
     newApproval.profileImageUrl = member.profileImageUrl;
 
-    console.log(member);
-
-    console.log(newApproval);
-
     return res.status(200).json(newApproval);
   } catch (error) {
     return next(error);
