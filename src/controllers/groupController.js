@@ -4,6 +4,7 @@ const User = require('../models/User');
 const groupService = require('../services/groupService');
 const handleError = require('../lib/handleError');
 const { ERRORS } = require('../lib/ERRORS');
+const connections = require('../utils/sseConnections');
 
 const generateGroup = async (req, res, next) => {
   const { groupName, creatorId } = req.body;
@@ -121,12 +122,16 @@ const inviteMember = async (req, res, next) => {
     }
 
     const notification = new Notification({
-      content: `${fromUser.username}님이 ${group.groupName}에 초대하였습니다.`,
+      content: `${fromUser.nickname}님이 ${group.groupName}에 초대하였습니다.`,
       from: fromUserId,
       to: toUserId,
       status: 'invite',
     });
     await notification.save();
+
+    connections.forEach((client) => {
+      client.write(`data: ${JSON.stringify(notification)}\n\n`);
+    });
 
     return res
       .status(200)
