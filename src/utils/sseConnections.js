@@ -1,3 +1,3 @@
-const connections = [];
+const connections = {};
 
 module.exports = connections;

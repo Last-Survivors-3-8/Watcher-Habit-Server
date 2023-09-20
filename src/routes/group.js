@@ -8,15 +8,23 @@ const connections = require('../utils/sseConnections');
 const router = express.Router();
 
 router.get('/events', (req, res) => {
+  const { userId } = req.query;
+
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
   res.flushHeaders();
 
-  connections.push(res);
+  if (userId) {
+    connections[userId] = res;
+  }
 
   req.on('close', () => {
-    connections.splice(connections.indexOf(res), 1);
+    if (userId) {
+      delete connections[userId];
+    } else {
+      connections.splice(connections.indexOf(res), 1);
+    }
   });
 });
 

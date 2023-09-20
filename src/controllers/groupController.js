@@ -133,9 +133,9 @@ const inviteMember = async (req, res, next) => {
 
     await notification.save();
 
-    connections.forEach((client) => {
-      client.write(`data: ${JSON.stringify(notification)}\n\n`);
-    });
+    if (connections[toUserId]) {
+      connections[toUserId].write(`data: ${JSON.stringify(notification)}\n\n`);
+    }
 
     return res
       .status(200)
