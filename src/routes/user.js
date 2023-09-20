@@ -18,6 +18,17 @@ router.get(
 );
 
 /**
+ * 유저 이메일 검색 조회 API
+ * api/user/getInfoByEmail?email=:email
+ */
+router.get(
+  '/getInfoByEmail',
+  validateUser.validateGetUserCheck,
+  validateMiddleware,
+  userController.getUserInfoByEmail,
+);
+
+/**
  * 유저 조회 api
  * /api/user/:userId
  */
@@ -48,17 +59,6 @@ router.get(
   validateUser.validateGetUserHabitList,
   validateMiddleware,
   userController.getUserDailyHabitList,
-);
-
-/**
- * 유저 이메일 검색 조회 API
- * api/user/getInfoByEmail?email=:email
- */
-router.get(
-  '/getInfoByEmail',
-  validateUser.validateGetUserCheck,
-  validateMiddleware,
-  userController.getUserInfoByEmail,
 );
 
 router.use(commonErrorHandler);
