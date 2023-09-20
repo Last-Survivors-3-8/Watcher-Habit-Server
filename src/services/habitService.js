@@ -48,8 +48,26 @@ const createNewHabit = async (habitData) => {
   return habit;
 };
 
-const updateExistingHabit = (habitId, updatedFields) =>
-  Habit.findByIdAndUpdate(habitId, updatedFields, { new: true }).lean().exec();
+const updateExistingHabit = async (habitId, fields) => {
+  const updatedFields = { ...fields };
+
+  if (updatedFields.approvalStatus && updatedFields.approvalId) {
+    await Habit.updateOne(
+      {
+        _id: habitId,
+        'approvals._id': new mongoose.Types.ObjectId(updatedFields.approvalId),
+      },
+      { $set: { 'approvals.$.status': updatedFields.approvalStatus } },
+    );
+
+    delete updatedFields.approvalStatus;
+    delete updatedFields.approvalId;
+  }
+
+  return Habit.findByIdAndUpdate(habitId, updatedFields, { new: true })
+    .lean()
+    .exec();
+};
 
 const deleteHabitById = async (habitId) => {
   const { creator: userId, sharedGroup: groupId } = await getHabitById(habitId);
