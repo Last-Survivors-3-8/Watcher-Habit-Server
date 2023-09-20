@@ -61,11 +61,13 @@ const addMember = async (req, res, next) => {
 
   try {
     const group = await Group.findById(groupId).exec();
+
     if (!group) {
       return handleError(res, ERRORS.GROUP_NOT_FOUND);
     }
 
     const user = await User.findById(userId).exec();
+
     if (!user) {
       return handleError(res, ERRORS.USER_NOT_FOUND);
     }
@@ -102,6 +104,7 @@ const inviteMember = async (req, res, next) => {
 
   try {
     const group = await Group.findById(groupId).exec();
+
     if (!group) {
       return handleError(res, ERRORS.GROUP_NOT_FOUND);
     }
@@ -127,6 +130,7 @@ const inviteMember = async (req, res, next) => {
       to: toUserId,
       status: 'invite',
     });
+
     await notification.save();
 
     connections.forEach((client) => {
