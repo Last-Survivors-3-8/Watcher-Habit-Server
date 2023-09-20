@@ -92,9 +92,32 @@ const getUserDailyHabitList = async (req, res, next) => {
   }
 };
 
+const getUserInfoByEmail = async (req, res, next) => {
+  const { email } = req.query;
+
+  try {
+    const user = await User.findOne({ email }).exec();
+
+    if (user) {
+      return res.status(200).json({
+        exists: true,
+        nickname: user.nickname,
+        userId: user._id,
+      });
+    }
+
+    return res.status(404).json({
+      exists: false,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
 module.exports = {
   getUserCheck,
   getUser,
   postUser,
   getUserDailyHabitList,
+  getUserInfoByEmail,
 };
