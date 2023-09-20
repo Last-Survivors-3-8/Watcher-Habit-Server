@@ -29,10 +29,13 @@ const validateInviteMemberId = [
   body('toUserId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID),
 ];
 
+const addMemberValidation = [validateGroupId(), validateMemberId()];
+
 module.exports = {
   validateGetGroupHabitList,
   validateGroupId,
   validateMemberId,
   validateCreation,
   validateInviteMemberId,
+  addMemberValidation,
 };

@@ -56,8 +56,7 @@ router.get(
  */
 router.patch(
   '/:groupId/members',
-  validateGroup.validateGroupId,
-  validateGroup.validateMemberId,
+  validateGroup.addMemberValidation,
   validateMiddleware,
   groupController.addMember,
 );
