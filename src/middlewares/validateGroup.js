@@ -1,37 +1,44 @@
 const { param, query, body } = require('express-validator');
 const { ERRORS } = require('../lib/ERRORS');
 
-const validateCreation = [
+const isGroupId = (isRequired = true) =>
+  param('groupId')
+    .optional(!isRequired)
+    .isMongoId()
+    .withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE);
+
+const isGroupName = (isRequired = true) =>
   body('groupName')
+    .optional(!isRequired)
     .isString()
     .isLength({ min: 2, max: 15 })
-    .withMessage(ERRORS.INVALID_GROUP_NAME.MESSAGE),
-];
+    .withMessage(ERRORS.INVALID_GROUP_NAME.MESSAGE);
 
-const validateGroupId = [
-  param('groupId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID),
-];
+const isUserId = (field, isRequired = true) =>
+  body(field)
+    .optional(!isRequired)
+    .isMongoId()
+    .withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE);
 
-const validateMemberId = [
-  body('userId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID),
-];
-
-const validateGetGroupHabitList = [
-  param('groupId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE),
+const isDate = (isRequired = true) =>
   query('date')
-    .optional()
+    .optional(!isRequired)
     .matches(/^\d{4}-\d{2}-\d{2}$/)
-    .withMessage(ERRORS.INVALID_HABIT_START_DATE_FORMAT),
-];
+    .withMessage(ERRORS.INVALID_HABIT_START_DATE_FORMAT);
 
-const validateInviteMemberId = [
-  body('fromUserId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID),
-  body('toUserId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID),
-];
+const validateCreation = [isGroupName()];
 
-const addMemberValidation = [validateGroupId(), validateMemberId()];
+const validateGroupId = [isGroupId()];
 
-const inviteMemberValidation = [validateGroupId(), ...validateInviteMemberId()];
+const validateMemberId = [isUserId('userId')];
+
+const validateGetGroupHabitList = [isGroupId(), isDate(false)];
+
+const validateInviteMemberId = [isUserId('fromUserId'), isUserId('toUserId')];
+
+const addMemberValidation = [isGroupId(), isUserId('userId')];
+
+const inviteMemberValidation = [isGroupId(), ...validateInviteMemberId];
 
 module.exports = {
   validateGetGroupHabitList,
