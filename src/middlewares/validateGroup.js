@@ -31,6 +31,8 @@ const validateInviteMemberId = [
 
 const addMemberValidation = [validateGroupId(), validateMemberId()];
 
+const inviteMemberValidation = [validateGroupId(), ...validateInviteMemberId()];
+
 module.exports = {
   validateGetGroupHabitList,
   validateGroupId,
@@ -38,4 +40,5 @@ module.exports = {
   validateCreation,
   validateInviteMemberId,
   addMemberValidation,
+  inviteMemberValidation,
 };

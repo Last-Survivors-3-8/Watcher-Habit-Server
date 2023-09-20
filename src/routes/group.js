@@ -78,8 +78,7 @@ router.get(
  */
 router.post(
   '/:groupId/invite',
-  validateGroup.validateGroupId,
-  validateGroup.validateInviteMemberId,
+  validateGroup.inviteMemberValidation,
   validateMiddleware,
   groupController.inviteMember,
 );
