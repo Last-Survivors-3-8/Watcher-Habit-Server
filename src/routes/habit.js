@@ -20,6 +20,17 @@ router.get(
 );
 
 /**
+ * 기한별 습관 조회 api
+ * /api/habit/periodic/:userId?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
+ */
+router.get(
+  '/periodic/:userId',
+  validateHabit.getPeriodicHabitsByUserIdRequest,
+  validateMiddleware,
+  habitController.getPeriodicHabitsByUserId,
+);
+
+/**
  * 습관 생성 api
  * /api/habit
  */
