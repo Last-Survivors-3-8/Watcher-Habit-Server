@@ -4,6 +4,7 @@ const uploadImage = require('../services/aws/s3Service');
 const habitService = require('../services/habitService');
 const User = require('../models/User');
 const Habit = require('../models/Habit');
+const notificationService = require('../services/notificationService');
 
 const getHabit = async (req, res, next) => {
   const { habitId } = req.params;
@@ -105,6 +106,7 @@ const updateHabit = async (req, res, next) => {
     habitEndDate,
     minApprovalCount,
     sharedGroup,
+    approvalStatus,
   } = req.body;
 
   try {
@@ -152,6 +154,56 @@ const updateHabit = async (req, res, next) => {
       }
     }
 
+    /* 와처 승인/거부 처리 */
+    if (approvalStatus) {
+      const approveCount = habit.approvals.filter(
+        (approval) => approval.status === 'approved',
+      ).length;
+
+      const rejectedCount = habit.approvals.filter(
+        (approval) => approval.status === 'rejected',
+      ).length;
+
+      if (
+        approvalStatus === 'approved' &&
+        approveCount + 1 >= habit.minApprovalCount
+      ) {
+        updateFields.status = 'approvalSuccess';
+
+        const notificationReq = {
+          body: {
+            content: `${habit.creator.nickname}님이 습관을 성공했습니다.
+              ${habit.habitTitle}`,
+            from: habit.creator._id,
+            to: habit.creator._id,
+            status: 'success',
+            habitId,
+          },
+        };
+
+        await notificationService.saveNotification(notificationReq, res);
+      }
+      if (
+        approvalStatus === 'rejected' &&
+        rejectedCount + 1 > habit.approvals.length - habit.minApprovalCount
+      ) {
+        updateFields.status = 'approvalFailure';
+
+        const notificationReq = {
+          body: {
+            content: `${habit.creator.nickname}님이 습관을 실패했습니다.
+              ${habit.habitTitle}`,
+            from: habit.creator._id,
+            to: habit.creator._id,
+            status: 'failure',
+            habitId,
+          },
+        };
+
+        await notificationService.saveNotification(notificationReq, res);
+      }
+    }
+
     const updatedHabit = await habitService.updateExistingHabit(
       habitId,
       updateFields,
@@ -196,7 +248,11 @@ const updateHabitImage = async (req, res, next) => {
         return handleError(res, ERRORS.IMAGE_UPLOAD_FAILED);
       }
 
-      const result = await habitService.updateHabitImageUrl(habitId, imageUrl);
+      const result = await habitService.updateHabitImageUrl(
+        habitId,
+        imageUrl,
+        res,
+      );
 
       if (!result) {
         return handleError(res, ERRORS.HABIT_NOT_FOUND);
