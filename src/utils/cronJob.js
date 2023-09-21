@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const { CronJob } = require('cron');
 const updateAllHabits = require('../lib/habitStatusUpdate/updateAllHabits');
 
