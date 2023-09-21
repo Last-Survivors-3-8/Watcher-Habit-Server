@@ -22,6 +22,27 @@ const getHabit = async (req, res, next) => {
   }
 };
 
+const getPeriodicHabitsByUserId = async (req, res, next) => {
+  const { userId } = req.params;
+  const { startDate, endDate } = req.query;
+
+  try {
+    const habits = await habitService.getHabitsByDateRange(
+      userId,
+      startDate,
+      endDate,
+    );
+
+    if (!habits || habits.length === 0) {
+      return handleError(res, ERRORS.HABIT_NOT_FOUND);
+    }
+
+    return res.status(200).json(habits);
+  } catch (error) {
+    return next(error);
+  }
+};
+
 const createHabit = async (req, res, next) => {
   const {
     creator,
@@ -325,6 +346,7 @@ const unSubscribeWatcher = async (req, res, next) => {
 
 module.exports = {
   getHabit,
+  getPeriodicHabitsByUserId,
   createHabit,
   updateHabit,
   deleteHabit,
