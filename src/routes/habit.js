@@ -21,7 +21,7 @@ router.get(
 
 /**
  * 기한별 습관 조회 api
- * /api/habit/periodic/:userId?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD
+ * /api/habit/periodic/:userId?startDate=:startDate&endDate=:endDate
  */
 router.get(
   '/periodic/:userId',
