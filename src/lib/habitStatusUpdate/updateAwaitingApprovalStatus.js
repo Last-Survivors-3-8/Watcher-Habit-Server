@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const Habit = require('../../models/Habit');
 const getExpiredTime = require('./getExpiredTime');
 const getCurrentDayAndTime = require('./getCurrentDayAndTime');

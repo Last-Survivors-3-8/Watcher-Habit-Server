@@ -24,6 +24,7 @@ const sendNotificationsForStatus = (habit, newStatus) => {
     );
 
     const approvalIds = habit.approvals.map((approval) => approval._id);
+
     approvalIds.forEach((approvalId) => {
       createAndSendNotification(
         `${creator.nickname}님이 습관을 실패했습니다. <br>${habit.habitTitle}`,
@@ -47,6 +48,7 @@ const sendNotificationsForStatus = (habit, newStatus) => {
     );
 
     const approvalIds = habit.approvals.map((approval) => approval._id);
+
     approvalIds.forEach((approvalId) => {
       createAndSendNotification(
         `${creator.nickname}님이 습관을 완료했습니다. <br>${habit.habitTitle}`,
