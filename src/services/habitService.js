@@ -20,6 +20,16 @@ const getHabitById = (habitId) =>
     .lean()
     .exec();
 
+const getHabitsByDateRange = async (userId, startDate, endDate) =>
+  Habit.find({
+    creator: userId,
+    habitStartDate: { $lte: endDate },
+    habitEndDate: { $gte: startDate },
+  })
+    .select('doDay habitTitle startTime endTime')
+    .lean()
+    .exec();
+
 const checkUserExists = (userId) => User.exists({ _id: userId });
 
 const checkForDuplicateHabitTime = (conditions) =>
@@ -101,6 +111,7 @@ const updateHabitImageUrl = async (habitId, imageUrl) => {
 
 module.exports = {
   getHabitById,
+  getHabitsByDateRange,
   checkUserExists,
   checkForDuplicateHabitTime,
   checkGroupExists,
