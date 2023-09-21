@@ -138,6 +138,7 @@ const updateHabit = async (req, res, next) => {
       const approveCount = habit.approvals.filter(
         (approval) => approval.status === 'approved',
       ).length;
+
       const rejectedCount = habit.approvals.filter(
         (approval) => approval.status === 'rejected',
       ).length;
@@ -147,6 +148,7 @@ const updateHabit = async (req, res, next) => {
         approveCount + 1 >= habit.minApprovalCount
       ) {
         updateFields.status = 'approvalSuccess';
+
         const notificationReq = {
           body: {
             content: `${habit.creator.nickname}님이 습관을 성공했습니다.
@@ -165,6 +167,7 @@ const updateHabit = async (req, res, next) => {
         rejectedCount + 1 > habit.approvals.length - habit.minApprovalCount
       ) {
         updateFields.status = 'approvalFailure';
+
         const notificationReq = {
           body: {
             content: `${habit.creator.nickname}님이 습관을 실패했습니다.
