@@ -144,7 +144,7 @@ const updateHabit = async (req, res, next) => {
 
       if (
         approvalStatus === 'approved' &&
-        approveCount + 1 >= minApprovalCount
+        approveCount + 1 >= habit.minApprovalCount
       ) {
         updateFields.status = 'approvalSuccess';
         const notificationReq = {
@@ -162,7 +162,7 @@ const updateHabit = async (req, res, next) => {
       }
       if (
         approvalStatus === 'rejected' &&
-        rejectedCount + 1 > habit.approvals.length - minApprovalCount
+        rejectedCount + 1 > habit.approvals.length - habit.minApprovalCount
       ) {
         updateFields.status = 'approvalFailure';
         const notificationReq = {
