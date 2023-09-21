@@ -1,26 +1,33 @@
 const Habit = require('../../models/Habit');
 const getExpiredTime = require('./getExpiredTime');
 const getCurrentDayAndTime = require('./getCurrentDayAndTime');
-const { sendNotification } = require('../../routes/events');
+const sendNotificationsForStatus = require('./sendNotificationsForStatus');
 
 const updateAwaitingApprovalStatus = async () => {
   const { day } = getCurrentDayAndTime();
   const expiredTime6 = getExpiredTime(0, 6);
 
   try {
-    const habitsToUpdate = await Habit.find({
+    const habits = await Habit.find({
       status: 'awaitingApproval',
       doDay: day,
       endTime: { $lte: expiredTime6 },
       'approvals.status': 'undecided',
     });
 
-    if (habitsToUpdate.length === 0) {
-      console.log('업데이트 대상이 없음.');
+    const habitIds = habits.map((habit) => habit._id);
+
+    if (habitIds.length === 0) {
+      console.log(
+        'approvalFailure, approvalSuccess로 업데이트할 습관이 없습니다.',
+      );
+
       return;
     }
 
-    const promises = habitsToUpdate.map(async (habit) => {
+    console.log('approvalFailure, approvalSuccess 업데이트 대상: ', habitIds);
+
+    const promises = habits.map(async (habit) => {
       const habitId = habit._id;
 
       const updateResult = await Habit.updateOne(
@@ -50,13 +57,13 @@ const updateAwaitingApprovalStatus = async () => {
           { $set: { status: newStatus } },
         );
 
-        sendNotification(habit.creator, '승인이 필요합니다.');
+        sendNotificationsForStatus(habit, newStatus);
       }
     });
 
     await Promise.all(promises);
 
-    console.log(`${habitsToUpdate.length} habit approvals`);
+    console.log(`${habits.length} habit approvals`);
   } catch (error) {
     console.error(error);
   }
