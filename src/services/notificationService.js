@@ -24,11 +24,11 @@ const getNotifications = async (userId) => {
 };
 
 const saveNotification = async (req, res) => {
-  const { to, status, habitId } = req.body;
+  const { to, habitId } = req.body;
 
-  if (status !== 'invite') {
-    return handleError(res, ERRORS.STATUS_NOT_INVITE);
-  }
+  // if (status !== 'invite' || status !== 'approveRequest') {
+  //   return handleError(res, ERRORS.STATUS_NOT_INVITE);
+  // }
   const invitedUser = await User.findById(to).exec();
 
   if (!invitedUser) {
