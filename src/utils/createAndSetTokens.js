@@ -8,11 +8,17 @@ const createAndSetTokens = (user, res, tokenExpired = true) => {
       { expiresIn: '7d' },
     );
 
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      secure: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    res.cookie(
+      'refreshToken',
+      refreshToken,
+      { path: '/', maxAge: 7 * 24 * 60 * 60 * 1000 },
+      // {
+      //   httpOnly: true,
+      //   secure: true,
+
+      //   SameSite: 'None',
+      // }
+    );
   }
 
   const accessToken = jwt.sign(
