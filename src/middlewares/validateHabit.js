@@ -144,7 +144,7 @@ const patchRequest = [
 
 const deleteRequest = [isHabitId()];
 
-const getWeeklyHabitsRequest = [isUserId()];
+const getPeriodicHabitsByUserIdRequest = [isUserId()];
 
 const subscribeHabitRequest = [isHabitId(), isWatcherId()];
 
@@ -155,7 +155,7 @@ module.exports = {
   deleteRequest,
   getRequest,
   patchRequest,
-  getWeeklyHabitsRequest,
+  getPeriodicHabitsByUserIdRequest,
   subscribeHabitRequest,
   unSubscribeHabitRequest,
 };
