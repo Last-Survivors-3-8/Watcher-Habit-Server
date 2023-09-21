@@ -26,9 +26,6 @@ const getNotifications = async (userId) => {
 const saveNotification = async (req, res) => {
   const { to, habitId } = req.body;
 
-  // if (status !== 'invite' || status !== 'approveRequest') {
-  //   return handleError(res, ERRORS.STATUS_NOT_INVITE);
-  // }
   const invitedUser = await User.findById(to).exec();
 
   if (!invitedUser) {

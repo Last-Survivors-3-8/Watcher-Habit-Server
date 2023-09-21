@@ -133,7 +133,7 @@ const updateHabit = async (req, res, next) => {
       }
     }
 
-    // 와처 승인/거부 처리
+    /* 와처 승인/거부 처리 */
     if (approvalStatus) {
       const approveCount = habit.approvals.filter(
         (approval) => approval.status === 'approved',

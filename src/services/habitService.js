@@ -96,7 +96,7 @@ const updateHabitImageUrl = async (habitId, imageUrl, res) => {
   const habit = await getHabitById(habitId);
   const creatorNickname = habit.creator.nickname;
 
-  // 사진 인증했을때 지켜보는 사람에게 알림이 간다
+  /* 사진 인증했을때 지켜보는 사람에게 알림이 간다 */
   await Promise.all(
     habit.approvals.map(async (approval) => {
       const notificationReq = {
@@ -113,7 +113,8 @@ const updateHabitImageUrl = async (habitId, imageUrl, res) => {
       return notificationService.saveNotification(notificationReq, res);
     }),
   );
-  // sse로 접속한 유저들에게 실시간 알림이 간다
+
+  /* Todo: 접속한 유저들에게 실시간 알림 전송 필요 (SSE) */
 
   const result = await Habit.findByIdAndUpdate(habitId, {
     habitImage: imageUrl,
