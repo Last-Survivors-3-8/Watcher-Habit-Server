@@ -1,25 +1,29 @@
 const express = require('express');
 
 const router = express.Router();
+const clients = {};
 
-let clients = [];
-
-function sendNotification(message) {
-  clients.forEach((client) =>
-    client.write(`data: ${JSON.stringify({ message })}\n\n`),
-  );
+function sendNotification(userId, message) {
+  const client = clients[userId];
+  if (client) {
+    client.write(`data: ${JSON.stringify({ message })}\n\n`);
+  }
 }
 
-router.get('/events', (req, res) => {
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection', 'keep-alive');
+router.get('/', (req, res) => {
+  const { userId } = req.query;
 
-  clients.push(res);
+  if (userId) {
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
 
-  req.on('close', () => {
-    clients = clients.filter((client) => client !== res);
-  });
+    clients[userId] = res;
+
+    req.on('close', () => {
+      delete clients[userId];
+    });
+  }
 });
 
 module.exports = {

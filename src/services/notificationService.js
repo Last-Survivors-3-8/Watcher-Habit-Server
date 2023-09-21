@@ -28,6 +28,7 @@ const saveNotification = async (req, res) => {
   if (status !== 'invite') {
     return handleError(res, ERRORS.STATUS_NOT_INVITE);
   }
+
   const invitedUser = await User.findById(to).exec();
 
   if (!invitedUser) {
