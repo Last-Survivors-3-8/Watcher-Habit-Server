@@ -1,4 +1,4 @@
-const getCurrentDayAndTime = () => {
+const getKSTDateAndTime = () => {
   const KST_OFFSET = 9 * 60 * 60 * 1000;
   const now = new Date(Date.now() + KST_OFFSET);
 
@@ -11,4 +11,4 @@ const getCurrentDayAndTime = () => {
   return { day, time, todayDate };
 };
 
-module.exports = getCurrentDayAndTime;
+module.exports = getKSTDateAndTime;

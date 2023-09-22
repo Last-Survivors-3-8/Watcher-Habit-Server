@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 const Habit = require('../../models/Habit');
 const getAdjustTime = require('./getAdjustTime');
-const getCurrentDayAndTime = require('./getCurrentDayAndTime');
+const getKSTDateAndTime = require('./getKSTDateAndTime');
 const sendNotificationsForStatus = require('./sendNotificationsForStatus');
 
-const { time } = getCurrentDayAndTime();
+const { time } = getKSTDateAndTime();
 
 const updateApprovalStatus = async (query) => {
   const habits = await Habit.find(

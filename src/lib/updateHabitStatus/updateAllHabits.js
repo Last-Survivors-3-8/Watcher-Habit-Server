@@ -1,8 +1,8 @@
 const updateHabitStatus = require('./updateHabitStatus');
 const updateApprovalStatus = require('./updateApprovalStatus');
-const getCurrentDayAndTime = require('./getCurrentDayAndTime');
+const getKSTDateAndTime = require('./getKSTDateAndTime');
 
-const { day, time, todayDate } = getCurrentDayAndTime();
+const { day, time, todayDate } = getKSTDateAndTime();
 
 const updateAllHabits = async () => {
   await updateHabitStatus(

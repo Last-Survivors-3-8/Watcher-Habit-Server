@@ -1,8 +1,8 @@
 const getAdjustTime = require('./getAdjustTime');
-const getCurrentDayAndTime = require('./getCurrentDayAndTime');
+const getKSTDateAndTime = require('./getKSTDateAndTime');
 
 const handleExpiredFailureStatus = async (habits) => {
-  const { time } = getCurrentDayAndTime();
+  const { time } = getKSTDateAndTime();
 
   return habits
     .filter((habit) => {
