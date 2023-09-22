@@ -26,7 +26,7 @@ const getHabitsByDateRange = async (userId, startDate, endDate) =>
     habitStartDate: { $lte: endDate },
     habitEndDate: { $gte: startDate },
   })
-    .select('doDay habitTitle startTime endTime')
+    .select('doDay habitTitle startTime endTime habitStartDate habitEndDate')
     .lean()
     .exec();
 
