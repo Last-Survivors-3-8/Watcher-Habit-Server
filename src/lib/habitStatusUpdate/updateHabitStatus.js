@@ -1,12 +1,12 @@
+/* eslint-disable no-console */
 const Habit = require('../../models/Habit');
-const handleApproval = require('./handleApproval');
 const handleExpiredFailureStatus = require('./handleExpiredFailureStatus');
 const sendNotificationsForStatus = require('./sendNotificationsForStatus');
 
 const updateHabitStatus = async (query, newStatus) => {
   const habits = await Habit.find(
     query,
-    '_id habitTitle endTime sharedGroup creator approvals',
+    '_id habitTitle endTime minApprovalCount sharedGroup creator approvals',
   ).populate({
     path: 'creator',
     select: 'nickName',
@@ -14,16 +14,21 @@ const updateHabitStatus = async (query, newStatus) => {
 
   let habitIdsToUpdate = habits.map((habit) => habit._id);
 
+  if (newStatus === 'awaitingVerification') {
+    await Promise.all(
+      habits.map((habit) =>
+        Habit.updateOne(
+          { _id: habit._id },
+          {
+            minApprovalCount: habit.approvals.length,
+          },
+        ),
+      ),
+    );
+  }
+
   if (newStatus === 'expiredFailure') {
     habitIdsToUpdate = await handleExpiredFailureStatus(habits);
-  }
-
-  if (newStatus === 'approvalFailure') {
-    handleApproval(habits, newStatus);
-  }
-
-  if (newStatus === 'approvalSuccess') {
-    handleApproval(habits, newStatus);
   }
 
   if (habitIdsToUpdate.length === 0) {

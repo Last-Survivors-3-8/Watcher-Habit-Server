@@ -1,13 +1,24 @@
 const Habit = require('../../models/Habit');
 const getAdjustTime = require('./getAdjustTime');
 const getCurrentDayAndTime = require('./getCurrentDayAndTime');
+const sendNotificationsForStatus = require('./sendNotificationsForStatus');
 
-const handleApproval = async (habits, targetStatus) => {
+const handleApproval = async (query) => {
+  const habits = await Habit.find(
+    query,
+    '_id habitTitle endTime minApprovalCount sharedGroup creator approvals',
+  ).populate({
+    path: 'creator',
+    select: 'nickName',
+  });
+
   const { time } = getCurrentDayAndTime();
+  let newStatus = '';
 
   const habitIdsToUpdate = habits
     .filter((habit) => {
-      const adjustedEndTime = getAdjustTime(habit.endTime, 0, 6);
+      const adjustedEndTime = getAdjustTime(habit.endTime, 40);
+
       return adjustedEndTime < time;
     })
     .map((habit) => habit._id);
@@ -21,33 +32,32 @@ const handleApproval = async (habits, targetStatus) => {
         'approvals.status': 'undecided',
       },
       {
-        $set: { 'approvals.$.status': 'approved' },
+        $set: { 'approvals.$[].status': 'approved' },
       },
     );
 
-    if (updateResult.nModified > 0) {
+    if (updateResult.modifiedCount > 0) {
       const updatedHabit = await Habit.findById(habitId);
       const approvedCount = updatedHabit.approvals.filter(
         (approval) => approval.status === 'approved',
       ).length;
 
-      if (
-        (targetStatus === 'approvalFailure' &&
-          approvedCount < updatedHabit.minApprovalCount) ||
-        (targetStatus === 'approvalSuccess' &&
-          approvedCount >= updatedHabit.minApprovalCount)
-      ) {
-        await Habit.updateOne(
-          { _id: habitId },
-          { $set: { status: targetStatus } },
-        );
-      }
+      newStatus =
+        approvedCount < updatedHabit.minApprovalCount
+          ? 'approvalFailure'
+          : 'approvalSuccess';
+
+      await Habit.updateOne({ _id: habitId }, { $set: { status: newStatus } });
     }
   });
 
   await Promise.all(promises);
 
-  return habitIdsToUpdate;
+  habits.forEach((habit) => {
+    if (habitIdsToUpdate.includes(habit._id)) {
+      sendNotificationsForStatus(habit, newStatus);
+    }
+  });
 };
 
 module.exports = handleApproval;

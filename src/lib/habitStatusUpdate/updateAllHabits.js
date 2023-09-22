@@ -1,5 +1,6 @@
 const updateHabitStatus = require('./updateHabitStatus');
 const getCurrentDayAndTime = require('./getCurrentDayAndTime');
+const handleApproval = require('./handleApproval');
 
 const { day, time } = getCurrentDayAndTime();
 
@@ -30,21 +31,10 @@ const updateAllHabits = async () => {
     'expiredFailure',
   );
 
-  await updateHabitStatus(
-    {
-      status: 'awaitingApproval',
-      doDay: day,
-    },
-    'approvalFailure',
-  );
-
-  await updateHabitStatus(
-    {
-      status: 'awaitingApproval',
-      doDay: day,
-    },
-    'approvalSuccess',
-  );
+  await handleApproval({
+    status: 'awaitingApproval',
+    doDay: day,
+  });
 };
 
 module.exports = updateAllHabits;
