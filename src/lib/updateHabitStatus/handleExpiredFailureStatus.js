@@ -7,6 +7,7 @@ const handleExpiredFailureStatus = async (habits) => {
   return habits
     .filter((habit) => {
       const adjustedEndTime = getAdjustTime(habit.endTime, 30);
+
       return adjustedEndTime <= time;
     })
     .map((habit) => habit._id);

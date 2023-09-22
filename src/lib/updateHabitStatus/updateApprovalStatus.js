@@ -21,6 +21,7 @@ const updateApprovalStatus = async (query) => {
     console.log(
       `approvalFailure, approvalSuccess로 업데이트할 습관이 없습니다.`,
     );
+
     return;
   }
 
@@ -47,6 +48,7 @@ const updateApprovalStatus = async (query) => {
 
     if (updateResult.modifiedCount > 0) {
       const updatedHabit = await Habit.findById(habit._id);
+
       const approvedCount = updatedHabit.approvals.filter(
         (approval) => approval.status === 'approved',
       ).length;

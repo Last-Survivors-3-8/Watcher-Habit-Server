@@ -8,6 +8,7 @@ const getKSTDateAndTime = () => {
   const minutes = String(now.getUTCMinutes()).padStart(2, '0');
   const time = `${hours}:${minutes}`;
   const todayDate = now.toISOString().split('T')[0];
+
   return { day, time, todayDate };
 };
 

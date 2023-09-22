@@ -16,6 +16,7 @@ const updateHabitStatus = async (query, newStatus) => {
 
   if (habitIdsToUpdate.length === 0) {
     console.log(`${newStatus}로 업데이트할 습관이 없습니다.`);
+
     return;
   }
 
