@@ -4,7 +4,7 @@ const sendNotificationsForStatus = (habit, newStatus) => {
   const { creator } = habit;
   if (newStatus === 'awaitingVerification') {
     createAndSendNotification(
-      `인증이 필요한 습관이 있습니다. <br>${habit.habitTitle}`,
+      `인증이 필요한 습관이 있습니다. ${habit.habitTitle}`,
       creator._id,
       creator._id,
       habit._id,
@@ -15,7 +15,7 @@ const sendNotificationsForStatus = (habit, newStatus) => {
 
   if (newStatus === 'expiredFailure' || newStatus === 'approvalFailure') {
     createAndSendNotification(
-      `습관을 실패했습니다. <br>${habit.habitTitle}`,
+      `습관을 실패했습니다. ${habit.habitTitle}`,
       creator._id,
       creator._id,
       habit._id,
@@ -26,7 +26,7 @@ const sendNotificationsForStatus = (habit, newStatus) => {
 
   if (newStatus === 'approvalSuccess') {
     createAndSendNotification(
-      `습관을 완료했습니다. <br>${habit.habitTitle}`,
+      `습관을 완료했습니다. ${habit.habitTitle}`,
       creator._id,
       creator._id,
       habit._id,

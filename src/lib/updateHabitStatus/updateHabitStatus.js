@@ -14,6 +14,11 @@ const updateHabitStatus = async (query, newStatus) => {
 
   let habitIdsToUpdate = habits.map((habit) => habit._id);
 
+  if (habitIdsToUpdate.length === 0) {
+    console.log(`${newStatus}로 업데이트할 습관이 없습니다.`);
+    return;
+  }
+
   if (newStatus === 'awaitingVerification') {
     await Promise.all(
       habits.map((habit) =>
@@ -29,11 +34,6 @@ const updateHabitStatus = async (query, newStatus) => {
 
   if (newStatus === 'expiredFailure') {
     habitIdsToUpdate = await handleExpiredFailureStatus(habits);
-  }
-
-  if (habitIdsToUpdate.length === 0) {
-    console.log(`${newStatus}로 업데이트할 습관이 없습니다.`);
-    return;
   }
 
   console.log(`${newStatus} 업데이트 대상: `, habitIdsToUpdate);
