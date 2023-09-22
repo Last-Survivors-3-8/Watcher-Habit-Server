@@ -22,19 +22,6 @@ const sendNotificationsForStatus = (habit, newStatus) => {
       habit.sharedGroup,
       'failure',
     );
-
-    const approvalIds = habit.approvals.map((approval) => approval._id);
-
-    approvalIds.forEach((approvalId) => {
-      createAndSendNotification(
-        `${creator.nickname}님이 습관을 실패했습니다. <br>${habit.habitTitle}`,
-        creator,
-        approvalId,
-        habit._id,
-        habit.sharedGroup,
-        'failure',
-      );
-    });
   }
 
   if (newStatus === 'approvalSuccess') {
@@ -46,19 +33,6 @@ const sendNotificationsForStatus = (habit, newStatus) => {
       habit.sharedGroup,
       'success',
     );
-
-    const approvalIds = habit.approvals.map((approval) => approval._id);
-
-    approvalIds.forEach((approvalId) => {
-      createAndSendNotification(
-        `${creator.nickname}님이 습관을 완료했습니다. <br>${habit.habitTitle}`,
-        creator,
-        approvalId,
-        habit._id,
-        habit.sharedGroup,
-        'success',
-      );
-    });
   }
 };
 

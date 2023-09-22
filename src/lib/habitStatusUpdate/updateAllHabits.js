@@ -1,10 +1,7 @@
-const getCurrentDayAndTime = require('./getCurrentDayAndTime');
-const getExpiredTime = require('./getExpiredTime');
-const updateAwaitingApprovalStatus = require('./updateAwaitingApprovalStatus');
 const updateHabitStatus = require('./updateHabitStatus');
+const getCurrentDayAndTime = require('./getCurrentDayAndTime');
 
 const { day, time } = getCurrentDayAndTime();
-const expiredTime = getExpiredTime(30);
 
 const updateAllHabits = async () => {
   await updateHabitStatus(
@@ -29,12 +26,25 @@ const updateAllHabits = async () => {
     {
       status: 'awaitingVerification',
       doDay: day,
-      endTime: { $lte: expiredTime },
     },
     'expiredFailure',
   );
 
-  updateAwaitingApprovalStatus();
+  await updateHabitStatus(
+    {
+      status: 'awaitingApproval',
+      doDay: day,
+    },
+    'approvalFailure',
+  );
+
+  await updateHabitStatus(
+    {
+      status: 'awaitingApproval',
+      doDay: day,
+    },
+    'approvalSuccess',
+  );
 };
 
 module.exports = updateAllHabits;
