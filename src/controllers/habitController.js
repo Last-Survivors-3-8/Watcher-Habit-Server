@@ -33,7 +33,7 @@ const getPeriodicHabitsByUserId = async (req, res, next) => {
     );
 
     if (!habits || habits.length === 0) {
-      return handleError(res, ERRORS.HABIT_NOT_FOUND);
+      return res.status(200).json(null);
     }
 
     return res.status(200).json(habits);
