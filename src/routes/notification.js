@@ -8,6 +8,7 @@ const router = express.Router();
 
 /**
  * 알림 목록 조회 api
+ * api/notification/:userId
  */
 router.get(
   '/:userId',
@@ -18,6 +19,7 @@ router.get(
 
 /**
  * 알림 저장 api
+ * api/notification
  */
 router.post(
   '/',

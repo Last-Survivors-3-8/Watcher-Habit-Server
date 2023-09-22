@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Habit = require('../models/Habit');
 const User = require('../models/User');
 const Group = require('../models/Group');
+const notificationService = require('./notificationService');
 
 const getHabitById = (habitId) =>
   Habit.findById(habitId)
@@ -62,13 +63,16 @@ const updateExistingHabit = async (habitId, fields) => {
   const updatedFields = { ...fields };
 
   if (updatedFields.approvalStatus && updatedFields.approvalId) {
-    return Habit.updateOne(
+    await Habit.updateOne(
       {
         _id: habitId,
         'approvals._id': new mongoose.Types.ObjectId(updatedFields.approvalId),
       },
       { $set: { 'approvals.$.status': updatedFields.approvalStatus } },
     );
+
+    delete updatedFields.approvalStatus;
+    delete updatedFields.approvalId;
   }
 
   return Habit.findByIdAndUpdate(habitId, updatedFields, { new: true })
@@ -98,10 +102,31 @@ const deleteHabitById = async (habitId) => {
   return result;
 };
 
-const updateHabitImageUrl = async (habitId, imageUrl) => {
-  const result = await Habit.findByIdAndUpdate(habitId).exec();
+const updateHabitImageUrl = async (habitId, imageUrl, res) => {
+  const habit = await getHabitById(habitId);
+  const creatorNickname = habit.creator.nickname;
 
-  await Habit.findByIdAndUpdate(habitId, {
+  /* 사진 인증했을때 지켜보는 사람에게 알림이 간다 */
+  await Promise.all(
+    habit.approvals.map(async (approval) => {
+      const notificationReq = {
+        body: {
+          content: `${creatorNickname}님이 습관을 완료했습니다.
+            ${habit.habitTitle}`,
+          from: habit.creator._id,
+          to: approval._id._id,
+          status: 'approveRequest',
+          habitId,
+        },
+      };
+
+      return notificationService.saveNotification(notificationReq, res);
+    }),
+  );
+
+  /* Todo: 접속한 유저들에게 실시간 알림 전송 필요 (SSE) */
+
+  const result = await Habit.findByIdAndUpdate(habitId, {
     habitImage: imageUrl,
     status: 'awaitingApproval',
   });

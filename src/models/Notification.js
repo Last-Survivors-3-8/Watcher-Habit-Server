@@ -9,7 +9,9 @@ const NotificationSchema = new mongoose.Schema(
     from: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     to: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     createdAt: { type: Date, default: Date.now },
-    isNeedToSend: { type: Boolean, default: false },
+    isNeedToSend: { type: Boolean, default: true },
+    groupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' },
+    habitId: { type: mongoose.Schema.Types.ObjectId, ref: 'Habit' },
     status: {
       type: String,
       enum: [
