@@ -126,10 +126,17 @@ const updateHabitImageUrl = async (habitId, imageUrl, res) => {
 
   /* Todo: 접속한 유저들에게 실시간 알림 전송 필요 (SSE) */
 
-  const result = await Habit.findByIdAndUpdate(habitId, {
+  const updateValues = {
     habitImage: imageUrl,
     status: 'awaitingApproval',
-  });
+  };
+
+  if (habit.approvals.length === 0) {
+    updateValues.minApprovalCount = 0;
+    updateValues.status = 'approvalSuccess';
+  }
+
+  const result = await Habit.findByIdAndUpdate(habitId, updateValues);
 
   return result;
 };
