@@ -4,6 +4,9 @@ const { ERRORS } = require('../lib/ERRORS');
 const isHabitId = () =>
   param('habitId').isMongoId().withMessage(ERRORS.INVALID_HABIT_ID);
 
+const isUserId = () =>
+  param('userId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE);
+
 const isHabitTitle = (isRequired = true) =>
   body('habitTitle')
     .optional(!isRequired)
@@ -141,6 +144,8 @@ const patchRequest = [
 
 const deleteRequest = [isHabitId()];
 
+const getPeriodicHabitsByUserIdRequest = [isUserId()];
+
 const subscribeHabitRequest = [isHabitId(), isWatcherId()];
 
 const unSubscribeHabitRequest = [isHabitId(), isWatcherIdonUrl()];
@@ -150,6 +155,7 @@ module.exports = {
   deleteRequest,
   getRequest,
   patchRequest,
+  getPeriodicHabitsByUserIdRequest,
   subscribeHabitRequest,
   unSubscribeHabitRequest,
 };
