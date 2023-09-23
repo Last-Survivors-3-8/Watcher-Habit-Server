@@ -1,5 +1,6 @@
 const { sendNotification } = require('../../routes/events');
 const Notification = require('../../models/Notification');
+const { ERRORS } = require('../ERRORS');
 
 const createAndSendNotification = async (
   message,
@@ -9,18 +10,22 @@ const createAndSendNotification = async (
   groupId,
   status,
 ) => {
-  const newNotification = new Notification({
-    content: message,
-    from: fromUserId,
-    to: toUserId,
-    habitId,
-    groupId,
-    status,
-  });
+  try {
+    const newNotification = new Notification({
+      content: message,
+      from: fromUserId,
+      to: toUserId,
+      habitId,
+      groupId,
+      status,
+    });
 
-  await newNotification.save();
+    await newNotification.save();
 
-  sendNotification(toUserId.toString(), message);
+    sendNotification(toUserId.toString(), message);
+  } catch (error) {
+    throw new Error(ERRORS.NOTIFICATION_SEND_FAILED);
+  }
 };
 
 module.exports = createAndSendNotification;

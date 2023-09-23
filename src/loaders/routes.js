@@ -11,5 +11,5 @@ module.exports = (app) => {
   app.use('/api/habit', habitRouter);
   app.use('/api/group', groupRouter);
   app.use('/api/notification', notificationRouter);
-  app.use('/events', eventsRouter.router);
+  app.use('/events', eventsRouter);
 };

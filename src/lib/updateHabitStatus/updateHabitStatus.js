@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+/* 배치 확인용 console 사용 */
 const Habit = require('../../models/Habit');
 const handleExpiredFailureStatus = require('./handleExpiredFailureStatus');
 const sendNotificationsForStatus = require('./sendNotificationsForStatus');
@@ -22,14 +23,18 @@ const updateHabitStatus = async (query, newStatus) => {
 
   if (newStatus === 'awaitingVerification') {
     await Promise.all(
-      habits.map((habit) =>
-        Habit.updateOne(
-          { _id: habit._id },
-          {
-            minApprovalCount: habit.approvals.length,
-          },
-        ),
-      ),
+      habits.map(async (habit) => {
+        if (habit.minApprovalCount > habit.approvals.length) {
+          return Habit.updateOne(
+            { _id: habit._id },
+            {
+              minApprovalCount: habit.approvals.length,
+            },
+          );
+        }
+
+        return null;
+      }),
     );
   }
 

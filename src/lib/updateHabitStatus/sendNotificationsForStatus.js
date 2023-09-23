@@ -1,39 +1,40 @@
 const createAndSendNotification = require('./createAndSendNotification');
 
+const statusMapping = {
+  awaitingVerification: {
+    messageFunc: (habitTitle) => `인증이 필요한 습관이 있습니다. ${habitTitle}`,
+    status: 'verificationRequest',
+  },
+  expiredFailure: {
+    messageFunc: (habitTitle) => `습관을 실패했습니다. ${habitTitle}`,
+    status: 'failure',
+  },
+  approvalFailure: {
+    messageFunc: (habitTitle) => `습관을 실패했습니다. ${habitTitle}`,
+    status: 'failure',
+  },
+  approvalSuccess: {
+    messageFunc: (habitTitle) => `습관을 완료했습니다. ${habitTitle}`,
+    status: 'success',
+  },
+};
+
 const sendNotificationsForStatus = (habit, newStatus) => {
-  const { creator } = habit;
-  if (newStatus === 'awaitingVerification') {
-    createAndSendNotification(
-      `인증이 필요한 습관이 있습니다. ${habit.habitTitle}`,
-      creator._id,
-      creator._id,
-      habit._id,
-      habit.sharedGroup,
-      'verificationRequest',
-    );
-  }
+  const { creator, habitTitle, _id, sharedGroup } = habit;
 
-  if (newStatus === 'expiredFailure' || newStatus === 'approvalFailure') {
-    createAndSendNotification(
-      `습관을 실패했습니다. ${habit.habitTitle}`,
-      creator._id,
-      creator._id,
-      habit._id,
-      habit.sharedGroup,
-      'failure',
-    );
-  }
+  if (!statusMapping[newStatus]) return;
 
-  if (newStatus === 'approvalSuccess') {
-    createAndSendNotification(
-      `습관을 완료했습니다. ${habit.habitTitle}`,
-      creator._id,
-      creator._id,
-      habit._id,
-      habit.sharedGroup,
-      'success',
-    );
-  }
+  const { messageFunc, status } = statusMapping[newStatus];
+  const message = messageFunc(habitTitle);
+
+  createAndSendNotification(
+    message,
+    creator._id,
+    creator._id,
+    _id,
+    sharedGroup,
+    status,
+  );
 };
 
 module.exports = sendNotificationsForStatus;

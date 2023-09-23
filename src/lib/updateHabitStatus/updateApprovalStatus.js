@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+/* 배치 확인용 console 사용 */
 const Habit = require('../../models/Habit');
 const getAdjustTime = require('./getAdjustTime');
 const getKSTDateAndTime = require('./getKSTDateAndTime');
