@@ -1,4 +1,4 @@
-const adjustTime = require('./adjustTime');
+const getIncrementedTime = require('./getIncrementedTime');
 const getKSTDateAndTime = require('./getKSTDateAndTime');
 
 const handleExpiredFailureStatus = async (habits) => {
@@ -6,7 +6,7 @@ const handleExpiredFailureStatus = async (habits) => {
 
   return habits
     .filter((habit) => {
-      const adjustedEndTime = adjustTime(habit.endTime, 30);
+      const adjustedEndTime = getIncrementedTime(habit.endTime, 30);
 
       return adjustedEndTime <= time;
     })
