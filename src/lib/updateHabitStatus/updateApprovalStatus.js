@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 /* 배치 확인용 console 사용 */
 const Habit = require('../../models/Habit');
-const getAdjustTime = require('./getAdjustTime');
+const adjustTime = require('./adjustTime');
 const getKSTDateAndTime = require('./getKSTDateAndTime');
 const sendNotificationsForStatus = require('./sendNotificationsForStatus');
 
@@ -30,7 +30,7 @@ const updateApprovalStatus = async (query) => {
   const approvalSuccessIds = [];
 
   const updateHabitPromises = habits.map(async (habit) => {
-    const adjustedEndTime = getAdjustTime(habit.endTime, 0, 6);
+    const adjustedEndTime = adjustTime(habit.endTime, 0, 6);
 
     if (adjustedEndTime >= time) return;
 
