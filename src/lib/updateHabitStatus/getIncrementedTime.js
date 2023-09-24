@@ -7,7 +7,7 @@ const getIncrementedTime = (time, minutesToAdd = 0, hoursToAdd = 0) => {
     .split(':')
     .map((val) => String(val).padStart(2, '0'));
 
-  const adjustedTime = new Date(`${todayDate}T${hours}:${minutes}:00Z`);
+  const adjustedTime = new Date(`${todayDate}T${hours}:${minutes}:00+09:00`);
 
   adjustedTime.setHours(adjustedTime.getHours() + hoursToAdd);
   adjustedTime.setMinutes(adjustedTime.getMinutes() + minutesToAdd);
