@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 /* 배치 확인용 console 사용 */
 const Habit = require('../../models/Habit');
+const initializeHabit = require('../initializeHabit');
 const handleExpiredFailureStatus = require('./handleExpiredFailureStatus');
 const sendNotificationsForStatus = require('./sendNotificationsForStatus');
 
@@ -19,6 +20,12 @@ const updateHabitStatus = async (query, newStatus) => {
     console.log(`${newStatus}로 업데이트할 습관이 없습니다.`);
 
     return;
+  }
+
+  if (
+    ['approvalSuccess', 'expiredFailure', 'approvalFailure'].includes(newStatus)
+  ) {
+    initializeHabit(habits);
   }
 
   if (newStatus === 'awaitingVerification') {
