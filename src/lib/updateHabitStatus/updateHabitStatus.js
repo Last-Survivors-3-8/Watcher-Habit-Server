@@ -22,10 +22,8 @@ const updateHabitStatus = async (query, newStatus) => {
     return;
   }
 
-  if (
-    ['approvalSuccess', 'expiredFailure', 'approvalFailure'].includes(newStatus)
-  ) {
-    initializeHabit(habits);
+  if (newStatus === 'notTimeYet') {
+    await initializeHabit(habits);
   }
 
   if (newStatus === 'awaitingVerification') {
