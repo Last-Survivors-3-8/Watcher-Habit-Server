@@ -7,11 +7,24 @@ const { day, time, todayDate } = getKSTDateAndTime();
 const updateAllHabits = async () => {
   await updateHabitStatus(
     {
+      status: { $in: ['approvalSuccess', 'expiredFailure', 'approvalFailure'] },
+      habitStartDate: { $lte: todayDate },
+      habitEndDate: { $gte: todayDate },
+      doDay: { $in: [day] },
+      startTime: { $lte: time },
+      endTime: { $gte: time },
+    },
+    'notTimeYet',
+  );
+
+  await updateHabitStatus(
+    {
       status: 'notTimeYet',
       habitStartDate: { $lte: todayDate },
       habitEndDate: { $gte: todayDate },
       doDay: { $in: [day] },
       startTime: { $lte: time },
+      endTime: { $gte: time },
     },
     'inProgress',
   );
