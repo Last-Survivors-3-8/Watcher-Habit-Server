@@ -35,7 +35,7 @@ const sendNotificationsForStatus = (habit, newStatus) => {
     createAndSendNotification(
       message,
       creator._id,
-      creator._id,
+      approvals._id,
       _id,
       sharedGroup,
       status,
@@ -47,7 +47,7 @@ const sendNotificationsForStatus = (habit, newStatus) => {
   createAndSendNotification(
     message,
     creator._id,
-    approvals._id,
+    creator._id,
     _id,
     sharedGroup,
     status,
