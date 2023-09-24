@@ -3,6 +3,7 @@ const Habit = require('../models/Habit');
 const User = require('../models/User');
 const Group = require('../models/Group');
 const notificationService = require('./notificationService');
+const sendNotificationsForStatus = require('../lib/updateHabitStatus/sendNotificationsForStatus');
 
 const getHabitById = (habitId) =>
   Habit.findById(habitId)
@@ -130,6 +131,8 @@ const updateHabitImageUrl = async (habitId, imageUrl, res) => {
     habitImage: imageUrl,
     status: 'awaitingApproval',
   });
+
+  sendNotificationsForStatus(habit, 'awaitingApproval');
 
   return result;
 };
