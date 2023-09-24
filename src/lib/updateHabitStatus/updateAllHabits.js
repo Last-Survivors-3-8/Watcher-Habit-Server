@@ -7,11 +7,20 @@ const { day, time, todayDate } = getKSTDateAndTime();
 const updateAllHabits = async () => {
   await updateHabitStatus(
     {
+      status: 'success',
+      // 초기화 로직
+    },
+    'notTimeYet',
+  );
+
+  await updateHabitStatus(
+    {
       status: 'notTimeYet',
       habitStartDate: { $lte: todayDate },
       habitEndDate: { $gte: todayDate },
       doDay: { $in: [day] },
       startTime: { $lte: time },
+      endTime: { $gte: time },
     },
     'inProgress',
   );
