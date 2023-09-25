@@ -24,7 +24,7 @@ const createAndSendNotification = async (
 
     sendNotification(toUserId.toString(), newNotification);
   } catch (error) {
-    throw new Error(ERRORS.NOTIFICATION_SEND_FAILED);
+    throw new Error(ERRORS.NOTIFICATION_SEND_FAILED.MESSAGE);
   }
 };
 
