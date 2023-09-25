@@ -183,6 +183,7 @@ const updateHabit = async (req, res, next) => {
 
         await notificationService.saveNotification(notificationReq, res);
       }
+
       if (
         approvalStatus === 'rejected' &&
         rejectedCount + 1 > habit.approvals.length - habit.minApprovalCount
@@ -248,11 +249,7 @@ const updateHabitImage = async (req, res, next) => {
         return handleError(res, ERRORS.IMAGE_UPLOAD_FAILED);
       }
 
-      const result = await habitService.updateHabitImageUrl(
-        habitId,
-        imageUrl,
-        res,
-      );
+      const result = await habitService.updateHabitImageUrl(habitId, imageUrl);
 
       if (!result) {
         return handleError(res, ERRORS.HABIT_NOT_FOUND);
