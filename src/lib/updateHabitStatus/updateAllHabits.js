@@ -24,7 +24,6 @@ const updateAllHabits = async () => {
       habitEndDate: { $gte: todayDate },
       doDay: { $in: [day] },
       startTime: { $lte: time },
-      endTime: { $gte: time },
     },
     'inProgress',
   );
@@ -40,22 +39,22 @@ const updateAllHabits = async () => {
     'awaitingVerification',
   );
 
-  await updateHabitStatus(
-    {
-      status: 'awaitingVerification',
-      habitStartDate: { $lte: todayDate },
-      habitEndDate: { $gte: todayDate },
-      doDay: { $in: [day] },
-    },
-    'expiredFailure',
-  );
+  // await updateHabitStatus(
+  //   {
+  //     status: 'awaitingVerification',
+  //     habitStartDate: { $lte: todayDate },
+  //     habitEndDate: { $gte: todayDate },
+  //     doDay: { $in: [day] },
+  //   },
+  //   'expiredFailure',
+  // );
 
-  await updateApprovalStatus({
-    status: 'awaitingApproval',
-    habitStartDate: { $lte: todayDate },
-    habitEndDate: { $gte: todayDate },
-    doDay: { $in: [day] },
-  });
+  // await updateApprovalStatus({
+  //   status: 'awaitingApproval',
+  //   habitStartDate: { $lte: todayDate },
+  //   habitEndDate: { $gte: todayDate },
+  //   doDay: { $in: [day] },
+  // });
 };
 
 module.exports = updateAllHabits;
