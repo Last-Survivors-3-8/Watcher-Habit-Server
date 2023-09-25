@@ -22,6 +22,7 @@ const updateNotifications = async () => {
     switch (updatedNotificationData.status) {
       case 'invite':
       case 'failure':
+      case 'success':
         if (
           currentTime - updatedNotificationData.createdAt >=
           24 * 60 * 60 * 1000
@@ -54,7 +55,7 @@ const updateNotifications = async () => {
       updates.push(
         Notification.updateOne(
           { _id: notification._id },
-          updatedNotificationData,
+          { isNeedToSend: false },
         ),
       );
 
