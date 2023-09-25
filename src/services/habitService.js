@@ -114,7 +114,10 @@ const updateHabitImageUrl = async (habitId, imageUrl) => {
   }
 
   const result = await Habit.findByIdAndUpdate(habitId, updateValues);
-  const newStatus = updateValues.status === 'awaitingApproval' ? 'awaitingApproval' ? 'approvalSuccess';
+  const newStatus =
+    updateValues.status === 'awaitingApproval'
+      ? 'awaitingApproval'
+      : 'approvalSuccess';
 
   sendNotificationsForStatus(habit, newStatus);
 
