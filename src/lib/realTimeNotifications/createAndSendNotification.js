@@ -1,4 +1,4 @@
-const sendNotification = require('../../utils/sendNotification');
+const sendNotification = require('./sendNotification');
 const Notification = require('../../models/Notification');
 const { ERRORS } = require('../ERRORS');
 

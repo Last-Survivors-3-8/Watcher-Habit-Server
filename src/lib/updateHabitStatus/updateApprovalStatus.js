@@ -3,7 +3,7 @@
 const Habit = require('../../models/Habit');
 const getIncrementedTime = require('./getIncrementedTime');
 const getKSTDateAndTime = require('./getKSTDateAndTime');
-const sendNotificationsForStatus = require('./sendNotificationsForStatus');
+const sendNotificationsForStatus = require('../realTimeNotifications/sendNotificationsForStatus');
 
 const { time } = getKSTDateAndTime();
 

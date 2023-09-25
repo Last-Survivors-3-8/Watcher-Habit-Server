@@ -1,4 +1,4 @@
-const clients = require('./sseConnections');
+const clients = require('../../utils/sseConnections');
 
 function sendNotification(userId, notification) {
   const client = clients[userId];
