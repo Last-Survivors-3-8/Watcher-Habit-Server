@@ -30,29 +30,17 @@ const getPeriodicHabitsByUserId = async (req, res, next) => {
   yesterday.setDate(yesterday.getDate() - 1);
   yesterday.setHours(0, 0, 0, 0);
 
-  const transformHistoryResults = (historyResults) => {
-    const transformed = {};
+  const transformHistoryResults = (historyResults) =>
+    historyResults.reduce((acc, entry) => {
+      const {
+        date,
+        habitDetails: { habitTitle, startTime, endTime, habitImage, status },
+      } = entry;
+      const habitData = { habitTitle, startTime, endTime, habitImage, status };
 
-    historyResults.forEach((entry) => {
-      const { date } = entry;
-
-      if (!transformed[date]) {
-        transformed[date] = [];
-      }
-
-      const habitData = {
-        habitTitle: entry.habitDetails.habitTitle,
-        startTime: entry.habitDetails.startTime,
-        endTime: entry.habitDetails.endTime,
-        habitImage: entry.habitDetails.habitImage,
-        status: entry.habitDetails.status,
-      };
-
-      transformed[date].push(habitData);
-    });
-
-    return transformed;
-  };
+      acc[date] = acc[date] ? [...acc[date], habitData] : [habitData];
+      return acc;
+    }, {});
 
   try {
     const results = {
@@ -60,31 +48,24 @@ const getPeriodicHabitsByUserId = async (req, res, next) => {
       regular: [],
     };
 
-    if (new Date(endDate) < yesterday) {
+    const historyEndDate =
+      new Date(endDate) < yesterday
+        ? endDate
+        : yesterday.toISOString().split('T')[0];
+    if (new Date(startDate) < yesterday) {
       const habitsFromHistory = await habitService.getHabitHistoryByDateRange(
         userId,
         startDate,
-        endDate,
+        historyEndDate,
       );
-
-      results.history = transformHistoryResults(habitsFromHistory);
-    } else if (new Date(startDate) < yesterday) {
-      const habitsFromHistory = await habitService.getHabitHistoryByDateRange(
-        userId,
-        startDate,
-        yesterday.toISOString().split('T')[0],
-      );
-
       results.history = transformHistoryResults(habitsFromHistory);
     }
 
-    const habitsFromRegular = await habitService.getHabitsByDateRange(
+    results.regular = await habitService.getHabitsByDateRange(
       userId,
       startDate,
       endDate,
     );
-
-    results.regular = habitsFromRegular;
 
     return res.status(200).json(results);
   } catch (error) {
