@@ -32,15 +32,16 @@ const sendNotificationsForStatus = (habit, newStatus) => {
   const message = messageFunc(habitTitle);
 
   if (newStatus === 'awaitingApproval') {
-    createAndSendNotification(
-      message,
-      creator._id,
-      approvals._id,
-      _id,
-      sharedGroup,
-      status,
-    );
-
+    approvals.forEach((approval) => {
+      createAndSendNotification(
+        message,
+        creator._id,
+        approval._id,
+        _id,
+        sharedGroup,
+        status,
+      );
+    });
     return;
   }
 
