@@ -3,7 +3,7 @@
 const Habit = require('../../models/Habit');
 const initializeHabit = require('../initializeHabit');
 const handleExpiredFailureStatus = require('./handleExpiredFailureStatus');
-const sendNotificationsForStatus = require('./sendNotificationsForStatus');
+const sendNotificationsForStatus = require('../realTimeNotifications/sendNotificationsForStatus');
 
 const updateHabitStatus = async (query, newStatus) => {
   const habits = await Habit.find(
