@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* 배치 확인용 console 사용 */
 const Notification = require('../models/Notification');
 
 const updateNotifications = async () => {
@@ -43,9 +45,7 @@ const updateNotifications = async () => {
         }
         break;
       default:
-        console.log(
-          `Unknown notification status: ${updatedNotificationData.status}`,
-        );
+        console.log(`알 수 없는 습관 상태: ${updatedNotificationData.status}`);
         break;
     }
 
