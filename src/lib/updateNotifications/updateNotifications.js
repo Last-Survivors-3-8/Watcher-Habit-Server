@@ -13,10 +13,11 @@ const updateNotifications = async () => {
   });
 
   const updates = [];
+  const updatedIds = [];
 
   notifications.forEach((notification) => {
     let shouldSave = false;
-    const updatedNotificationData = { ...notification };
+    const updatedNotificationData = notification.toObject();
 
     switch (updatedNotificationData.status) {
       case 'invite':
@@ -56,12 +57,14 @@ const updateNotifications = async () => {
           updatedNotificationData,
         ),
       );
+
+      updatedIds.push(notification._id.toString());
     }
   });
 
   await Promise.all(updates);
 
-  console.log(`${updates.length} 업데이트`);
+  console.log(`알림 상태 업데이트 대상: [${updatedIds.join(', ')}]`);
 };
 
 module.exports = updateNotifications;
