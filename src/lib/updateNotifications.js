@@ -14,7 +14,7 @@ const updateNotifications = async () => {
 
   notifications.forEach((notification) => {
     let shouldSave = false;
-    const updatedNotificationData = { ...notification._doc }; // Notification document를 새 객체로 복사합니다.
+    const updatedNotificationData = { ...notification };
 
     switch (updatedNotificationData.status) {
       case 'invite':
