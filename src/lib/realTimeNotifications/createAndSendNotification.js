@@ -1,4 +1,4 @@
-const sendNotification = require('./sendNotification');
+const sendSseNotification = require('./sendSseNotification');
 const Notification = require('../../models/Notification');
 const { ERRORS } = require('../ERRORS');
 
@@ -22,7 +22,7 @@ const createAndSendNotification = async (
 
     await newNotification.save();
 
-    sendNotification(toUserId.toString(), newNotification);
+    sendSseNotification(toUserId.toString(), newNotification);
   } catch (error) {
     throw new Error(ERRORS.NOTIFICATION_SEND_FAILED.MESSAGE);
   }

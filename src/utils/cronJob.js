@@ -3,7 +3,7 @@
 const { CronJob } = require('cron');
 const updateAllHabits = require('../lib/updateHabitStatus/updateAllHabits');
 const dailyHabitsBackup = require('../lib/dailyHabitsBackup/dailyHabitsBackup');
-const updateNotifications = require('../lib/updateNotifications/updateNotifications');
+const updateIsNeedToSend = require('../lib/updateIsNeedToSend/updateIsNeedToSend');
 
 // 습관 상태 업데이트 및 알림 전송
 const updateAllHabitsBatch = new CronJob('*/5 * * * *', () => {
@@ -13,8 +13,6 @@ const updateAllHabitsBatch = new CronJob('*/5 * * * *', () => {
   updateAllHabits();
 });
 
-updateAllHabitsBatch.start();
-
 // 일일 습관 백업
 const habitBackupBatch = new CronJob('0 0 */6 * * *', () => {
   const currentTime = new Date().toLocaleString();
@@ -23,15 +21,15 @@ const habitBackupBatch = new CronJob('0 0 */6 * * *', () => {
   dailyHabitsBackup();
 });
 
-habitBackupBatch.start();
-
 // 알림 상태 업데이트
-const updateNotificationsBatch = new CronJob('*/5 * * * *', () => {
+const updateSendExpireNotificationsBatch = new CronJob('*/5 * * * *', () => {
   console.log(
-    `알림 상태 업데이트 배치 실행 로그 - ${new Date().toLocaleString()}`,
+    `알림 전송 만료 업데이트 배치 실행 로그 - ${new Date().toLocaleString()}`,
   );
 
-  updateNotifications();
+  updateIsNeedToSend();
 });
 
-updateNotificationsBatch.start();
+updateAllHabitsBatch.start();
+habitBackupBatch.start();
+updateSendExpireNotificationsBatch.start();

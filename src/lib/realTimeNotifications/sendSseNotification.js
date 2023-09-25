@@ -1,6 +1,6 @@
 const clients = require('../../utils/sseConnections');
 
-function sendNotification(userId, notification) {
+function sendSseNotification(userId, notification) {
   const client = clients[userId];
 
   if (client) {
@@ -8,4 +8,4 @@ function sendNotification(userId, notification) {
   }
 }
 
-module.exports = sendNotification;
+module.exports = sendSseNotification;

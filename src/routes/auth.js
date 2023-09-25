@@ -5,7 +5,7 @@ const handleError = require('../lib/handleError');
 const createAndSetTokens = require('../utils/createAndSetTokens');
 const commonErrorHandler = require('../middlewares/commonErrorHandler');
 const validateMiddleware = require('../middlewares/validateMiddleware');
-const sendNotification = require('../lib/realTimeNotifications/sendNotification');
+const sendSseNotification = require('../lib/realTimeNotifications/sendSseNotification');
 const Notification = require('../models/Notification');
 
 const router = express.Router();
@@ -31,7 +31,7 @@ router.post('/login', validateMiddleware, async (req, res, next) => {
     });
 
     unsentNotifications.forEach((notification) => {
-      sendNotification(user._id.toString(), notification);
+      sendSseNotification(user._id.toString(), notification);
     });
 
     return res.status(200).json({ accessToken });

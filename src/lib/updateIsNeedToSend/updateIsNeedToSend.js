@@ -2,7 +2,7 @@
 /* 배치 확인용 console 사용 */
 const Notification = require('../../models/Notification');
 
-const updateNotifications = async () => {
+const updateIsNeedToSend = async () => {
   const currentTime = new Date();
   const yesterday = new Date(currentTime);
   yesterday.setDate(yesterday.getDate() - 1);
@@ -68,4 +68,4 @@ const updateNotifications = async () => {
   console.log(`알림 상태 업데이트 대상: [${updatedIds.join(', ')}]`);
 };
 
-module.exports = updateNotifications;
+module.exports = updateIsNeedToSend;
