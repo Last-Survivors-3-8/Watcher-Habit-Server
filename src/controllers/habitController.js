@@ -26,18 +26,59 @@ const getPeriodicHabitsByUserId = async (req, res, next) => {
   const { userId } = req.params;
   const { startDate, endDate } = req.query;
 
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(0, 0, 0, 0);
+
+  const transformHistoryResults = (historyResults) => {
+    const transformed = {};
+
+    historyResults.forEach((entry) => {
+      const { date } = entry;
+
+      if (!transformed[date]) {
+        transformed[date] = [];
+      }
+
+      const habitData = {
+        habitTitle: entry.habitDetails.habitTitle,
+        startTime: entry.habitDetails.startTime,
+        endTime: entry.habitDetails.endTime,
+        habitImage: entry.habitDetails.habitImage,
+        status: entry.habitDetails.status,
+      };
+
+      transformed[date].push(habitData);
+    });
+
+    return transformed;
+  };
+
   try {
-    const habits = await habitService.getHabitsByDateRange(
+    const results = {
+      history: {},
+      regular: [],
+    };
+
+    if (new Date(startDate) < yesterday) {
+      const habitsFromHistory = await habitService.getHabitHistoryByDateRange(
+        userId,
+        startDate,
+        yesterday.toISOString().split('T')[0],
+      );
+
+      results.history = transformHistoryResults(habitsFromHistory);
+    }
+
+    const habitsFromRegular = await habitService.getHabitsByDateRange(
       userId,
       startDate,
       endDate,
     );
 
-    if (!habits || habits.length === 0) {
-      return res.status(200).json(null);
-    }
+    results.regular = habitsFromRegular;
 
-    return res.status(200).json(habits);
+    return res.status(200).json(results);
   } catch (error) {
     return next(error);
   }
