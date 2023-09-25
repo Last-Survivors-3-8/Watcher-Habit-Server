@@ -18,7 +18,6 @@ const createAndSendNotification = async (
       habitId,
       groupId,
       status,
-      isNeedToSend: status !== 'success',
     });
 
     await newNotification.save();
