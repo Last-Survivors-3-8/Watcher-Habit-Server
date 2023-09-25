@@ -137,7 +137,7 @@ const inviteMember = async (req, res, next) => {
     }
 
     const notification = new Notification({
-      content: `${fromUser.nickname}님이 ${group.groupName}에 초대하였습니다.`,
+      content: `${fromUser.nickname}님이 그룹에 초대하였습니다. ${group.groupName}`,
       from: fromUserId,
       to: toUserId,
       groupId,
