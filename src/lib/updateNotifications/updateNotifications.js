@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /* 배치 확인용 console 사용 */
-const Notification = require('../models/Notification');
+const Notification = require('../../models/Notification');
 
 const updateNotifications = async () => {
   const currentTime = new Date();
