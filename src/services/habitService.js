@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Habit = require('../models/Habit');
 const User = require('../models/User');
 const Group = require('../models/Group');
+const HabitHistory = require('../models/HabitHistory');
 const sendNotificationsForStatus = require('../lib/realTimeNotifications/sendNotificationsForStatus');
 
 const getHabitById = (habitId) =>
@@ -28,6 +29,15 @@ const getHabitsByDateRange = async (userId, startDate, endDate) =>
     habitEndDate: { $gte: startDate },
   })
     .select('doDay habitTitle startTime endTime habitStartDate habitEndDate')
+    .lean()
+    .exec();
+
+const getHabitHistoryByDateRange = async (userId, startDate, endDate) =>
+  HabitHistory.find({
+    userId,
+    date: { $gte: startDate, $lte: endDate },
+  })
+    .select('date habitDetails')
     .lean()
     .exec();
 
@@ -127,6 +137,7 @@ const updateHabitImageUrl = async (habitId, imageUrl) => {
 module.exports = {
   getHabitById,
   getHabitsByDateRange,
+  getHabitHistoryByDateRange,
   checkUserExists,
   checkForDuplicateHabitTime,
   checkGroupExists,

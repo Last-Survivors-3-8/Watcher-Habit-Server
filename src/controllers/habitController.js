@@ -26,18 +26,48 @@ const getPeriodicHabitsByUserId = async (req, res, next) => {
   const { userId } = req.params;
   const { startDate, endDate } = req.query;
 
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(0, 0, 0, 0);
+
+  const transformHistoryResults = (historyResults) =>
+    historyResults.reduce((acc, entry) => {
+      const {
+        date,
+        habitDetails: { habitTitle, startTime, endTime, habitImage, status },
+      } = entry;
+      const habitData = { habitTitle, startTime, endTime, habitImage, status };
+
+      acc[date] = acc[date] ? [...acc[date], habitData] : [habitData];
+      return acc;
+    }, {});
+
   try {
-    const habits = await habitService.getHabitsByDateRange(
+    const results = {
+      history: {},
+      regular: [],
+    };
+    const historyEndDate =
+      new Date(endDate) < yesterday
+        ? endDate
+        : yesterday.toISOString().split('T')[0];
+
+    if (new Date(startDate) < yesterday) {
+      const habitsFromHistory = await habitService.getHabitHistoryByDateRange(
+        userId,
+        startDate,
+        historyEndDate,
+      );
+      results.history = transformHistoryResults(habitsFromHistory);
+    }
+
+    results.regular = await habitService.getHabitsByDateRange(
       userId,
       startDate,
       endDate,
     );
 
-    if (!habits || habits.length === 0) {
-      return res.status(200).json(null);
-    }
-
-    return res.status(200).json(habits);
+    return res.status(200).json(results);
   } catch (error) {
     return next(error);
   }
