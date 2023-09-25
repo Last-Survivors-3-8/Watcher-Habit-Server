@@ -26,7 +26,7 @@ const habitBackupBatch = new CronJob('0 0 */6 * * *', () => {
 habitBackupBatch.start();
 
 // 알림 상태 업데이트
-const updateNotificationsBatch = new CronJob('*/15 * * * *', () => {
+const updateNotificationsBatch = new CronJob('*/5 * * * *', () => {
   console.log(
     `알림 상태 업데이트 배치 실행 로그 - ${new Date().toLocaleString()}`,
   );
