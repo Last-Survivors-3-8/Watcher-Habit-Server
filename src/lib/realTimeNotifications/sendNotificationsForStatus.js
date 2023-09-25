@@ -5,6 +5,10 @@ const statusMapping = {
     messageFunc: (habitTitle) => `인증이 필요한 습관이 있습니다. ${habitTitle}`,
     status: 'verificationRequest',
   },
+  awaitingApproval: {
+    messageFunc: (habitTitle) => `승인이 필요한 습관이 있습니다. ${habitTitle}`,
+    status: 'approveRequest',
+  },
   expiredFailure: {
     messageFunc: (habitTitle) => `습관을 실패했습니다. ${habitTitle}`,
     status: 'failure',
@@ -20,12 +24,26 @@ const statusMapping = {
 };
 
 const sendNotificationsForStatus = (habit, newStatus) => {
-  const { creator, habitTitle, _id, sharedGroup } = habit;
+  const { creator, habitTitle, _id, sharedGroup, approvals } = habit;
 
   if (!statusMapping[newStatus]) return;
 
   const { messageFunc, status } = statusMapping[newStatus];
   const message = messageFunc(habitTitle);
+
+  if (newStatus === 'awaitingApproval') {
+    approvals.forEach((approval) => {
+      createAndSendNotification(
+        message,
+        creator._id,
+        approval._id,
+        _id,
+        sharedGroup,
+        status,
+      );
+    });
+    return;
+  }
 
   createAndSendNotification(
     message,

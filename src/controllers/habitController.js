@@ -4,7 +4,7 @@ const uploadImage = require('../services/aws/s3Service');
 const habitService = require('../services/habitService');
 const User = require('../models/User');
 const Habit = require('../models/Habit');
-const notificationService = require('../services/notificationService');
+const sendNotificationsForStatus = require('../lib/realTimeNotifications/sendNotificationsForStatus');
 
 const getHabit = async (req, res, next) => {
   const { habitId } = req.params;
@@ -170,37 +170,16 @@ const updateHabit = async (req, res, next) => {
       ) {
         updateFields.status = 'approvalSuccess';
 
-        const notificationReq = {
-          body: {
-            content: `${habit.creator.nickname}님이 습관을 성공했습니다.
-              ${habit.habitTitle}`,
-            from: habit.creator._id,
-            to: habit.creator._id,
-            status: 'success',
-            habitId,
-          },
-        };
-
-        await notificationService.saveNotification(notificationReq, res);
+        sendNotificationsForStatus(habit, 'approvalSuccess');
       }
+
       if (
         approvalStatus === 'rejected' &&
         rejectedCount + 1 > habit.approvals.length - habit.minApprovalCount
       ) {
         updateFields.status = 'approvalFailure';
 
-        const notificationReq = {
-          body: {
-            content: `${habit.creator.nickname}님이 습관을 실패했습니다.
-              ${habit.habitTitle}`,
-            from: habit.creator._id,
-            to: habit.creator._id,
-            status: 'failure',
-            habitId,
-          },
-        };
-
-        await notificationService.saveNotification(notificationReq, res);
+        sendNotificationsForStatus(habit, 'approvalFailure');
       }
     }
 
@@ -248,11 +227,7 @@ const updateHabitImage = async (req, res, next) => {
         return handleError(res, ERRORS.IMAGE_UPLOAD_FAILED);
       }
 
-      const result = await habitService.updateHabitImageUrl(
-        habitId,
-        imageUrl,
-        res,
-      );
+      const result = await habitService.updateHabitImageUrl(habitId, imageUrl);
 
       if (!result) {
         return handleError(res, ERRORS.HABIT_NOT_FOUND);

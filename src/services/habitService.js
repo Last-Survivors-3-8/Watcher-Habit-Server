@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Habit = require('../models/Habit');
 const User = require('../models/User');
 const Group = require('../models/Group');
-const notificationService = require('./notificationService');
+const sendNotificationsForStatus = require('../lib/realTimeNotifications/sendNotificationsForStatus');
 
 const getHabitById = (habitId) =>
   Habit.findById(habitId)
@@ -102,41 +102,24 @@ const deleteHabitById = async (habitId) => {
   return result;
 };
 
-const updateHabitImageUrl = async (habitId, imageUrl, res) => {
+const updateHabitImageUrl = async (habitId, imageUrl) => {
   const habit = await getHabitById(habitId);
-  const creatorNickname = habit.creator.nickname;
-
-  /* 사진 인증했을때 지켜보는 사람에게 알림이 간다 */
-  await Promise.all(
-    habit.approvals.map(async (approval) => {
-      const notificationReq = {
-        body: {
-          content: `${creatorNickname}님이 습관을 완료했습니다.
-            ${habit.habitTitle}`,
-          from: habit.creator._id,
-          to: approval._id._id,
-          status: 'approveRequest',
-          habitId,
-        },
-      };
-
-      return notificationService.saveNotification(notificationReq, res);
-    }),
-  );
-
-  /* Todo: 접속한 유저들에게 실시간 알림 전송 필요 (SSE) */
-
   const updateValues = {
     habitImage: imageUrl,
     status: 'awaitingApproval',
   };
 
   if (habit.approvals.length === 0) {
-    updateValues.minApprovalCount = 0;
     updateValues.status = 'approvalSuccess';
   }
 
   const result = await Habit.findByIdAndUpdate(habitId, updateValues);
+  const newStatus =
+    updateValues.status === 'awaitingApproval'
+      ? 'awaitingApproval'
+      : 'approvalSuccess';
+
+  sendNotificationsForStatus(habit, newStatus);
 
   return result;
 };
