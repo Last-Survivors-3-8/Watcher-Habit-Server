@@ -92,7 +92,9 @@ const addMember = async (req, res, next) => {
       await notification.save();
     }
 
-    return res.status(200).json({ message: '가입되었습니다.' });
+    return res
+      .status(200)
+      .json({ message: '가입되었습니다.', groupId: group._id });
   } catch (error) {
     return next(error);
   }
