@@ -60,7 +60,15 @@ const getPeriodicHabitsByUserId = async (req, res, next) => {
       regular: [],
     };
 
-    if (new Date(startDate) < yesterday) {
+    if (new Date(endDate) < yesterday) {
+      const habitsFromHistory = await habitService.getHabitHistoryByDateRange(
+        userId,
+        startDate,
+        endDate,
+      );
+
+      results.history = transformHistoryResults(habitsFromHistory);
+    } else if (new Date(startDate) < yesterday) {
       const habitsFromHistory = await habitService.getHabitHistoryByDateRange(
         userId,
         startDate,
