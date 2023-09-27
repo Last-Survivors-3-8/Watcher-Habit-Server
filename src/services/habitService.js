@@ -4,6 +4,7 @@ const User = require('../models/User');
 const Group = require('../models/Group');
 const HabitHistory = require('../models/HabitHistory');
 const sendNotificationsForStatus = require('../lib/realTimeNotifications/sendNotificationsForStatus');
+const Notification = require('../models/Notification');
 
 const getHabitById = (habitId) =>
   Habit.findById(habitId)
@@ -134,6 +135,18 @@ const updateHabitImageUrl = async (habitId, imageUrl) => {
   return result;
 };
 
+const updateNotifications = async (habitId) => {
+  await Notification.updateMany(
+    {
+      habitId,
+      status: 'verificationRequest',
+    },
+    {
+      isNeedToSend: false,
+    },
+  );
+};
+
 module.exports = {
   getHabitById,
   getHabitsByDateRange,
@@ -145,4 +158,5 @@ module.exports = {
   updateExistingHabit,
   deleteHabitById,
   updateHabitImageUrl,
+  updateNotifications,
 };
