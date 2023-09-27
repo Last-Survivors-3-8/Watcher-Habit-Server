@@ -5,9 +5,9 @@ const getKSTDateAndTime = () => {
   const now = new Date(Date.now() + KST_OFFSET_MILLISECONDS);
 
   const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-  const day = days[now.getUTCDay()];
-  const hours = String(now.getUTCHours()).padStart(2, '0');
-  const minutes = String(now.getUTCMinutes()).padStart(2, '0');
+  const day = days[now.getDay()];
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
   const time = `${hours}:${minutes}`;
   const todayDate = now.toISOString().split('T')[0];
 
