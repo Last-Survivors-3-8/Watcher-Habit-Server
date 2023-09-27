@@ -41,15 +41,19 @@ const generateGroup = async (req, res, next) => {
 
 const getGroup = async (req, res, next) => {
   const { groupId } = req.params;
+  const { userId } = req.query;
 
   try {
     const group = await Group.findById(groupId).lean().exec();
+    const isMember = group.members
+      .map((memberId) => memberId.toString())
+      .includes(userId);
 
     if (!group) {
       return handleError(res, ERRORS.GROUP_NOT_FOUND);
     }
 
-    return res.status(200).json({ group });
+    return res.status(200).json({ group, isMember });
   } catch (error) {
     return next(error);
   }
