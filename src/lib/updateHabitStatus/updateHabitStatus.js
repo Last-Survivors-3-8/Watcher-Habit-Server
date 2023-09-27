@@ -33,7 +33,9 @@ const updateHabitStatus = async (query, newStatus) => {
           return Habit.updateOne(
             { _id: habit._id },
             {
-              minApprovalCount: habit.approvals.length,
+              $set: {
+                minApprovalCount: habit.approvals.length,
+              },
             },
           );
         }

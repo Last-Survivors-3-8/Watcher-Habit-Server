@@ -55,7 +55,7 @@ const updateIsNeedToSend = async () => {
       updates.push(
         Notification.updateOne(
           { _id: notification._id },
-          { isNeedToSend: false },
+          { $set: { isNeedToSend: false } },
         ),
       );
 
