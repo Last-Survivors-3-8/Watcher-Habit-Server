@@ -82,6 +82,18 @@ const updateExistingHabit = async (habitId, fields) => {
       { $set: { 'approvals.$.status': updatedFields.approvalStatus } },
     );
 
+    await Notification.updateOne(
+      {
+        to: new mongoose.Types.ObjectId(updatedFields.approvalId),
+        isNeedToSend: true,
+        habitId,
+        status: 'approveRequest',
+      },
+      {
+        $set: { isNeedToSend: false },
+      },
+    );
+
     delete updatedFields.approvalStatus;
     delete updatedFields.approvalId;
   }
