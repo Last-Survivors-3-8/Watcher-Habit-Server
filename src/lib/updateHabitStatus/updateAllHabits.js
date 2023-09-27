@@ -24,6 +24,7 @@ const updateAllHabits = async () => {
       habitEndDate: { $gte: todayDate },
       doDay: { $in: [day] },
       startTime: { $lte: time },
+      endTime: { $gte: time },
     },
     'inProgress',
   );
