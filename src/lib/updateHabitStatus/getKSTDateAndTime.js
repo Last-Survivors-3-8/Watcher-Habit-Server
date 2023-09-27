@@ -1,8 +1,8 @@
 const getKSTDateAndTime = () => {
+  const now = new Date();
   const KST_OFFSET_HOURS = 9;
-  const KST_OFFSET_MILLISECONDS = KST_OFFSET_HOURS * 60 * 60 * 1000;
 
-  const now = new Date(Date.now() + KST_OFFSET_MILLISECONDS);
+  now.setHours(now.getUTCHours() + KST_OFFSET_HOURS);
 
   const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
   const day = days[now.getDay()];
