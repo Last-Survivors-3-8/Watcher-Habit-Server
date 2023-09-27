@@ -85,6 +85,7 @@ const addMember = async (req, res, next) => {
     const notification = await Notification.findOne({
       groupId,
       status: 'invite',
+      isNeedToSend: true,
     }).exec();
 
     if (notification) {
