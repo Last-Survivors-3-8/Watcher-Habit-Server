@@ -136,6 +136,17 @@ const inviteMember = async (req, res, next) => {
       return handleError(res, ERRORS.USER_ALREADY_IN_GROUP);
     }
 
+    await Notification.updateMany(
+      {
+        to: toUserId,
+        groupId,
+        status: 'invite',
+      },
+      {
+        isNeedToSend: false,
+      },
+    );
+
     const notification = new Notification({
       content: `${fromUser.nickname}님이 그룹에 초대하였습니다. ${group.groupName}`,
       from: fromUserId,
