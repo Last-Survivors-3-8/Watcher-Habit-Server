@@ -151,7 +151,7 @@ const updateNotifications = async (habitId) => {
   await Notification.updateMany(
     {
       habitId,
-      status: 'verificationRequest',
+      status: 'approveRequest',
     },
     {
       isNeedToSend: false,
