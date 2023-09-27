@@ -82,16 +82,16 @@ const addMember = async (req, res, next) => {
     user.groups.push(groupId);
     await user.save();
 
-    const notification = await Notification.findOne({
-      groupId,
-      status: 'invite',
-      isNeedToSend: true,
-    }).exec();
-
-    if (notification) {
-      notification.isNeedToSend = false;
-      await notification.save();
-    }
+    await Notification.updateOne(
+      {
+        groupId,
+        status: 'invite',
+        isNeedToSend: true,
+      },
+      {
+        $set: { isNeedToSend: false },
+      },
+    );
 
     return res
       .status(200)
