@@ -45,7 +45,7 @@ router.post(
  */
 router.get(
   '/:groupId',
-  validateGroup.validateGroupId,
+  validateGroup.validateGroupIdAndUserId,
   validateMiddleware,
   groupController.getGroup,
 );
