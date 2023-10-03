@@ -2,14 +2,13 @@
 /* 배치 확인용 console 사용 */
 const Notification = require('../../models/Notification');
 
+const DAY_TO_MILLISECONDS = 24 * 60 * 60 * 1000;
+const VERIFICATION_TIME_LIMIT = 30 * 60 * 1000;
+const APPROVE_TIME_LIMIT = 6 * 60 * 60 * 1000;
+
 const updateIsNeedToSend = async () => {
   const currentTime = new Date();
-  const yesterday = new Date(currentTime);
-  const MAX_NOTIFICATION_TIME_LIMIT = 24 * 60 * 60 * 1000;
-  const VERIFICATION_TIME_LIMIT = 30 * 60 * 1000;
-  const APPROVE_TIME_LIMIT = 6 * 60 * 60 * 1000;
-
-  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterday = new Date(Date.now() - DAY_TO_MILLISECONDS);
 
   const notifications = await Notification.find({
     createdAt: { $gte: yesterday, $lte: currentTime },
@@ -29,7 +28,7 @@ const updateIsNeedToSend = async () => {
       case 'success':
         if (
           currentTime - updatedNotificationData.createdAt >=
-          MAX_NOTIFICATION_TIME_LIMIT
+          DAY_TO_MILLISECONDS
         ) {
           updatedNotificationData.isNeedToSend = false;
           shouldSave = true;
