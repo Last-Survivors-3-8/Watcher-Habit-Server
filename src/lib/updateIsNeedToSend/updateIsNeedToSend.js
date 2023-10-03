@@ -5,6 +5,10 @@ const Notification = require('../../models/Notification');
 const updateIsNeedToSend = async () => {
   const currentTime = new Date();
   const yesterday = new Date(currentTime);
+  const MAX_NOTIFICATION_TIME_LIMIT = 24 * 60 * 60 * 1000;
+  const VERIFICATION_TIME_LIMIT = 30 * 60 * 1000;
+  const APPROVE_TIME_LIMIT = 6 * 60 * 60 * 1000;
+
   yesterday.setDate(yesterday.getDate() - 1);
 
   const notifications = await Notification.find({
@@ -25,14 +29,17 @@ const updateIsNeedToSend = async () => {
       case 'success':
         if (
           currentTime - updatedNotificationData.createdAt >=
-          24 * 60 * 60 * 1000
+          MAX_NOTIFICATION_TIME_LIMIT
         ) {
           updatedNotificationData.isNeedToSend = false;
           shouldSave = true;
         }
         break;
       case 'verificationRequest':
-        if (currentTime - updatedNotificationData.createdAt >= 30 * 60 * 1000) {
+        if (
+          currentTime - updatedNotificationData.createdAt >=
+          VERIFICATION_TIME_LIMIT
+        ) {
           updatedNotificationData.isNeedToSend = false;
           shouldSave = true;
         }
@@ -40,7 +47,7 @@ const updateIsNeedToSend = async () => {
       case 'approveRequest':
         if (
           currentTime - updatedNotificationData.createdAt >=
-          6 * 60 * 60 * 1000
+          APPROVE_TIME_LIMIT
         ) {
           updatedNotificationData.isNeedToSend = false;
           shouldSave = true;
