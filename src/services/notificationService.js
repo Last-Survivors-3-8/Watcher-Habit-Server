@@ -1,5 +1,6 @@
 const { ERRORS } = require('../lib/ERRORS');
 const handleError = require('../lib/handleError');
+const Habit = require('../models/Habit');
 const Notification = require('../models/Notification');
 const User = require('../models/User');
 const getDateDiffFromToday = require('../utils/getDateDiffFromToday');
@@ -23,11 +24,8 @@ const getNotifications = async (userId) => {
 };
 
 const saveNotification = async (req, res) => {
-  const { to, status } = req.body;
+  const { to, habitId } = req.body;
 
-  if (status !== 'invite') {
-    return handleError(res, ERRORS.STATUS_NOT_INVITE);
-  }
   const invitedUser = await User.findById(to).exec();
 
   if (!invitedUser) {
@@ -40,6 +38,12 @@ const saveNotification = async (req, res) => {
 
   invitedUser.notifications.push(newNotification._id);
   await invitedUser.save();
+
+  if (habitId) {
+    const habit = await Habit.findById(habitId).exec();
+    habit.notifications.push(habitId);
+    await habit.save();
+  }
 
   return newNotification;
 };

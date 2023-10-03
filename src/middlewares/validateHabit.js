@@ -1,8 +1,29 @@
-const { body, param } = require('express-validator');
+const { body, param, query } = require('express-validator');
 const { ERRORS } = require('../lib/ERRORS');
 
 const isHabitId = () =>
   param('habitId').isMongoId().withMessage(ERRORS.INVALID_HABIT_ID);
+
+const isUserId = () =>
+  param('userId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE);
+
+const isStartDateQuery = () =>
+  query('startDate')
+    .matches(/^\d{4}-\d{2}-\d{2}$/)
+    .withMessage(ERRORS.INVALID_HABIT_START_DATE_FORMAT)
+    .optional();
+
+const isEndDateQuery = () =>
+  query('endDate')
+    .matches(/^\d{4}-\d{2}-\d{2}$/)
+    .withMessage(ERRORS.INVALID_HABIT_END_DATE_FORMAT)
+    .optional()
+    .custom((value, { req }) => {
+      if (req.query.startDate && value < req.query.startDate) {
+        throw new Error(ERRORS.HABIT_END_DATE_BEFORE_START);
+      }
+      return true;
+    });
 
 const isHabitTitle = (isRequired = true) =>
   body('habitTitle')
@@ -26,7 +47,7 @@ const isHabitStartDate = (isRequired = true) =>
     .matches(/^\d{4}-\d{2}-\d{2}$/)
     .withMessage(ERRORS.INVALID_HABIT_START_DATE_FORMAT);
 
-const ishabitEndDate = (isRequired = true) =>
+const isHabitEndDate = (isRequired = true) =>
   body('habitEndDate')
     .optional(!isRequired)
     .matches(/^\d{4}-\d{2}-\d{2}$/)
@@ -114,7 +135,7 @@ const postRequest = [
   isHabitTitle(),
   isHabitContent(),
   isHabitStartDate(false),
-  ishabitEndDate(false),
+  isHabitEndDate(false),
   isDoDay(),
   isStartTime(),
   isEndTime(),
@@ -129,7 +150,7 @@ const patchRequest = [
   isHabitTitle(false),
   isHabitContent(false),
   isHabitStartDate(false),
-  ishabitEndDate(false),
+  isHabitEndDate(false),
   isDoDay(false),
   isStartTime(false),
   isEndTime(false),
@@ -141,6 +162,12 @@ const patchRequest = [
 
 const deleteRequest = [isHabitId()];
 
+const getPeriodicHabitsByUserIdRequest = [
+  isUserId(),
+  isStartDateQuery(),
+  isEndDateQuery(),
+];
+
 const subscribeHabitRequest = [isHabitId(), isWatcherId()];
 
 const unSubscribeHabitRequest = [isHabitId(), isWatcherIdonUrl()];
@@ -150,6 +177,7 @@ module.exports = {
   deleteRequest,
   getRequest,
   patchRequest,
+  getPeriodicHabitsByUserIdRequest,
   subscribeHabitRequest,
   unSubscribeHabitRequest,
 };

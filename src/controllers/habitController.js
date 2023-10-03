@@ -4,6 +4,7 @@ const uploadImage = require('../services/aws/s3Service');
 const habitService = require('../services/habitService');
 const User = require('../models/User');
 const Habit = require('../models/Habit');
+const sendNotificationsForStatus = require('../lib/realTimeNotifications/sendNotificationsForStatus');
 
 const getHabit = async (req, res, next) => {
   const { habitId } = req.params;
@@ -19,6 +20,57 @@ const getHabit = async (req, res, next) => {
     }
 
     return res.status(200).json(habit);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const getPeriodicHabitsByUserId = async (req, res, next) => {
+  const { userId } = req.params;
+  const { startDate, endDate } = req.query;
+
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(0, 0, 0, 0);
+
+  const transformHistoryResults = (historyResults) =>
+    historyResults.reduce((acc, entry) => {
+      const {
+        date,
+        habitDetails: { habitTitle, startTime, endTime, habitImage, status },
+      } = entry;
+      const habitData = { habitTitle, startTime, endTime, habitImage, status };
+
+      acc[date] = acc[date] ? [...acc[date], habitData] : [habitData];
+      return acc;
+    }, {});
+
+  try {
+    const results = {
+      history: {},
+      regular: [],
+    };
+    const historyEndDate =
+      new Date(endDate) < yesterday
+        ? endDate
+        : yesterday.toISOString().split('T')[0];
+
+    if (new Date(startDate) < yesterday) {
+      const habitsFromHistory = await habitService.getHabitHistoryByDateRange(
+        userId,
+        startDate,
+        historyEndDate,
+      );
+      results.history = transformHistoryResults(habitsFromHistory);
+    }
+
+    results.regular = await habitService.getHabitsByDateRange(
+      userId,
+      startDate,
+      endDate,
+    );
+
+    return res.status(200).json(results);
   } catch (error) {
     return next(error);
   }
@@ -87,6 +139,7 @@ const updateHabit = async (req, res, next) => {
     habitEndDate,
     minApprovalCount,
     sharedGroup,
+    approvalStatus,
   } = req.body;
 
   try {
@@ -131,6 +184,35 @@ const updateHabit = async (req, res, next) => {
       const hasSharedGroup = await habitService.checkGroupExists(sharedGroup);
       if (!hasSharedGroup) {
         return handleError(res, ERRORS.GROUP_NOT_FOUND);
+      }
+    }
+
+    /* 와처 승인/거부 처리 */
+    if (approvalStatus) {
+      const approveCount = habit.approvals.filter(
+        (approval) => approval.status === 'approved',
+      ).length;
+
+      const rejectedCount = habit.approvals.filter(
+        (approval) => approval.status === 'rejected',
+      ).length;
+
+      if (
+        approvalStatus === 'approved' &&
+        approveCount + 1 >= habit.minApprovalCount
+      ) {
+        updateFields.status = 'approvalSuccess';
+
+        sendNotificationsForStatus(habit, 'approvalSuccess');
+      }
+
+      if (
+        approvalStatus === 'rejected' &&
+        rejectedCount + 1 > habit.approvals.length - habit.minApprovalCount
+      ) {
+        updateFields.status = 'approvalFailure';
+
+        sendNotificationsForStatus(habit, 'approvalFailure');
       }
     }
 
@@ -272,6 +354,7 @@ const unSubscribeWatcher = async (req, res, next) => {
 
 module.exports = {
   getHabit,
+  getPeriodicHabitsByUserId,
   createHabit,
   updateHabit,
   deleteHabit,

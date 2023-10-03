@@ -82,7 +82,19 @@ const addMember = async (req, res, next) => {
     user.groups.push(groupId);
     await user.save();
 
-    return res.status(200).json({ message: '가입되었습니다.' });
+    const notification = await Notification.findOne({
+      groupId,
+      status: 'invite',
+    }).exec();
+
+    if (notification) {
+      notification.isNeedToSend = false;
+      await notification.save();
+    }
+
+    return res
+      .status(200)
+      .json({ message: '가입되었습니다.', groupId: group._id });
   } catch (error) {
     return next(error);
   }
@@ -125,9 +137,10 @@ const inviteMember = async (req, res, next) => {
     }
 
     const notification = new Notification({
-      content: `${fromUser.nickname}님이 ${group.groupName}에 초대하였습니다.`,
+      content: `${fromUser.nickname}님이 그룹에 초대하였습니다. ${group.groupName}`,
       from: fromUserId,
       to: toUserId,
+      groupId,
       status: 'invite',
     });
 

@@ -5,6 +5,10 @@ const validateGetUser = [
   param('userId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE),
 ];
 
+const validateUserIdInQuery = [
+  query('userId').isMongoId().withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE),
+];
+
 const validateCreateUser = [
   check('nickname')
     .exists()
@@ -56,6 +60,7 @@ const validateGetUserHabitList = [
 
 module.exports = {
   validateGetUser,
+  validateUserIdInQuery,
   validateCreateUser,
   validateGetUserCheck,
   validateGetUserHabitList,
