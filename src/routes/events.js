@@ -5,6 +5,10 @@ const eventsController = require('../controllers/eventsController');
 
 const router = express.Router();
 
+/**
+ * 실시간 알림 API
+ * api/events
+ */
 router.get(
   '/',
   validateGetUser.validateUserIdInQuery,
