@@ -6,6 +6,10 @@ const userController = require('../controllers/userController');
 
 const router = express.Router();
 
+router.get('/test', async (req, res) =>
+  res.status(200).json({ test: 'successful' }),
+);
+
 /**
  * 유저 가입 확인 api
  * api/user/check?email=:email
