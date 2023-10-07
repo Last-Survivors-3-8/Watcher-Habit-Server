@@ -5,6 +5,7 @@ const validateHabit = require('../middlewares/validateHabit');
 const habitController = require('../controllers/habitController');
 const validateMiddleware = require('../middlewares/validateMiddleware');
 const commonErrorHandler = require('../middlewares/commonErrorHandler');
+// const verifyToken = require('../utils/verifyToken');
 
 const router = express.Router();
 

@@ -52,6 +52,12 @@ router.post('/logout', (_, res, next) => {
       sameSite: 'none',
     });
 
+    res.clearCookie('accessToken', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+    });
+
     return res.status(200).json({ message: '로그아웃 정상 처리되었습니다.' });
   } catch (error) {
     return next(error);

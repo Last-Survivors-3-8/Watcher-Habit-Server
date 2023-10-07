@@ -1,6 +1,15 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-const createAndSetTokens = (user, res, tokenExpired = true) => {
+const createAndSetTokens = async (user, res, tokenExpired = true) => {
+  const userData = await User.findById(user._id);
+
+  if (!userData) {
+    throw new Error('User not found');
+  }
+
+  const tokens = {};
+
   if (tokenExpired) {
     const refreshToken = jwt.sign(
       { userId: user._id },
@@ -24,10 +33,19 @@ const createAndSetTokens = (user, res, tokenExpired = true) => {
   const accessToken = jwt.sign(
     { userId: user._id },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '6h' },
+    { expiresIn: '30s' },
   );
 
-  return accessToken;
+  tokens.accessToken = {
+    value: accessToken,
+    options: {
+      httpOnly: true,
+      secure: true,
+      maxAge: 30 * 1000,
+    },
+  };
+
+  return tokens;
 };
 
 module.exports = createAndSetTokens;

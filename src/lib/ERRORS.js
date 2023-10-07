@@ -168,6 +168,31 @@ const NOTIFICATION_SEND_FAILED = {
   MESSAGE: '알림 생성 및 전송에 실패하였습니다.',
 };
 
+const ACCESS_TOKEN_REQUIRED = {
+  STATUS_CODE: 401,
+  MESSAGE: '접근 토큰이 필요합니다.',
+};
+
+const REFRESH_TOKEN_REQUIRED = {
+  STATUS_CODE: 401,
+  MESSAGE: '리프레시 토큰이 필요합니다.',
+};
+
+const INVALID_OR_EXPIRED_REFRESH_TOKEN = {
+  STATUS_CODE: 401,
+  MESSAGE: '유효하지 않거나 만료된 리프레시 토큰입니다.',
+};
+
+const FAILED_TO_REFRESH_ACCESS_TOKEN = {
+  STATUS_CODE: 500,
+  MESSAGE: '접근 토큰을 새로 고침하는데 실패했습니다.',
+};
+
+const INVALID_OR_EXPIRED_TOKEN = {
+  STATUS_CODE: 401,
+  MESSAGE: '유효하지 않거나 만료된 토큰입니다.',
+};
+
 // 유저 스키마 검증 오류 메시지
 const NICKNAME_REQUIRED = '닉네임은 필수입니다.';
 
@@ -326,4 +351,9 @@ module.exports.ERRORS = {
   USER_ALREADY_IN_GROUP,
   FROM_USER_NOT_IN_GROUP,
   NOTIFICATION_SEND_FAILED,
+  ACCESS_TOKEN_REQUIRED,
+  REFRESH_TOKEN_REQUIRED,
+  INVALID_OR_EXPIRED_REFRESH_TOKEN,
+  FAILED_TO_REFRESH_ACCESS_TOKEN,
+  INVALID_OR_EXPIRED_TOKEN,
 };
