@@ -23,7 +23,7 @@ router.post('/login', validateMiddleware, async (req, res, next) => {
       return handleError(res, ERRORS.USER_NOT_FOUND);
     }
 
-    const accessToken = createAndSetTokens(user, res);
+    const accessToken = await createAndSetTokens(user, res);
 
     const unsentNotifications = await Notification.find({
       to: user._id,
