@@ -8,8 +8,6 @@ const createAndSetTokens = async (user, res, tokenExpired = true) => {
     throw new Error('User not found');
   }
 
-  const tokens = {};
-
   if (tokenExpired) {
     const refreshToken = jwt.sign(
       { userId: user._id },
@@ -33,19 +31,22 @@ const createAndSetTokens = async (user, res, tokenExpired = true) => {
   const accessToken = jwt.sign(
     { userId: user._id },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '30s' },
+    { expiresIn: '1m' },
   );
 
-  tokens.accessToken = {
-    value: accessToken,
-    options: {
-      httpOnly: true,
-      secure: true,
-      maxAge: 30 * 1000,
-    },
-  };
+  res.cookie(
+    'accessToken',
+    accessToken,
+    { path: '/', maxAge: 60 * 60 * 1000 },
+    // {
+    //   httpOnly: true,
+    //   secure: true,
 
-  return tokens;
+    //   SameSite: 'None',
+    // }
+  );
+
+  return accessToken;
 };
 
 module.exports = createAndSetTokens;
