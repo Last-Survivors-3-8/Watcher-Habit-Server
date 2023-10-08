@@ -27,6 +27,7 @@ router.get(
 router.get(
   '/getInfoByEmail',
   validateUser.validateGetUserCheck,
+  verifyToken,
   validateMiddleware,
   userController.getUserInfoByEmail,
 );
@@ -38,6 +39,7 @@ router.get(
 router.get(
   '/:userId',
   validateUser.validateGetUser,
+  verifyToken,
   validateMiddleware,
   userController.getUser,
 );
