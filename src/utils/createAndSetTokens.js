@@ -28,17 +28,14 @@ const createAndSetTokens = async (user, res, tokenExpired = true) => {
   const accessToken = jwt.sign(
     { userId: user._id },
     process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: '1m' },
+    { expiresIn: '2h' },
   );
 
-  res.cookie(
-    'accessToken',
-    accessToken,
-    { path: '/', maxAge: 1 * 60 * 1000 },
-    {
-      httpOnly: true,
-    },
-  );
+  res.cookie('accessToken', accessToken, {
+    path: '/',
+    maxAge: 2 * 60 * 60 * 1000,
+    httpOnly: true,
+  });
 
   return accessToken;
 };
