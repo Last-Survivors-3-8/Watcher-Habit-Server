@@ -3,6 +3,7 @@ const commonErrorHandler = require('../middlewares/commonErrorHandler');
 const validateGroup = require('../middlewares/validateGroup');
 const validateMiddleware = require('../middlewares/validateMiddleware');
 const groupController = require('../controllers/groupController');
+const verifyToken = require('../utils/verifyToken');
 
 const router = express.Router();
 
@@ -12,6 +13,7 @@ const router = express.Router();
  */
 router.post(
   '/',
+  verifyToken,
   validateGroup.validateCreation,
   validateMiddleware,
   groupController.generateGroup,
@@ -23,6 +25,7 @@ router.post(
  */
 router.get(
   '/:groupId',
+  verifyToken,
   validateGroup.validateGroupIdAndUserId,
   validateMiddleware,
   groupController.getGroup,
@@ -34,6 +37,7 @@ router.get(
  */
 router.patch(
   '/:groupId/members',
+  verifyToken,
   validateGroup.addMemberValidation,
   validateMiddleware,
   groupController.addMember,
@@ -45,6 +49,7 @@ router.patch(
  */
 router.get(
   '/:groupId/habitList',
+  verifyToken,
   validateGroup.validateGetGroupHabitList,
   validateMiddleware,
   groupController.getGroupDailyHabitList,
@@ -56,6 +61,7 @@ router.get(
  */
 router.post(
   '/:groupId/invite',
+  verifyToken,
   validateGroup.inviteMemberValidation,
   validateMiddleware,
   groupController.inviteMember,

@@ -5,6 +5,7 @@ const validateHabit = require('../middlewares/validateHabit');
 const habitController = require('../controllers/habitController');
 const validateMiddleware = require('../middlewares/validateMiddleware');
 const commonErrorHandler = require('../middlewares/commonErrorHandler');
+const verifyToken = require('../utils/verifyToken');
 
 const router = express.Router();
 
@@ -14,6 +15,7 @@ const router = express.Router();
  */
 router.get(
   '/:habitId',
+  verifyToken,
   validateHabit.getRequest,
   validateMiddleware,
   habitController.getHabit,
@@ -25,6 +27,7 @@ router.get(
  */
 router.get(
   '/periodic/:userId',
+  verifyToken,
   validateHabit.getPeriodicHabitsByUserIdRequest,
   validateMiddleware,
   habitController.getPeriodicHabitsByUserId,
@@ -36,6 +39,7 @@ router.get(
  */
 router.post(
   '/',
+  verifyToken,
   validateHabit.postRequest,
   validateMiddleware,
   habitController.createHabit,
@@ -47,6 +51,7 @@ router.post(
  */
 router.patch(
   '/:habitId',
+  verifyToken,
   validateHabit.patchRequest,
   validateMiddleware,
   habitController.updateHabit,
@@ -58,6 +63,7 @@ router.patch(
  */
 router.delete(
   '/:habitId',
+  verifyToken,
   validateHabit.deleteRequest,
   validateMiddleware,
   habitController.deleteHabit,
@@ -69,6 +75,7 @@ router.delete(
  */
 router.patch(
   '/:habitId/watcher',
+  verifyToken,
   validateHabit.subscribeHabitRequest,
   validateMiddleware,
   habitController.subscribeWatcher,
@@ -80,6 +87,7 @@ router.patch(
  */
 router.delete(
   '/:habitId/watcher/:watcherId',
+  verifyToken,
   validateHabit.unSubscribeHabitRequest,
   validateMiddleware,
   habitController.unSubscribeWatcher,
@@ -89,6 +97,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 router.post(
   '/:habitId/image',
   upload.single('image'),
+  verifyToken,
   validateHabit.getRequest,
   validateMiddleware,
   habitController.updateHabitImage,
