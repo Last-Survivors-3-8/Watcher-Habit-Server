@@ -41,15 +41,19 @@ const generateGroup = async (req, res, next) => {
 
 const getGroup = async (req, res, next) => {
   const { groupId } = req.params;
+  const { userId } = req.query;
 
   try {
     const group = await Group.findById(groupId).lean().exec();
+    const isMember = group.members
+      .map((memberId) => memberId.toString())
+      .includes(userId);
 
     if (!group) {
       return handleError(res, ERRORS.GROUP_NOT_FOUND);
     }
 
-    return res.status(200).json({ group });
+    return res.status(200).json({ group, isMember });
   } catch (error) {
     return next(error);
   }
@@ -82,15 +86,16 @@ const addMember = async (req, res, next) => {
     user.groups.push(groupId);
     await user.save();
 
-    const notification = await Notification.findOne({
-      groupId,
-      status: 'invite',
-    }).exec();
-
-    if (notification) {
-      notification.isNeedToSend = false;
-      await notification.save();
-    }
+    await Notification.updateOne(
+      {
+        groupId,
+        status: 'invite',
+        isNeedToSend: true,
+      },
+      {
+        $set: { isNeedToSend: false },
+      },
+    );
 
     return res
       .status(200)
@@ -135,6 +140,17 @@ const inviteMember = async (req, res, next) => {
     if (group.members.includes(toUserId)) {
       return handleError(res, ERRORS.USER_ALREADY_IN_GROUP);
     }
+
+    await Notification.updateMany(
+      {
+        to: toUserId,
+        groupId,
+        status: 'invite',
+      },
+      {
+        isNeedToSend: false,
+      },
+    );
 
     const notification = new Notification({
       content: `${fromUser.nickname}님이 그룹에 초대하였습니다. ${group.groupName}`,

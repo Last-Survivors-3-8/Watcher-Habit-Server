@@ -1,4 +1,4 @@
-const { param, query, body } = require('express-validator');
+const { param, query, body, oneOf } = require('express-validator');
 const { ERRORS } = require('../lib/ERRORS');
 
 const isGroupId = (isRequired = true) =>
@@ -14,11 +14,21 @@ const isGroupName = (isRequired = true) =>
     .isLength({ min: 2, max: 15 })
     .withMessage(ERRORS.INVALID_GROUP_NAME.MESSAGE);
 
-const isUserId = (field, isRequired = true) =>
-  body(field)
-    .optional(!isRequired)
-    .isMongoId()
-    .withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE);
+const isUserId = (field, isRequired = true) => [
+  oneOf(
+    [
+      body(field)
+        .optional(!isRequired)
+        .isMongoId()
+        .withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE),
+      query(field)
+        .optional(!isRequired)
+        .isMongoId()
+        .withMessage(ERRORS.INVALID_MONGO_ID.MESSAGE),
+    ],
+    ERRORS.INVALID_MONGO_ID.MESSAGE,
+  ),
+];
 
 const isDate = (isRequired = true) =>
   query('date')
@@ -28,7 +38,7 @@ const isDate = (isRequired = true) =>
 
 const validateCreation = [isGroupName()];
 
-const validateGroupId = [isGroupId()];
+const validateGroupIdAndUserId = [isGroupId(), isUserId('userId')];
 
 const validateMemberId = [isUserId('userId')];
 
@@ -42,7 +52,7 @@ const inviteMemberValidation = [isGroupId(), ...validateInviteMemberId];
 
 module.exports = {
   validateGetGroupHabitList,
-  validateGroupId,
+  validateGroupIdAndUserId,
   validateMemberId,
   validateCreation,
   validateInviteMemberId,

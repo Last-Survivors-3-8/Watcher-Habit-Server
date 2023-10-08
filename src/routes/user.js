@@ -7,6 +7,8 @@ const verifyToken = require('../utils/verifyToken');
 
 const router = express.Router();
 
+router.get('/test', (req, res) => res.status(200).json({ test: 'successful' }));
+
 /**
  * 유저 가입 확인 api
  * api/user/check?email=:email

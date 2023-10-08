@@ -1,13 +1,13 @@
 const getKSTDateAndTime = () => {
+  const now = new Date();
   const KST_OFFSET_HOURS = 9;
-  const KST_OFFSET_MILLISECONDS = KST_OFFSET_HOURS * 60 * 60 * 1000;
 
-  const now = new Date(Date.now() + KST_OFFSET_MILLISECONDS);
+  now.setHours(now.getUTCHours() + KST_OFFSET_HOURS);
 
   const days = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
-  const day = days[now.getUTCDay()];
-  const hours = String(now.getUTCHours()).padStart(2, '0');
-  const minutes = String(now.getUTCMinutes()).padStart(2, '0');
+  const day = days[now.getDay()];
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
   const time = `${hours}:${minutes}`;
   const todayDate = now.toISOString().split('T')[0];
 

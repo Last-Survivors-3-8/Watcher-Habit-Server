@@ -18,7 +18,8 @@ const dailyHabitsBackup = async () => {
       endTime: { $lte: approveDoneTime },
       doDay: { $in: [today, yesterDay] },
       habitStartDate: { $lte: todayDate },
-      habitEndDate: { $gt: todayDate },
+      habitEndDate: { $gte: todayDate },
+      status: { $in: ['expiredFailure', 'approvalFailure', 'approvalSuccess'] },
     })
       .lean()
       .exec();

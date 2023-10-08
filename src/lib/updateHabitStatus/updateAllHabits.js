@@ -1,10 +1,11 @@
 const updateHabitStatus = require('./updateHabitStatus');
 const updateApprovalStatus = require('./updateApprovalStatus');
 const getKSTDateAndTime = require('./getKSTDateAndTime');
-
-const { day, time, todayDate } = getKSTDateAndTime();
+const getIncrementedTime = require('./getIncrementedTime');
 
 const updateAllHabits = async () => {
+  const { day, time, todayDate } = getKSTDateAndTime();
+
   await updateHabitStatus(
     {
       status: { $in: ['approvalSuccess', 'expiredFailure', 'approvalFailure'] },
@@ -24,6 +25,7 @@ const updateAllHabits = async () => {
       habitEndDate: { $gte: todayDate },
       doDay: { $in: [day] },
       startTime: { $lte: time },
+      endTime: { $gte: time },
     },
     'inProgress',
   );
@@ -39,12 +41,15 @@ const updateAllHabits = async () => {
     'awaitingVerification',
   );
 
+  const expireTime = getIncrementedTime(time, -5);
+
   await updateHabitStatus(
     {
       status: 'awaitingVerification',
       habitStartDate: { $lte: todayDate },
       habitEndDate: { $gte: todayDate },
       doDay: { $in: [day] },
+      endTime: { $lte: expireTime },
     },
     'expiredFailure',
   );

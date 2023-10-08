@@ -258,6 +258,7 @@ const updateHabitImage = async (req, res, next) => {
       }
 
       const result = await habitService.updateHabitImageUrl(habitId, imageUrl);
+      await habitService.updateNotifications(habitId);
 
       if (!result) {
         return handleError(res, ERRORS.HABIT_NOT_FOUND);

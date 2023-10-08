@@ -2,10 +2,13 @@
 /* 배치 확인용 console 사용 */
 const Notification = require('../../models/Notification');
 
+const DAY_TO_MILLISECONDS = 24 * 60 * 60 * 1000;
+const VERIFICATION_TIME_LIMIT = 30 * 60 * 1000;
+const APPROVE_TIME_LIMIT = 6 * 60 * 60 * 1000;
+
 const updateIsNeedToSend = async () => {
   const currentTime = new Date();
-  const yesterday = new Date(currentTime);
-  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterday = new Date(Date.now() - DAY_TO_MILLISECONDS);
 
   const notifications = await Notification.find({
     createdAt: { $gte: yesterday, $lte: currentTime },
@@ -25,14 +28,17 @@ const updateIsNeedToSend = async () => {
       case 'success':
         if (
           currentTime - updatedNotificationData.createdAt >=
-          24 * 60 * 60 * 1000
+          DAY_TO_MILLISECONDS
         ) {
           updatedNotificationData.isNeedToSend = false;
           shouldSave = true;
         }
         break;
       case 'verificationRequest':
-        if (currentTime - updatedNotificationData.createdAt >= 30 * 60 * 1000) {
+        if (
+          currentTime - updatedNotificationData.createdAt >=
+          VERIFICATION_TIME_LIMIT
+        ) {
           updatedNotificationData.isNeedToSend = false;
           shouldSave = true;
         }
@@ -40,7 +46,7 @@ const updateIsNeedToSend = async () => {
       case 'approveRequest':
         if (
           currentTime - updatedNotificationData.createdAt >=
-          6 * 60 * 60 * 1000
+          APPROVE_TIME_LIMIT
         ) {
           updatedNotificationData.isNeedToSend = false;
           shouldSave = true;
@@ -55,7 +61,7 @@ const updateIsNeedToSend = async () => {
       updates.push(
         Notification.updateOne(
           { _id: notification._id },
-          { isNeedToSend: false },
+          { $set: { isNeedToSend: false } },
         ),
       );
 

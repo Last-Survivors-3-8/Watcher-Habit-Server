@@ -4,6 +4,7 @@ const User = require('../models/User');
 const Group = require('../models/Group');
 const HabitHistory = require('../models/HabitHistory');
 const sendNotificationsForStatus = require('../lib/realTimeNotifications/sendNotificationsForStatus');
+const Notification = require('../models/Notification');
 
 const getHabitById = (habitId) =>
   Habit.findById(habitId)
@@ -81,6 +82,18 @@ const updateExistingHabit = async (habitId, fields) => {
       { $set: { 'approvals.$.status': updatedFields.approvalStatus } },
     );
 
+    await Notification.updateOne(
+      {
+        to: new mongoose.Types.ObjectId(updatedFields.approvalId),
+        isNeedToSend: true,
+        habitId,
+        status: 'approveRequest',
+      },
+      {
+        $set: { isNeedToSend: false },
+      },
+    );
+
     delete updatedFields.approvalStatus;
     delete updatedFields.approvalId;
   }
@@ -134,6 +147,18 @@ const updateHabitImageUrl = async (habitId, imageUrl) => {
   return result;
 };
 
+const updateNotifications = async (habitId) => {
+  await Notification.updateMany(
+    {
+      habitId,
+      status: 'approveRequest',
+    },
+    {
+      isNeedToSend: false,
+    },
+  );
+};
+
 module.exports = {
   getHabitById,
   getHabitsByDateRange,
@@ -145,4 +170,5 @@ module.exports = {
   updateExistingHabit,
   deleteHabitById,
   updateHabitImageUrl,
+  updateNotifications,
 };
