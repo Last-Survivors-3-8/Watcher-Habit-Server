@@ -1,4 +1,4 @@
-const { body } = require('express-validator');
+const { body, cookie } = require('express-validator');
 const { ERRORS } = require('../lib/ERRORS');
 
 const isValidEmail = (isRequired = true) =>
@@ -7,12 +7,12 @@ const isValidEmail = (isRequired = true) =>
     .isEmail()
     .withMessage(ERRORS.INVALID_EMAIL);
 
-const isValidRefreshToken = () =>
-  body('refreshToken').isString().withMessage(ERRORS.INVALID_REFRESH_TOKEN);
+const isValidRefreshTokenInCookie = () =>
+  cookie('refreshToken').exists().withMessage(ERRORS.INVALID_REFRESH_TOKEN);
 
 const loginRequestValidations = [isValidEmail()];
 
-const refreshTokenRequestValidations = [isValidRefreshToken()];
+const refreshTokenRequestValidations = [isValidRefreshTokenInCookie()];
 
 module.exports = {
   loginRequestValidations,
