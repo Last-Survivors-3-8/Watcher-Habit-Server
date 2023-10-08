@@ -69,7 +69,7 @@ router.post('/logout', (_, res, next) => {
  * 토큰 재발급 api
  * /api/auth/refresh-token
  */
-router.post('/refresh-token', validateMiddleware, async (req, res, next) => {
+router.post('/refreshToken', validateMiddleware, async (req, res, next) => {
   try {
     const { refreshToken } = req.cookies;
 
