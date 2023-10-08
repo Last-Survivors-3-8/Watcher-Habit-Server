@@ -173,24 +173,19 @@ const ACCESS_TOKEN_REQUIRED = {
   MESSAGE: '접근 토큰이 필요합니다.',
 };
 
-const REFRESH_TOKEN_REQUIRED = {
-  STATUS_CODE: 401,
-  MESSAGE: '리프레시 토큰이 필요합니다.',
-};
-
-const INVALID_OR_EXPIRED_REFRESH_TOKEN = {
-  STATUS_CODE: 401,
-  MESSAGE: '유효하지 않거나 만료된 리프레시 토큰입니다.',
-};
-
-const FAILED_TO_REFRESH_ACCESS_TOKEN = {
-  STATUS_CODE: 500,
-  MESSAGE: '접근 토큰을 새로 고침하는데 실패했습니다.',
-};
-
 const INVALID_OR_EXPIRED_TOKEN = {
   STATUS_CODE: 401,
   MESSAGE: '유효하지 않거나 만료된 토큰입니다.',
+};
+
+const NO_REFRESH_TOKEN = {
+  STATUS_CODE: 403,
+  MESSAGE: '리프레시 토큰이 제공되지 않았습니다',
+};
+
+const INVALID_REFRESH_TOKEN = {
+  STATUS_CODE: 403,
+  MESSAGE: '유효하지 않은 리프레시 토큰',
 };
 
 // 유저 스키마 검증 오류 메시지
@@ -352,8 +347,7 @@ module.exports.ERRORS = {
   FROM_USER_NOT_IN_GROUP,
   NOTIFICATION_SEND_FAILED,
   ACCESS_TOKEN_REQUIRED,
-  REFRESH_TOKEN_REQUIRED,
-  INVALID_OR_EXPIRED_REFRESH_TOKEN,
-  FAILED_TO_REFRESH_ACCESS_TOKEN,
   INVALID_OR_EXPIRED_TOKEN,
+  NO_REFRESH_TOKEN,
+  INVALID_REFRESH_TOKEN,
 };
