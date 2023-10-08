@@ -19,12 +19,9 @@ const createAndSetTokens = async (user, res, tokenExpired = true) => {
       'refreshToken',
       refreshToken,
       { path: '/', maxAge: 7 * 24 * 60 * 60 * 1000 },
-      // {
-      //   httpOnly: true,
-      //   secure: true,
-
-      //   SameSite: 'None',
-      // }
+      {
+        httpOnly: true,
+      },
     );
   }
 
@@ -38,12 +35,9 @@ const createAndSetTokens = async (user, res, tokenExpired = true) => {
     'accessToken',
     accessToken,
     { path: '/', maxAge: 1 * 60 * 1000 },
-    // {
-    //   httpOnly: true,
-    //   secure: true,
-
-    //   SameSite: 'None',
-    // }
+    {
+      httpOnly: true,
+    },
   );
 
   return accessToken;
