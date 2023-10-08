@@ -6,7 +6,7 @@ const createAndSetTokens = require('../utils/createAndSetTokens');
 const sendSseNotification = require('../lib/realTimeNotifications/sendSseNotification');
 const Notification = require('../models/Notification');
 
-exports.login = async (req, res, next) => {
+const login = async (req, res, next) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email }).lean().exec();
@@ -20,7 +20,7 @@ exports.login = async (req, res, next) => {
     const unsentNotifications = await Notification.find({
       to: user._id,
       isNeedToSend: true,
-    });
+    }).exec();
 
     unsentNotifications.forEach((notification) => {
       sendSseNotification(user._id.toString(), notification);
@@ -32,7 +32,7 @@ exports.login = async (req, res, next) => {
   }
 };
 
-exports.logout = (_, res, next) => {
+const logout = (_, res, next) => {
   try {
     res.clearCookie('refreshToken', {
       httpOnly: true,
@@ -52,18 +52,21 @@ exports.logout = (_, res, next) => {
   }
 };
 
-exports.refreshToken = async (req, res, next) => {
+const refreshToken = async (req, res, next) => {
   try {
-    const { refreshToken } = req.cookies;
+    const tokenFromCookies = req.cookies.refreshToken;
 
-    if (!refreshToken) {
+    if (!tokenFromCookies) {
       return handleError(res, ERRORS.NO_REFRESH_TOKEN);
     }
 
     let decoded;
     try {
-      decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+      decoded = jwt.verify(tokenFromCookies, process.env.REFRESH_TOKEN_SECRET);
     } catch (e) {
+      if (e instanceof jwt.TokenExpiredError) {
+        return handleError(res, ERRORS.REFRESH_TOKEN_EXPIRED);
+      }
       return handleError(res, ERRORS.INVALID_REFRESH_TOKEN);
     }
 
@@ -80,3 +83,5 @@ exports.refreshToken = async (req, res, next) => {
     return next(error);
   }
 };
+
+module.exports = { login, logout, refreshToken };

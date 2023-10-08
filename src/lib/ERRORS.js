@@ -180,7 +180,7 @@ const INVALID_OR_EXPIRED_TOKEN = {
 
 const NO_REFRESH_TOKEN = {
   STATUS_CODE: 403,
-  MESSAGE: '리프레시 토큰이 제공되지 않았습니다',
+  MESSAGE: '리프레시 토큰이 제공되지 않았습니다.',
 };
 
 const INVALID_REFRESH_TOKEN = {
