@@ -37,7 +37,7 @@ const createAndSetTokens = async (user, res, tokenExpired = true) => {
   res.cookie(
     'accessToken',
     accessToken,
-    { path: '/', maxAge: 60 * 60 * 1000 },
+    { path: '/', maxAge: 1 * 60 * 1000 },
     // {
     //   httpOnly: true,
     //   secure: true,
