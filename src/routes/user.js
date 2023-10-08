@@ -3,6 +3,7 @@ const commonErrorHandler = require('../middlewares/commonErrorHandler');
 const validateUser = require('../middlewares/validateUser');
 const validateMiddleware = require('../middlewares/validateMiddleware');
 const userController = require('../controllers/userController');
+const verifyToken = require('../utils/verifyToken');
 
 const router = express.Router();
 
@@ -35,6 +36,7 @@ router.get(
 router.get(
   '/:userId',
   validateUser.validateGetUser,
+  verifyToken,
   validateMiddleware,
   userController.getUser,
 );
@@ -57,6 +59,7 @@ router.post(
 router.get(
   '/:nickname/habitList',
   validateUser.validateGetUserHabitList,
+  verifyToken,
   validateMiddleware,
   userController.getUserDailyHabitList,
 );
