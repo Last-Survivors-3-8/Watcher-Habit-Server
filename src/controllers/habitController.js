@@ -8,9 +8,6 @@ const sendNotificationsForStatus = require('../lib/realTimeNotifications/sendNot
 
 const getHabit = async (req, res, next) => {
   const { habitId } = req.params;
-  const reqCookie = req.cookies;
-
-  console.log('reqCookie', reqCookie);
 
   try {
     const habit = await habitService.getHabitById(habitId);
