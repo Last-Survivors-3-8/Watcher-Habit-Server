@@ -13,8 +13,8 @@ const router = express.Router();
  */
 router.get(
   '/:userId',
-  validateNotification.getListRequest,
   verifyToken,
+  validateNotification.getListRequest,
   validateMiddleware,
   notificationController.getList,
 );
@@ -25,8 +25,8 @@ router.get(
  */
 router.post(
   '/',
-  validateNotification.saveRequest,
   verifyToken,
+  validateNotification.saveRequest,
   validateMiddleware,
   notificationController.save,
 );

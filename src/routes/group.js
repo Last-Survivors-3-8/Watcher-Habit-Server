@@ -13,8 +13,8 @@ const router = express.Router();
  */
 router.post(
   '/',
-  validateGroup.validateCreation,
   verifyToken,
+  validateGroup.validateCreation,
   validateMiddleware,
   groupController.generateGroup,
 );
@@ -25,8 +25,8 @@ router.post(
  */
 router.get(
   '/:groupId',
-  validateGroup.validateGroupIdAndUserId,
   verifyToken,
+  validateGroup.validateGroupIdAndUserId,
   validateMiddleware,
   groupController.getGroup,
 );
@@ -37,8 +37,8 @@ router.get(
  */
 router.patch(
   '/:groupId/members',
-  validateGroup.addMemberValidation,
   verifyToken,
+  validateGroup.addMemberValidation,
   validateMiddleware,
   groupController.addMember,
 );
@@ -49,8 +49,8 @@ router.patch(
  */
 router.get(
   '/:groupId/habitList',
-  validateGroup.validateGetGroupHabitList,
   verifyToken,
+  validateGroup.validateGetGroupHabitList,
   validateMiddleware,
   groupController.getGroupDailyHabitList,
 );
@@ -61,8 +61,8 @@ router.get(
  */
 router.post(
   '/:groupId/invite',
-  validateGroup.inviteMemberValidation,
   verifyToken,
+  validateGroup.inviteMemberValidation,
   validateMiddleware,
   groupController.inviteMember,
 );

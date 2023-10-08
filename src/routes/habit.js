@@ -15,8 +15,8 @@ const router = express.Router();
  */
 router.get(
   '/:habitId',
-  validateHabit.getRequest,
   verifyToken,
+  validateHabit.getRequest,
   validateMiddleware,
   habitController.getHabit,
 );
@@ -27,8 +27,8 @@ router.get(
  */
 router.get(
   '/periodic/:userId',
-  validateHabit.getPeriodicHabitsByUserIdRequest,
   verifyToken,
+  validateHabit.getPeriodicHabitsByUserIdRequest,
   validateMiddleware,
   habitController.getPeriodicHabitsByUserId,
 );
@@ -39,8 +39,8 @@ router.get(
  */
 router.post(
   '/',
-  validateHabit.postRequest,
   verifyToken,
+  validateHabit.postRequest,
   validateMiddleware,
   habitController.createHabit,
 );
@@ -51,8 +51,8 @@ router.post(
  */
 router.patch(
   '/:habitId',
-  validateHabit.patchRequest,
   verifyToken,
+  validateHabit.patchRequest,
   validateMiddleware,
   habitController.updateHabit,
 );
@@ -63,8 +63,8 @@ router.patch(
  */
 router.delete(
   '/:habitId',
-  validateHabit.deleteRequest,
   verifyToken,
+  validateHabit.deleteRequest,
   validateMiddleware,
   habitController.deleteHabit,
 );
@@ -75,8 +75,8 @@ router.delete(
  */
 router.patch(
   '/:habitId/watcher',
-  validateHabit.subscribeHabitRequest,
   verifyToken,
+  validateHabit.subscribeHabitRequest,
   validateMiddleware,
   habitController.subscribeWatcher,
 );
@@ -87,8 +87,8 @@ router.patch(
  */
 router.delete(
   '/:habitId/watcher/:watcherId',
-  validateHabit.unSubscribeHabitRequest,
   verifyToken,
+  validateHabit.unSubscribeHabitRequest,
   validateMiddleware,
   habitController.unSubscribeWatcher,
 );
@@ -97,8 +97,8 @@ const upload = multer({ storage: multer.memoryStorage() });
 router.post(
   '/:habitId/image',
   upload.single('image'),
-  validateHabit.getRequest,
   verifyToken,
+  validateHabit.getRequest,
   validateMiddleware,
   habitController.updateHabitImage,
 );

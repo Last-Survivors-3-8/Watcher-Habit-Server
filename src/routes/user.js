@@ -26,8 +26,8 @@ router.get(
  */
 router.get(
   '/getInfoByEmail',
-  validateUser.validateGetUserCheck,
   verifyToken,
+  validateUser.validateGetUserCheck,
   validateMiddleware,
   userController.getUserInfoByEmail,
 );
@@ -38,8 +38,8 @@ router.get(
  */
 router.get(
   '/:userId',
-  validateUser.validateGetUser,
   verifyToken,
+  validateUser.validateGetUser,
   validateMiddleware,
   userController.getUser,
 );
@@ -61,8 +61,8 @@ router.post(
  */
 router.get(
   '/:nickname/habitList',
-  validateUser.validateGetUserHabitList,
   verifyToken,
+  validateUser.validateGetUserHabitList,
   validateMiddleware,
   userController.getUserDailyHabitList,
 );
