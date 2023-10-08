@@ -2,12 +2,14 @@ const express = require('express');
 const validateGetUser = require('../middlewares/validateUser');
 const validateMiddleware = require('../middlewares/validateMiddleware');
 const eventsController = require('../controllers/eventsController');
+const verifyToken = require('../utils/verifyToken');
 
 const router = express.Router();
 
 router.get(
   '/',
   validateGetUser.validateUserIdInQuery,
+  verifyToken,
   validateMiddleware,
   eventsController.handleSSEConnection,
 );

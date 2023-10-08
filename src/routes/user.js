@@ -36,7 +36,6 @@ router.get(
 router.get(
   '/:userId',
   validateUser.validateGetUser,
-  verifyToken,
   validateMiddleware,
   userController.getUser,
 );

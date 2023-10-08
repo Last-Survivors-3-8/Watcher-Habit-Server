@@ -3,6 +3,7 @@ const commonErrorHandler = require('../middlewares/commonErrorHandler');
 const validateNotification = require('../middlewares/validateNotification');
 const validateMiddleware = require('../middlewares/validateMiddleware');
 const notificationController = require('../controllers/notificationController');
+const verifyToken = require('../utils/verifyToken');
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ const router = express.Router();
 router.get(
   '/:userId',
   validateNotification.getListRequest,
+  verifyToken,
   validateMiddleware,
   notificationController.getList,
 );
@@ -24,6 +26,7 @@ router.get(
 router.post(
   '/',
   validateNotification.saveRequest,
+  verifyToken,
   validateMiddleware,
   notificationController.save,
 );

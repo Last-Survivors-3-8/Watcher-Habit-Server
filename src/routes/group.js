@@ -4,6 +4,7 @@ const validateGroup = require('../middlewares/validateGroup');
 const validateMiddleware = require('../middlewares/validateMiddleware');
 const groupController = require('../controllers/groupController');
 const connections = require('../utils/sseConnections');
+const verifyToken = require('../utils/verifyToken');
 
 const router = express.Router();
 
@@ -35,6 +36,7 @@ router.get('/events', (req, res) => {
 router.post(
   '/',
   validateGroup.validateCreation,
+  verifyToken,
   validateMiddleware,
   groupController.generateGroup,
 );
@@ -46,6 +48,7 @@ router.post(
 router.get(
   '/:groupId',
   validateGroup.validateGroupId,
+  verifyToken,
   validateMiddleware,
   groupController.getGroup,
 );
@@ -57,6 +60,7 @@ router.get(
 router.patch(
   '/:groupId/members',
   validateGroup.addMemberValidation,
+  verifyToken,
   validateMiddleware,
   groupController.addMember,
 );
@@ -68,6 +72,7 @@ router.patch(
 router.get(
   '/:groupId/habitList',
   validateGroup.validateGetGroupHabitList,
+  verifyToken,
   validateMiddleware,
   groupController.getGroupDailyHabitList,
 );
@@ -79,6 +84,7 @@ router.get(
 router.post(
   '/:groupId/invite',
   validateGroup.inviteMemberValidation,
+  verifyToken,
   validateMiddleware,
   groupController.inviteMember,
 );
