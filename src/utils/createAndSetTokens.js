@@ -15,14 +15,12 @@ const createAndSetTokens = async (user, res, tokenExpired = true) => {
       { expiresIn: '7d' },
     );
 
-    res.cookie(
-      'refreshToken',
-      refreshToken,
-      { path: '/', maxAge: 7 * 24 * 60 * 60 * 1000 },
-      {
-        httpOnly: true,
-      },
-    );
+    res.cookie('refreshToken', refreshToken, {
+      path: '/',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      sameSite: 'none',
+      httpOnly: true,
+    });
   }
 
   const accessToken = jwt.sign(
@@ -34,6 +32,7 @@ const createAndSetTokens = async (user, res, tokenExpired = true) => {
   res.cookie('accessToken', accessToken, {
     path: '/',
     maxAge: 2 * 60 * 60 * 1000,
+    sameSite: 'none',
     httpOnly: true,
   });
 
