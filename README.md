@@ -4,7 +4,7 @@
 
 **Watcher Habit**은 개인의 습관을 효과적으로 관리하고, 소규모 그룹과 습관을 공유하는 플랫폼입니다. 사용자들이 서로의 습관을 공유하며, 서로를 지켜보면서 동기부여를 얻을 수 있습니다. 이를 통해 습관의 지속성을 높이고, 그룹 내의 동료들과 함께 성장하는 경험을 할 수 있습니다.
 
-> 📹 **소개 영상**: (영상 링크 업데이트 예정)
+> 📹 **시연 영상**: [WatcherHabit 시연 영상 유튜브 링크](https://youtu.be/5N8xgG7dRyc?si=RiP4gVwCZJxXmAK7)
 
 <br>
 
@@ -412,7 +412,7 @@ REACT_APP_SERVER_DOMAIN=                 # 백엔드 API 서버 주소
 REACT_APP_GOOGLE_CLIENT_ID=              # Google OAuth 2.0 인증을 위한 값
 REACT_APP_AWS_ACCESS_KEY_ID=             # AWS 서비스에 프로그래밍 방식으로 액세스하기 위한 값
 REACT_APP_AWS_SECRET_ACCESS_KEY=         # AWS 서비스에 프로그래밍 방식으로 액세스하기 위한 값
-REACT_APP_REDIRECT_URI=                  # OAuth 인증 과정 중 사용자를 리다이렉트시킬 URI
+REACT_APP_REDIRECT_URI=                  # OAuth 인증 과정 중 사용자를 리다이렉트시키는 URI
 
 # 서버
 MONGODB_URI=                             # MongoDB 데이터베이스 연결을 위한 URI
