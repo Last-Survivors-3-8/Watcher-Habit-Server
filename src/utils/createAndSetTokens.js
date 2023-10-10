@@ -19,6 +19,7 @@ const createAndSetTokens = async (user, res, tokenExpired = true) => {
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000,
       sameSite: 'none',
+      secure: true,
       httpOnly: true,
     });
   }
@@ -33,6 +34,7 @@ const createAndSetTokens = async (user, res, tokenExpired = true) => {
     path: '/',
     maxAge: 2 * 60 * 60 * 1000,
     sameSite: 'none',
+    secure: true,
     httpOnly: true,
   });
 
