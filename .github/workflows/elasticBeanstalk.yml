@@ -25,4 +25,4 @@ jobs:
           version_label: WatcherHabit15-version-2
           region: ap-northeast-2
           deployment_package: watcherHabit.zip
-          use_existing_version_if_available: true
+          use_existing_version_if_available: false
