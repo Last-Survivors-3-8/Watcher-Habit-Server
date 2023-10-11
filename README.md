@@ -4,7 +4,7 @@
 
 **Watcher Habit**은 개인의 습관을 효과적으로 관리하고, 소규모 그룹과 습관을 공유하는 플랫폼입니다. 사용자들이 서로의 습관을 공유하며, 서로를 지켜보면서 동기부여를 얻을 수 있습니다. 이를 통해 습관의 지속성을 높이고, 그룹 내의 동료들과 함께 성장하는 경험을 할 수 있습니다.
 
-> 📹 **시연 영상**: [WatcherHabit 시연 영상 유튜브 링크](https://youtu.be/5N8xgG7dRyc?si=RiP4gVwCZJxXmAK7)
+> 📹 **시연 영상**: [Watcher Habit 시연 영상 유튜브 링크](https://youtu.be/5N8xgG7dRyc?si=RiP4gVwCZJxXmAK7)
 
 <br>
 
@@ -243,7 +243,6 @@ module.exports = mongoose.model('HabitHistory', HabitHistorySchema);
 - **단방향 통신으로 충분히 구현 가능하다고 판단**: 프로젝트에서 필요한 알림은 받기만 하면 서버에서 다른 작업을 해주지 않아도 되는 것으로 기획했기 때문에, 단방향 전송 방법인 SSE로 충분히 구현이 가능했습니다.
 
 ![SSE](https://github.com/Last-Survivors-3-8/Watcher-Habit-Server/assets/133510836/d45e0f6b-7da9-4c68-95e1-3f6bc2946bbc)
-
 
 ### 3) 실시간 알림 구현 상세
 
