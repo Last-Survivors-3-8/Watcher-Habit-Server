@@ -93,7 +93,16 @@ router.delete(
   habitController.unSubscribeWatcher,
 );
 
-const upload = multer({ storage: multer.memoryStorage() });
+/**
+ * 이미지 업로드 api
+ * /api/habit/:habitId/image
+ */
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+});
 router.post(
   '/:habitId/image',
   upload.single('image'),
