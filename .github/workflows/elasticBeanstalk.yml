@@ -20,8 +20,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: WatcherHabit15
-          environment_name: WatcherHabit15-env
+          application_name: WatcherHabit17
+          environment_name: WatcherHabit17-env
           version_label: ${{ github.run_number }}
           region: ap-northeast-2
           deployment_package: watcherHabit.zip
