@@ -41,7 +41,7 @@ const updateAllHabits = async () => {
     'awaitingVerification',
   );
 
-  const expireTime = getIncrementedTime(time, -5);
+  const expireTime = getIncrementedTime(time, -30);
 
   await updateHabitStatus(
     {
